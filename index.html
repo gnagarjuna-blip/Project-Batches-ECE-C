@@ -3,67 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Project Batch Entry</title>
+    <title>ECE Batch Management - G. Nagarjuna</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .header { text-align: center; border-bottom: 2px solid #0056b3; margin-bottom: 20px; padding-bottom: 10px; }
-        h2 { color: #0056b3; margin: 5px 0; }
-        .info { font-weight: bold; color: #555; }
-        .batch-section { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 20px; }
-        button:hover { background-color: #004494; }
-        .member-title { background: #e9ecef; padding: 5px 10px; margin-bottom: 10px; font-size: 14px; border-left: 4px solid #0056b3; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 3px solid #004085; margin-bottom: 20px; }
+        h1 { color: #004085; margin-bottom: 5px; }
+        .coordinator { font-style: italic; color: #555; margin-bottom: 20px; }
+        
+        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 30px; }
+        .member-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
+        .member-box { padding: 10px; border: 1px dashed #ccc; border-radius: 5px; background: white; }
+        
+        input, select { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+        .btn-add { background: #28a745; color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        .btn-download { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; }
+        th { background-color: #004085; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h2>Department of ECE</h2>
-        <p class="info">Coordinator: G. Nagarjuna</p>
+        <h1>ECE Department - Batch Registration</h1>
+        <p class="coordinator">Coordinator: <strong>G. Nagarjuna</strong></p>
     </div>
 
-    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        
-        <label for="batch">Select Batch Number:</label>
-        <select name="Batch_Number" id="batch" required>
-            <option value="">-- Select Batch --</option>
+    <div class="form-section">
+        <h3>Fill Batch Details</h3>
+        <label>Select Batch Number:</label>
+        <select id="batchNum">
             <script>
-                for(let i=1; i<=17; i++) {
-                    document.write(`<option value="Batch ${i}">Batch ${i}</option>`);
-                }
+                for(let i=1; i<=17; i++) document.write(`<option value="${i}">Batch ${i}</option>`);
             </script>
         </select>
 
-        <div id="members">
-            <script>
-                for(let m=1; m<=4; m++) {
-                    document.write(`
-                        <div class="batch-section">
-                            <div class="member-title">Member ${m} Details</div>
-                            <div class="grid">
-                                <div>
-                                    <label>Full Name</label>
-                                    <input type="text" name="Member_${m}_Name" placeholder="Enter Name" required>
-                                </div>
-                                <div>
-                                    <label>Roll Number</label>
-                                    <input type="text" name="Member_${m}_Roll" placeholder="Enter Roll No" required>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                }
-            </script>
+        <div class="member-grid">
+            <div class="member-box"><strong>Member 1</strong><input type="text" id="m1_n" placeholder="Name"><input type="text" id="m1_r" placeholder="Roll No"></div>
+            <div class="member-box"><strong>Member 2</strong><input type="text" id="m2_n" placeholder="Name"><input type="text" id="m2_r" placeholder="Roll No"></div>
+            <div class="member-box"><strong>Member 3</strong><input type="text" id="m3_n" placeholder="Name"><input type="text" id="m3_r" placeholder="Roll No"></div>
+            <div class="member-box"><strong>Member 4</strong><input type="text" id="m4_n" placeholder="Name"><input type="text" id="m4_r" placeholder="Roll No"></div>
         </div>
+        <button class="btn-add" onclick="saveBatch()">Add to Consolidated List</button>
+    </div>
 
-        <button type="submit">Submit Batch Details</button>
-    </form>
+    <button class="btn-download" onclick="downloadCSV()">⬇️ Download CSV for Excel</button>
+    
+    <table id="batchTable">
+        <thead>
+            <tr>
+                <th>Batch</th>
+                <th>Member 1 (Name - Roll)</th>
+                <th>Member 2 (Name - Roll)</th>
+                <th>Member 3 (Name - Roll)</th>
+                <th>Member 4 (Name - Roll)</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
 </div>
+
+<script>
+    function saveBatch() {
+        const table = document.getElementById("batchTable").getElementsByTagName('tbody')[0];
+        const batch = document.getElementById("batchNum").value;
+        const row = table.insertRow();
+        
+        row.innerHTML = `
+            <td>Batch ${batch}</td>
+            <td>${document.getElementById('m1_n').value} - ${document.getElementById('m1_r').value}</td>
+            <td>${document.getElementById('m2_n').value} - ${document.getElementById('m2_r').value}</td>
+            <td>${document.getElementById('m3_n').value} - ${document.getElementById('m3_r').value}</td>
+            <td>${document.getElementById('m4_n').value} - ${document.getElementById('m4_r').value}</td>
+        `;
+        
+        // Clear fields
+        document.querySelectorAll('input').forEach(input => input.value = "");
+    }
+
+    function downloadCSV() {
+        let csv = "Batch,Member 1,Member 2,Member 3,Member 4\n";
+        const rows = document.querySelectorAll("#batchTable tbody tr");
+        
+        rows.forEach(row => {
+            const cols = row.querySelectorAll("td");
+            const data = Array.from(cols).map(c => `"${c.innerText}"`).join(",");
+            csv += data + "\n";
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'ECE_Batches_Nagarjuna.csv');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+</script>
 
 </body>
 </html>
