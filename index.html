@@ -1,111 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Batch Management - G. Nagarjuna</title>
+    <base target="_top">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .header { text-align: center; border-bottom: 3px solid #004085; margin-bottom: 20px; }
-        h1 { color: #004085; margin-bottom: 5px; }
-        .coordinator { font-style: italic; color: #555; margin-bottom: 20px; }
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .sheet-container { background: white; padding: 40px; max-width: 900px; margin: auto; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; line-height: 1.2; margin-bottom: 20px; }
+        .header h1 { font-size: 20px; margin: 5px; text-transform: uppercase; }
+        .header h2 { font-size: 16px; margin: 5px; font-weight: normal; }
+        .coord-line { margin: 20px 0; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 10px; }
         
-        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 30px; }
-        .member-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
-        .member-box { padding: 10px; border: 1px dashed #ccc; border-radius: 5px; background: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; font-size: 13px; }
+        th { background-color: #e8e8e8; text-transform: uppercase; }
         
-        input, select { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
-        .btn-add { background: #28a745; color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 5px; font-weight: bold; }
-        .btn-download { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
+        .form-group { margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 5px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        select, input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; }
-        th { background-color: #004085; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
+        button { background-color: #0056b3; color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background-color: #004494; }
+        .success { color: green; font-weight: bold; text-align: center; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="sheet-container">
     <div class="header">
-        <h1>ECE Department - Batch Registration</h1>
-        <p class="coordinator">Coordinator: <strong>G. Nagarjuna</strong></p>
+        <h1>Bharat Institute of Engineering and Technology</h1>
+        <h2>Department of ECE</h2>
+        <h2>Mini Project Batches List (Academic Year 2025-26)</h2>
     </div>
 
-    <div class="form-section">
-        <h3>Fill Batch Details</h3>
-        <label>Select Batch Number:</label>
-        <select id="batchNum">
-            <script>
-                for(let i=1; i<=17; i++) document.write(`<option value="${i}">Batch ${i}</option>`);
-            </script>
-        </select>
+    <div class="coord-line">
+        Class Incharge: G. Nagarjuna
+    </div>
 
-        <div class="member-grid">
-            <div class="member-box"><strong>Member 1</strong><input type="text" id="m1_n" placeholder="Name"><input type="text" id="m1_r" placeholder="Roll No"></div>
-            <div class="member-box"><strong>Member 2</strong><input type="text" id="m2_n" placeholder="Name"><input type="text" id="m2_r" placeholder="Roll No"></div>
-            <div class="member-box"><strong>Member 3</strong><input type="text" id="m3_n" placeholder="Name"><input type="text" id="m3_r" placeholder="Roll No"></div>
-            <div class="member-box"><strong>Member 4</strong><input type="text" id="m4_n" placeholder="Name"><input type="text" id="m4_r" placeholder="Roll No"></div>
+    <form id="batchForm">
+        <div class="form-group">
+            <label>Select Your Batch Number:</label>
+            <select name="batchNo" required>
+                <option value="">-- Select Batch (1 to 17) --</option>
+                <script>
+                    for(let i=1; i<=17; i++) document.write(`<option value="Batch-${i}">Batch-${i}</option>`);
+                </script>
+            </select>
         </div>
-        <button class="btn-add" onclick="saveBatch()">Add to Consolidated List</button>
-    </div>
 
-    <button class="btn-download" onclick="downloadCSV()">⬇️ Download CSV for Excel</button>
-    
-    <table id="batchTable">
-        <thead>
-            <tr>
-                <th>Batch</th>
-                <th>Member 1 (Name - Roll)</th>
-                <th>Member 2 (Name - Roll)</th>
-                <th>Member 3 (Name - Roll)</th>
-                <th>Member 4 (Name - Roll)</th>
-            </tr>
-        </thead>
-        <tbody>
+        <div class="form-group">
+            <label>Project Details:</label>
+            <input type="text" name="guide" placeholder="Name of the Guide" required>
+            <input type="text" name="title" placeholder="Title of the Project" required>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Roll Number</th>
+                    <th>Name of the Student</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td><input type="text" name="roll1" required></td><td><input type="text" name="name1" required></td></tr>
+                <tr><td>2</td><td><input type="text" name="roll2" required></td><td><input type="text" name="name2" required></td></tr>
+                <tr><td>3</td><td><input type="text" name="roll3" required></td><td><input type="text" name="name3" required></td></tr>
+                <tr><td>4</td><td><input type="text" name="roll4" required></td><td><input type="text" name="name4" required></td></tr>
             </tbody>
-    </table>
+        </table>
+
+        <br>
+        <button type="submit" id="submitBtn">Submit Batch Details</button>
+    </form>
+    <div id="msg" class="success">Details submitted successfully! This will appear in the coordinator's Sheet.</div>
 </div>
 
 <script>
-    function saveBatch() {
-        const table = document.getElementById("batchTable").getElementsByTagName('tbody')[0];
-        const batch = document.getElementById("batchNum").value;
-        const row = table.insertRow();
+    const form = document.getElementById('batchForm');
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').innerHTML = "Sending...";
         
-        row.innerHTML = `
-            <td>Batch ${batch}</td>
-            <td>${document.getElementById('m1_n').value} - ${document.getElementById('m1_r').value}</td>
-            <td>${document.getElementById('m2_n').value} - ${document.getElementById('m2_r').value}</td>
-            <td>${document.getElementById('m3_n').value} - ${document.getElementById('m3_r').value}</td>
-            <td>${document.getElementById('m4_n').value} - ${document.getElementById('m4_r').value}</td>
-        `;
-        
-        // Clear fields
-        document.querySelectorAll('input').forEach(input => input.value = "");
-    }
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-    function downloadCSV() {
-        let csv = "Batch,Member 1,Member 2,Member 3,Member 4\n";
-        const rows = document.querySelectorAll("#batchTable tbody tr");
-        
-        rows.forEach(row => {
-            const cols = row.querySelectorAll("td");
-            const data = Array.from(cols).map(c => `"${c.innerText}"`).join(",");
-            csv += data + "\n";
-        });
-
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('hidden', '');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'ECE_Batches_Nagarjuna.csv');
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
+        // This links to the Google Script backend
+        google.script.run.withSuccessHandler(() => {
+            form.style.display = 'none';
+            document.getElementById('msg').style.display = 'block';
+        }).processForm(data);
+    };
 </script>
 
 </body>
