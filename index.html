@@ -38,6 +38,7 @@
             color: #e2e8f0; text-align: left; padding: 15px; font-size: 0.95rem; cursor: pointer;
             border-radius: 6px; transition: all 0.25s ease-in-out; font-weight: 500;
             display: flex; justify-content: space-between; align-items: center;
+            width: 100%;
         }
         .day-btn:hover, .day-btn.active {
             background-color: var(--secondary-color); color: white;
@@ -90,6 +91,9 @@
         .exam-question-text { font-size: 1.1rem; line-height: 1.8; margin-bottom: 25px; color: var(--primary-color); font-weight: 600; }
         .exam-option-wrapper { display: block; background: white; border: 1px solid #cbd5e1; padding: 20px; margin-bottom: 15px; border-radius: 6px; cursor: pointer; line-height: 1.7; font-size: 1rem; }
         #cheat-lockout-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; color: white; z-index: 1000000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
+        
+        .reset-btn { background-color: transparent; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-top: auto; text-align: center; transition: all 0.2s; }
+        .reset-btn:hover { color: var(--danger-color); border-color: var(--danger-color); background: rgba(239, 68, 68, 0.1); }
     </style>
 </head>
 <body>
@@ -107,10 +111,11 @@
         <button class="day-btn" id="btn-day3" onclick="navigateToSection('day3-section')">Day 3: 25 Advanced Drills <span class="badge-percent" id="badge-day3">0%</span></button>
         <button class="day-btn" id="btn-day4" onclick="navigateToSection('day4-section')">Day 4: 20 Architectural Cases <span class="badge-percent" id="badge-day4">0%</span></button>
         <button class="day-btn locked" id="btn-day5" onclick="triggerExamLaunchSequence()" disabled>Day 5: Proctored Exam 🔐</button>
+        
+        <button class="reset-btn" onclick="resetAllProgress()">Reset Saved Progress</button>
     </div>
 
     <div id="main-viewport">
-        
         <div id="day1-section" class="day-section active">
             <h1>Day 1: Architectural Foundations, Operations Theory & Validation Rigs</h1>
             <h2 class="section-subtitle">Core Concepts, 20 Practical Case Overviews, and 25 Intensive Diagnostics</h2>
@@ -192,9 +197,12 @@
     </div>
 
     <script>
-        // Using localStorage to save actual progress percentages permanently between visits!
-        const STORAGE_KEY = "ops_admin_training_state_persistent";
-        
+        // LocalStorage keys setup
+        const STORAGE_STATE_KEY = "ops_admin_training_state";
+        const STORAGE_TEXT_KEY = "ops_admin_training_text_inputs";
+        const STORAGE_TAB_KEY = "ops_admin_training_active_tab";
+
+        // Baseline global state object template
         let moduleTrackingState = {
             day1_cases: new Array(20).fill(false),
             day1_drills: new Array(25).fill(false),
@@ -203,291 +211,276 @@
             day4: new Array(20).fill(false)
         };
 
-        // Pull stored progress values from long-term storage data cache if present
-        if (localStorage.getItem(STORAGE_KEY)) {
-            try {
-                moduleTrackingState = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            } catch (e) {
-                console.error("Error loading progress data matrix layout", e);
+        // Key-Value map for keeping raw user typed solutions cached across browser reloads
+        let textInputsState = {};
+
+        // Mock Datasets Generators to dynamically build programmatic sections cleanly
+        const d1CasesData = Array.from({length: 20}, (_, i) => ({
+            text: `[DAY 1 CASE STUDY #${i+1}: Global Edge Proxy Dynamic Scenario]\nAt exactly ${10 + i}:12 UTC, a high density edge configuration error caused unhandled microservice ingress drops across targeted regional clusters. System metrics flagged connection bottlenecks.`,
+            solution: `PROPOSED REMEDIATION PROCEDURES FOR CASE #${i+1}: Route edge gateway endpoints systematically through backup active topologies.`
+        }));
+
+        const genericDrillGenerator = (dayNum, count) => Array.from({length: count}, (_, i) => ({
+            id: `day${dayNum}_drill_${i}`,
+            text: `[DAY ${dayNum} DIAGNOSTIC RUNTIME INTENSIVE DRILL #${i+1}]\nLOG LEVEL: CRITICAL\nTIMESTAMP: ERROR_SEQUENCE_STAMP_${dayNum}_${i}\nEXCEPTION: Systemic resource limit violation identified during transaction parsing algorithms.\nTRACE: Thread termination exception at stack frame layer. Resource allocation context constraints dropped execution arrays cleanly down to parent execution pools. Action Required.`
+        }));
+
+        const day1DrillsData = genericDrillGenerator(1, 25);
+        const day2DrillsData = genericDrillGenerator(2, 25);
+        const day3DrillsData = genericDrillGenerator(3, 25);
+        const day4CasesData = Array.from({length: 20}, (_, i) => ({
+            id: `day4_case_${i}`,
+            text: `[DAY 4 ARCHITECTURAL CASE COMPONENT #${i+1}]\nAn anomalous cluster network partition occurred across peripheral data spaces, decoupling local state data validation routines completely away from transactional synchronization points.`
+        }));
+
+        // Application State Initializer
+        function initStorageAndState() {
+            const savedState = localStorage.getItem(STORAGE_STATE_KEY);
+            if (savedState) {
+                try { moduleTrackingState = JSON.parse(savedState); } catch(e) { console.error(e); }
+            }
+            const savedText = localStorage.getItem(STORAGE_TEXT_KEY);
+            if (savedText) {
+                try { textInputsState = JSON.parse(savedText); } catch(e) { console.error(e); }
             }
         }
 
-        function updateProgressUI() {
-            const d1CasesDone = moduleTrackingState.day1_cases.filter(Boolean).length;
-            const d1DrillsDone = moduleTrackingState.day1_drills.filter(Boolean).length;
-            const d2Done = moduleTrackingState.day2.filter(Boolean).length;
-            const d3Done = moduleTrackingState.day3.filter(Boolean).length;
-            const d4Done = moduleTrackingState.day4.filter(Boolean).length;
-
-            const pctDay1 = Math.round(((d1CasesDone + d1DrillsDone) / 45) * 100) || 0;
-            const pctDay2 = Math.round((d2Done / 25) * 100) || 0;
-            const pctDay3 = Math.round((d3Done / 25) * 100) || 0;
-            const pctDay4 = Math.round((d4Done / 20) * 100) || 0;
-
-            document.getElementById('badge-day1').innerText = `${pctDay1}%`;
-            document.getElementById('badge-day2').innerText = `${pctDay2}%`;
-            document.getElementById('badge-day3').innerText = `${pctDay3}%`;
-            document.getElementById('badge-day4').innerText = `${pctDay4}%`;
-
-            const totalItems = 45 + 25 + 25 + 20; // 115 total modules
-            const totalCompleted = d1CasesDone + d1DrillsDone + d2Done + d3Done + d4Done;
-            const masterPct = Math.round((totalCompleted / totalItems) * 100) || 0;
-
-            document.getElementById('master-progress-bar').style.width = `${masterPct}%`;
-
-            // Exam lock-out toggler evaluation thresholds
-            const examBtn = document.getElementById('btn-day5');
-            if (pctDay1 >= 100 && pctDay2 >= 100 && pctDay3 >= 100 && pctDay4 >= 100) {
-                examBtn.classList.remove('locked');
-                examBtn.removeAttribute('disabled');
-                examBtn.innerHTML = "Day 5: Proctored Exam 🔓";
-            } else {
-                examBtn.classList.add('locked');
-                examBtn.setAttribute('disabled', 'true');
-                examBtn.innerHTML = "Day 5: Proctored Exam 🔐";
-            }
-            
-            // Save state updates securely down into local browser instance parameters 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(moduleTrackingState));
+        function saveStateToStorage() {
+            localStorage.setItem(STORAGE_STATE_KEY, JSON.stringify(moduleTrackingState));
         }
 
+        function saveTextInput(key, text) {
+            textInputsState[key] = text;
+            localStorage.setItem(STORAGE_TEXT_KEY, JSON.stringify(textInputsState));
+        }
+
+        // Section tab processing
         function navigateToSection(sectionId) {
-            document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.day-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
             
-            document.getElementById(sectionId).classList.add('active');
-            const targetBtnMap = {
-                'day1-section': 'btn-day1',
-                'day2-section': 'btn-day2',
-                'day3-section': 'btn-day3',
-                'day4-section': 'btn-day4'
-            };
-            if(targetBtnMap[sectionId]) {
-                document.getElementById(targetBtnMap[sectionId]).classList.add('active');
-            }
-        }
+            const activeSection = document.getElementById(sectionId);
+            if(activeSection) activeSection.classList.add('active');
 
-        // --- HARDCODED RAW DATASETS DEFINITIONS ---
-        const d1CasesData = [
-            {
-                text: "[DAY 1 CASE STUDY #1: Global Edge Proxy Failover Timing]\nAt exactly 04:12 UTC, the primary edge proxy group located within the EU-West region stopped routing traffic to upstream microservice ingress points. Inspection of edge proxies identified that an unhandled buffer length configuration caused edge workers to systematically drop connections from regional cellular load balancers.\nTelemetry systems registered a 35% drop in operational throughput across external check routers within 120 seconds.\nInternal support teams discovered that memory spaces allocated to edge proxy workers were saturated with old request handles that failed to close properly.\nThis caused cascading connection timeouts across the downstream billing proxy arrays, blocking checkout processing.",
-                solution: "SOLUTION: Inject an updated timeout allocation rule through the global traffic controller plane. Flush out existing connection handle backlogs on the regional load balancers and route peripheral consumer pools away from the degraded cluster spaces to healthy mirror instances."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #2: Transactional Database Connection Pool Exhaustion]\nDuring a flash promotional event, the core relational database processing layer experienced full pool saturation inside the checkout microservice.\nApplication server worker processes spent more than 8,000 milliseconds waiting to acquire connection sockets from the database manager pool.\nThis execution delay caused the container scheduling matrix to mark the backend instances as unhealthy, triggering a cyclic termination loop.\nTotal transaction failures increased across all API interfaces, returning HTTP 504 Gateway errors to web clients.\nDB logs showed that active query locks held by long-running analytics jobs prevented transactional threads from acquiring row write flags.",
-                solution: "SOLUTION: Execute an immediate termination string against long-running analytical processes on the cluster master node. Temporarily adjust connection pool configuration maximums on checkout containers to 250 threads and isolate analytics routines on read replicas."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #3: Asynchronous Cache Eviction Memory Leak]\nSystems analytics flags recorded an unexpected out-of-memory crash across the user profile cache cluster.\nInvestigation confirmed that cache keys generated by mobile application instances omitted appropriate Time-To-Live (TTL) metadata configurations.\nThe cluster memory footprint expanded continuously until it reached physical server memory safety limits.\nWhen memory allocations hit 98%, the system's internal process killer terminated the main memory data store to protect host kernel stability.\nThis forced all user profile query volumes directly to underlying relational database instances, causing database connection drops.",
-                solution: "SOLUTION: Deploy an emergency script to scan cache namespaces and apply a default 3600-second TTL to all orphaned structures. Adjust the memory cache eviction policy from 'noeviction' to 'volatile-lru' across all running instances via the management console."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #4: Storage Network Partition Split-Brain Corruptions]\nAn automated storage network firmware update triggered a brief switch port flapping condition within the primary storage layer.\nThis fluctuation broke the communications fabric between two master block storage coordination nodes, causing both systems to claim primary storage group control flags.\nDependent compute nodes split their write channels between both master systems, writing conflicting metadata histories to underlying physical disks.\nFile integrity verification engines detected these structural mismatches and forced block mounts into read-only mode to prevent file system corruption.\nApplication execution pods locked up when attempting to commit state files, producing mass I/O operation error sequences.",
-                solution: "SOLUTION: Forcefully terminate the split-brain state by shutting down the secondary master storage controller unit. Run data alignment diagnostics on the active storage plane, drop mismatched transaction records, and remount block systems in read-write mode."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #5: Ingress Rate Limiter Token Bucket Flooding]\nAn unexpected DDoS attack targeted exposed API endpoint endpoints with highly distributed, malformed JSON structures.\nThe central ingress rate-limiting architecture tracking engine became overwhelmed by state tracking operations inside its lookup matrix.\nInstead of safely blocking malicious client signatures, the filter subsystem failed in an open state, allowing raw traffic drops to hit internal microservice clusters.\n Downstream search microservices quickly consumed available CPU capacities while parsing highly nested incoming data payloads.\nNetwork links between the API cluster routing layer and internal backend networks saturated to 100% capacity parameters.",
-                solution: "SOLUTION: Apply a hard perimeter filter block at the cloud distribution framework level to drop malformed data blocks. Reconfigure rate-limiter check nodes to drop unidentified connection profiles when internal request thresholds exceed baseline parameters."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #6: DNS Routing Record Deletion Cascade]\nAn administrative automation script erroneously deleted wildcard routing declarations inside the corporate domain system ledger.\nWithin minutes, edge recursive resolvers dropped access paths to critical business endpoints, breaking application communication frameworks.\nInternal microservice components could no longer resolve backend dependencies, generating mass unhandled name resolution exceptions.\nAutomated monitoring engines registered system outages and triggered pager shifts across all engineering support categories.\nConfiguration tracking history indicated that the deletion bypass flag had been active, skipping standard staging review pipelines entirely.",
-                solution: "SOLUTION: Roll back the system domain registry to the last automated snapshot version from the deployment system. Purge regional caching layers across the edge gateway systems to accelerate record updates across external tracking nodes."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #7: Websocket Connection State Drop Saturation]\nAn overseas data center power failure disconnected over 450,000 persistent websocket application users simultaneously.\nThe active mobile clients immediate executed continuous connection retry logic, targeting alternative regional gateway systems.\nThis incoming traffic volume overwhelmed proxy handshake engines, saturating CPU allocations across the web tier with encryption steps.\nGateway handlers were unable to complete standard connection setups before client-side timeout thresholds expired.\nThis resulted in a tight retry loop that sustained high traffic volumes across the network ingress interfaces.",
-                solution: "SOLUTION: Enable a dynamic jitter profile and an exponential backoff routine within the client connection software update. Inject global perimeter rules to limit new handshake attempts to 5,000 per second while target clusters recover."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #8: Microservice Mesh MTU Mismatch Packet Drops]\nA routine infrastructure update changed the maximum transmission unit (MTU) properties across core compute networking fabrics.\nThe underlying physical switches were configured for jumbo frames, but newly provisioned microservice containers remained at standard MTU configurations.\nWhen large encrypted data packages were exchanged between authentication components, networks dropped these oversized data segments.\nBecause standard diagnostic ping tests used small payload profiles, baseline connection health checks reported normal statuses.\nHowever, actual application transaction requests failed consistently, returning generic network reset errors to client layers.",
-                solution: "SOLUTION: Update container provisioning specifications to explicitly match host network frame dimensions. Execute an orchestrator refresh sweep to rebuild affected containers with aligned MTU constraints."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #9: Distributed Task Scheduler Lock Overlap Deadlocks]\nAn internal timing drift inside the system clock source caused dual instances of an automated task manager to launch at the same time.\nBoth task managers picked up an identical batch of financial settlement records from the processing queue, attempting to apply changes simultaneously.\nThe storage persistence engine encountered recursive database row locks, which blocked both task processing engines.\nSubsequent hourly task updates piled up on the host containers, consuming process identifiers and bringing task processing to a halt.\nDiagnostic dashboards showed hundreds of processes waiting on active row locks within the ledger table structure.",
-                solution: "SOLUTION: Terminate both active task manager processes through the system management console. Synchronize host system clocks with an external atomic time standard, drop duplicate task requests, and clear the locking flags."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #10: Session Storage Secret Key Rotation Deserialization Fault]\nAn automated security management system rotated internal application session signing keys without distributing updates to legacy application tiers.\nWhen users made requests across separate system microservices, older application nodes rejected new authorization structures.\nThis caused the system to drop active user sessions, forcing consumers into a repetitive loop of re-authentication steps.\nCentral authentication systems experienced an 800% increase in login requests, saturating database backends.\nError aggregators recorded high volumes of cryptographic validation failures within application log streams.",
-                solution: "SOLUTION: Roll back active security signing keys to the previous version to stabilize existing user sessions. Deploy configuration updates across all legacy nodes before re-initiating the automated key change procedure."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #11: BGP Route Leak Packet Routing Void]\nAn external telecommunications partner misconfigured internal routing tables, announcing paths for corporate IP blocks.\nThis routing leak pulled internet traffic bound for business services into an unrouted network void, breaking user access lines.\nEdge firewall logging interfaces reported a sudden drop in incoming user connections, while internal system monitors reported normal status.\nNetwork engineers used traceroute utilities to discover that traffic dropped inside external transit carrier systems.\nThis network partition impacted client connections across multiple geographic areas, causing data drops.",
-                solution: "SOLUTION: Contact the external transit provider to clear the misconfigured routing announcements. Inject strict prefix filter controls at border gateway routers to ignore unauthorized path advertisements."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #12: IAM Policy Evaluation API Call Throttling]\nA newly deployed microservice architecture initiated explicit security permission checks for every individual data object fetch operation.\nThis high call volume quickly breached maximum account API limit parameters for the cloud platform's security evaluation layer.\nThe platform responded by throttling identity check requests, blocking permission checks for all company environments.\nCore infrastructure management systems could no longer check resource access rights, causing application components to fail.\nInternal log files recorded persistent 'ThrottlingException: Rate exceeded' error strings across all microservice layers.",
-                solution: "SOLUTION: Implement a localized, short-term caching structure for permission evaluations inside the application source code. Deploy a configuration update to replace individual object checks with single batched entitlement queries."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #13: Object Storage Metadata Synchronization Lag]\nA high-volume document management system uploaded over ten million image files into an object storage container within one hour.\nThe storage provider's internal metadata catalog experienced replication backlogs when synchronizing indexing records across target zones.\nWhen users attempted to retrieve documents immediately after upload, the storage interface returned HTTP 404 missing object codes.\nApplication index tracking systems marked these files as corrupted, triggering automated deletion workflows.\nThis data sync delay caused file retrieval inconsistencies across secondary user interface entry portals.",
-                solution: "SOLUTION: Pause automated deletion workflows within the document processing management engine. Introduce a progressive lookup retry delay for file verification steps before marking records as missing."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #14: Container Logging Daemon Kernel Hangs]\nAn internal logging daemon container hit hard thread constraints while processing extensive stack traces from debugging systems.\nThe logging daemon locked up file handles across host environments, blocking application containers from writing to standard output channels.\nBecause application code blocks used synchronous write mechanisms for log outputs, worker threads stalled waiting for the file system to respond.\nEntire application node groups stopped processing inbound network calls, causing external load balancers to drop instances from target pools.\nSystem telemetry showed flatlined CPU usage alongside maximized active connection indicators on impacted server nodes.",
-                solution: "SOLUTION: Update the host configuration to use non-blocking, asynchronous logging strategies. Restart the host logging daemons to free locked file handles and restore container execution paths."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #15: Message Queue Dead-Letter Queue Flooding Loop]\nA malformed payment validation response payload was routed into a high-throughput transaction processing message queue.\nThe consumer application failed to parse the payload formatting, generating an error and routing the message to a dead-letter queue.\nAn automation script mistakenly re-queued items from the dead-letter queue back into the primary processing queue without applying fixes.\nThis configuration created a loop where the malformed message consumed application processing capacity, blocking new messages.\nProcessing latency metrics for valid payment transactions increased, causing downstream order fulfillment systems to stall.",
-                solution: "SOLUTION: Disable the automated re-queue script on the dead-letter tracking interface. Purge the malformed payload from the message queue and update consumer logic to discard unparseable structures."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #16: Telemetry Collection Agent Memory Saturation]\nAn update to an infrastructure monitoring agent included a bug that caused it to retain system metric objects in local memory arrays.\nOver twelve hours, the monitoring agent consumed available system RAM across hundreds of application production host environments.\nWhen host memory allocations approached maximum limits, the operating system's out-of-memory utility terminated critical system processes.\nThis caused application nodes to drop offline, leading to unexpected service disruptions across multiple product lines.\nSystem administrators lacked real-time diagnostic visibility because the tracking agents crashed first.",
-                solution: "SOLUTION: Use secure administrative terminals to execute a remote kill instruction against running metric agent versions. Deploy a stable, rolled-back version of the monitoring agent to restore system visibility."
-            },
-            {
-                text: "[DAY 1 CASE STUDY #17: TLS Handshake Cryptographic Cipher Mismatches]\nA corporate infrastructure security update disabled legacy cipher suites across all public web gateway systems.\nLegacy desktop systems used by high-volume corporate clients could not complete TLS handshakes during API synchronization routines.\nClient connections failed during initial setup steps, producing generic connection errors inside legacy application clients.\nNetwork analysis confirmed that negotiation failures occurred because the client requests lacked modern secure hashing variants.\nThis security misalignment isolated a segmented client base from processing real-time system mutations.",
-                solution: "SOLUTION: Temporarily re-enable a limited, secure subset of backwards-compatible ciphers on specialized gateway termination endpoints. Issue structured client update demands to transition users onto up-to-date execution tools."
-            }
-        ];
-
-        // Generator layout builder logic to build and restore state flags smoothly
-        function renderDynamicInterfaceBins() {
-            const cBin = document.getElementById('day1-cases-bin');
-            if (cBin) {
-                cBin.innerHTML = d1CasesData.map((c, idx) => `
-                    <div class="static-case-item ${moduleTrackingState.day1_cases[idx] ? 'completed' : ''}" id="d1-c-${idx}">
-                        <div class="case-text">${c.text}</div>
-                        <div class="static-solution-block"><strong>Remediation Strategy:</strong> ${c.solution}</div>
-                        <button class="submit-item-btn ${moduleTrackingState.day1_cases[idx] ? 'done' : ''}" style="margin-top:15px;" onclick="markCaseRead(${idx})">
-                            ${moduleTrackingState.day1_cases[idx] ? '✓ Reviewed' : 'Mark Scenario As Read'}
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            const dBin1 = document.getElementById('day1-drills-bin');
-            if(dBin1) {
-                dBin1.innerHTML = Array.from({length: 25}).map((_, idx) => `
-                    <div class="drill-item ${moduleTrackingState.day1_drills[idx] ? 'completed' : ''}" id="d1-dr-${idx}">
-                        <div class="drill-text">[DAY 1 DIAGNOSTIC EXERCISE #${idx + 1}]\nSimulated infrastructure tracing logic validation routine for alert cluster trace matrix frame key sequence ${1000 + idx}.\nEnter engineering remediation summary notes below to confirm validation tracking loops.</div>
-                        <textarea class="solution-box" id="input-d1-dr-${idx}" ${moduleTrackingState.day1_drills[idx] ? 'disabled' : ''}>${moduleTrackingState.day1_drills[idx] ? 'Verified engineering signature submitted.' : ''}</textarea>
-                        <button class="submit-item-btn ${moduleTrackingState.day1_drills[idx] ? 'done' : ''}" onclick="submitDrill('day1_drills', ${idx}, 'input-d1-dr-${idx}', 'd1-dr-${idx}')">
-                            ${moduleTrackingState.day1_drills[idx] ? '✓ Verified' : 'Submit Diagnostic Validation'}
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            const dBin2 = document.getElementById('day2-drills-bin');
-            if(dBin2) {
-                dBin2.innerHTML = Array.from({length: 25}).map((_, idx) => `
-                    <div class="drill-item ${moduleTrackingState.day2[idx] ? 'completed' : ''}" id="d2-dr-${idx}">
-                        <div class="drill-text">[DAY 2 CORE REMEDIATION EXERCISE #${idx + 1}]\nEnter operational response diagnostics parameters for failure code error sequence matrix ${idx + 2000}.</div>
-                        <textarea class="solution-box" id="input-d2-dr-${idx}" ${moduleTrackingState.day2[idx] ? 'disabled' : ''}>${moduleTrackingState.day2[idx] ? 'Verified engineering signature submitted.' : ''}</textarea>
-                        <button class="submit-item-btn ${moduleTrackingState.day2[idx] ? 'done' : ''}" onclick="submitDrill('day2', ${idx}, 'input-d2-dr-${idx}', 'd2-dr-${idx}')">
-                            ${moduleTrackingState.day2[idx] ? '✓ Verified' : 'Submit Core Action'}
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            const dBin3 = document.getElementById('day3-drills-bin');
-            if(dBin3) {
-                dBin3.innerHTML = Array.from({length: 25}).map((_, idx) => `
-                    <div class="drill-item ${moduleTrackingState.day3[idx] ? 'completed' : ''}" id="d3-dr-${idx}">
-                        <div class="drill-text">[DAY 3 ADVANCED DISTRIBUTED FAULT #${idx + 1}]\nEnter step-by-step restoration workflow parameters for topology runtime instance sequence ${idx + 3000}.</div>
-                        <textarea class="solution-box" id="input-d3-dr-${idx}" ${moduleTrackingState.day3[idx] ? 'disabled' : ''}>${moduleTrackingState.day3[idx] ? 'Verified engineering signature submitted.' : ''}</textarea>
-                        <button class="submit-item-btn ${moduleTrackingState.day3[idx] ? 'done' : ''}" onclick="submitDrill('day3', ${idx}, 'input-d3-dr-${idx}', 'd3-dr-${idx}')">
-                            ${moduleTrackingState.day3[idx] ? '✓ Verified' : 'Submit Advanced Recovery'}
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            const dBin4 = document.getElementById('day4-cases-bin');
-            if(dBin4) {
-                dBin4.innerHTML = Array.from({length: 20}).map((_, idx) => `
-                    <div class="case-item ${moduleTrackingState.day4[idx] ? 'completed' : ''}" id="d4-c-${idx}">
-                        <div class="case-text">[DAY 4 REGIONAL MITIGATION ARCHITECTURE CASE #${idx + 1}]\nCross-region layout system routing constraints validation tracking scenario ${idx + 4000}.\nFormulate multi-datacenter replication network proxies topology mapping parameters here.</div>
-                        <textarea class="solution-box" id="input-d4-c-${idx}" ${moduleTrackingState.day4[idx] ? 'disabled' : ''}>${moduleTrackingState.day4[idx] ? 'Verified engineering signature submitted.' : ''}</textarea>
-                        <button class="submit-item-btn ${moduleTrackingState.day4[idx] ? 'done' : ''}" onclick="submitDrill('day4', ${idx}, 'input-d4-c-${idx}', 'd4-c-${idx}')">
-                            ${moduleTrackingState.day4[idx] ? '✓ Verified Architecture' : 'Commit Design Strategy'}
-                        </button>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function markCaseRead(idx) {
-            moduleTrackingState.day1_cases[idx] = true;
-            const element = document.getElementById(`d1-c-${idx}`);
-            if(element) {
-                element.classList.add('completed');
-                const btn = element.querySelector('.submit-item-btn');
-                if(btn) {
-                    btn.classList.add('done');
-                    btn.innerText = "✓ Reviewed";
-                }
-            }
-            updateProgressUI();
-        }
-
-        // Shared handler supporting processing updates across panels seamlessly
-        function submitDrill(dayKey, idx, inputId, cardId) {
-            const txt = document.getElementById(inputId).value.trim();
-            if(!txt || txt.length < 5) {
-                alert("Please explicitly enter a formal engineering validation entry response string.");
-                return;
-            }
-            moduleTrackingState[dayKey][idx] = true;
-            const element = document.getElementById(cardId);
-            if(element) {
-                element.classList.add('completed');
-                const box = document.getElementById(inputId);
-                if(box) box.disabled = true;
-                const btn = element.querySelector('.submit-item-btn');
-                if(btn) {
-                    btn.classList.add('done');
-                    btn.innerText = "✓ Verified";
-                }
-            }
-            updateProgressUI();
-        }
-
-        function triggerExamLaunchSequence() {
-            document.getElementById('exam-instructions-modal').style.display = "flex";
-        }
-
-        function launchProctoredExamViewport() {
-            document.getElementById('exam-instructions-modal').style.display = "none";
-            document.getElementById('secure-exam-overlay').style.display = "block";
+            // Find button linked with clicked section view
+            const matchingBtn = Array.from(document.querySelectorAll('.day-btn')).find(btn => {
+                return btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sectionId);
+            });
+            if(matchingBtn) matchingBtn.classList.add('active');
             
-            const form = document.getElementById('proctored-exam-form');
-            form.innerHTML = Array.from({length: 10}).map((_, idx) => `
-                <div class="exam-question-card">
-                    <div class="exam-question-text">EXAM QUESTION #${idx+1}: System trace telemetry displays code string variance mismatch values inside upstream core interface routing endpoints. What sequence provides optimal remediation control windows?</div>
-                    <label class="exam-option-wrapper"><input type="radio" name="q-${idx}" value="a"> Fast-forward deployment synchronization pipelines to override peripheral check indices manually.</label>
-                    <label class="exam-option-wrapper"><input type="radio" name="q-${idx}" value="b"> Route target clusters into failover backup rings while executing telemetry payload flushes.</label>
-                    <label class="exam-option-wrapper"><input type="radio" name="q-${idx}" value="c"> Terminate the network storage fabric endpoints unconditionally across active zones.</label>
-                </div>
-            `).join('');
+            localStorage.setItem(STORAGE_TAB_KEY, sectionId);
+        }
 
-            if(document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
+        // Core Layout Render Engine
+        function renderInterfaceModules() {
+            // Day 1 Cases
+            const d1cBin = document.getElementById('day1-cases-bin');
+            d1cBin.innerHTML = '';
+            d1CasesData.forEach((item, index) => {
+                const isDone = moduleTrackingState.day1_cases[index];
+                const card = document.createElement('div');
+                card.className = `static-case-item ${isDone ? 'completed' : ''}`;
+                card.innerHTML = `
+                    <div class="case-text">${item.text}</div>
+                    <div class="static-solution-block"><strong>Validation Schema:</strong> ${item.solution}</div>
+                    <button class="submit-item-btn ${isDone ? 'done' : ''}" style="margin-top:15px;" onclick="markDay1CaseRead(${index}, this)">
+                        ${isDone ? '✓ Reviewed & Acknowledged' : 'Mark Module as Reviewed'}
+                    </button>
+                `;
+                d1cBin.appendChild(card);
+            });
 
-            window.addEventListener('blur', triggerCheatLockout);
-            document.addEventListener('visibilitychange', () => {
-                if(document.hidden) triggerCheatLockout();
+            // Day 1 Drills
+            const d1dBin = document.getElementById('day1-drills-bin');
+            d1dBin.innerHTML = '';
+            day1DrillsData.forEach((item, index) => {
+                renderInteractiveDrillCard(d1dBin, item, 'day1_drills', index);
+            });
+
+            // Day 2 Drills
+            const d2dBin = document.getElementById('day2-drills-bin');
+            d2dBin.innerHTML = '';
+            day2DrillsData.forEach((item, index) => {
+                renderInteractiveDrillCard(d2dBin, item, 'day2', index);
+            });
+
+            // Day 3 Drills
+            const d3dBin = document.getElementById('day3-drills-bin');
+            d3dBin.innerHTML = '';
+            day3DrillsData.forEach((item, index) => {
+                renderInteractiveDrillCard(d3dBin, item, 'day3', index);
+            });
+
+            // Day 4 Cases
+            const d4cBin = document.getElementById('day4-cases-bin');
+            d4cBin.innerHTML = '';
+            day4CasesData.forEach((item, index) => {
+                renderInteractiveDrillCard(d4cBin, item, 'day4', index);
             });
         }
 
-        function triggerCheatLockout() {
-            document.getElementById('cheat-lockout-screen').style.display = "flex";
-            if(document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        function renderInteractiveDrillCard(targetBin, item, stateKey, index) {
+            const isDone = moduleTrackingState[stateKey][index];
+            const uniqueInputKey = `${stateKey}_${index}`;
+            const runtimeSavedText = textInputsState[uniqueInputKey] || "";
+            
+            const card = document.createElement('div');
+            card.className = `drill-item ${isDone ? 'completed' : ''}`;
+            card.innerHTML = `
+                <div class="drill-text">${item.text}</div>
+                <textarea class="solution-box" 
+                    id="input-${uniqueInputKey}" 
+                    placeholder="Provide your technical administrative analysis here..."
+                    oninput="handleTextTyping('${uniqueInputKey}', this.value)"
+                    ${isDone ? 'disabled' : ''}>${runtimeSavedText}</textarea>
+                <button class="submit-item-btn ${isDone ? 'done' : ''}" onclick="submitDrillModule('${stateKey}', ${index}, '${uniqueInputKey}', this)">
+                    ${isDone ? '✓ Core Verification Active' : 'Submit Engineering Resolution'}
+                </button>
+            `;
+            targetBin.appendChild(card);
+        }
+
+        // Live typing handlers
+        function handleTextTyping(key, values) {
+            saveTextInput(key, values);
+        }
+
+        // Action Submissions
+        function markDay1CaseRead(index, btnElement) {
+            if(moduleTrackingState.day1_cases[index]) return;
+            moduleTrackingState.day1_cases[index] = true;
+            btnElement.classList.add('done');
+            btnElement.innerText = "✓ Reviewed & Acknowledged";
+            btnElement.closest('.static-case-item').classList.add('completed');
+            saveStateToStorage();
+            calculateGlobalProgressMetrics();
+        }
+
+        function submitDrillModule(stateKey, index, uniqueInputKey, btnElement) {
+            if(moduleTrackingState[stateKey][index]) return;
+            
+            const targetTextarea = document.getElementById(`input-${uniqueInputKey}`);
+            if(!targetTextarea || targetTextarea.value.trim().length < 10) {
+                alert("Please provide a more comprehensive engineering resolution text description to satisfy metrics tracking.");
+                return;
+            }
+
+            moduleTrackingState[stateKey][index] = true;
+            targetTextarea.disabled = true;
+            btnElement.classList.add('done');
+            btnElement.innerText = "✓ Core Verification Active";
+            btnElement.closest('.drill-item').classList.add('completed');
+            
+            saveStateToStorage();
+            calculateGlobalProgressMetrics();
+        }
+
+        // Calculations & Metrics updates
+        function calculateGlobalProgressMetrics() {
+            const sum = (acc, val) => acc + (val ? 1 : 0);
+            
+            const d1cCount = moduleTrackingState.day1_cases.reduce(sum, 0);
+            const d1dCount = moduleTrackingState.day1_drills.reduce(sum, 0);
+            const d2Count = moduleTrackingState.day2.reduce(sum, 0);
+            const d3Count = moduleTrackingState.day3.reduce(sum, 0);
+            const d4Count = moduleTrackingState.day4.reduce(sum, 0);
+
+            // Calculate percentage profiles per block container space
+            const d1Pct = Math.round(((d1cCount + d1dCount) / 45) * 100);
+            const d2Pct = Math.round((d2Count / 25) * 100);
+            const d3Pct = Math.round((d3Count / 25) * 100);
+            const d4Pct = Math.round((d4Count / 20) * 100);
+
+            document.getElementById('badge-day1').innerText = `${d1Pct}%`;
+            document.getElementById('badge-day2').innerText = `${d2Pct}%`;
+            document.getElementById('badge-day3').innerText = `${d3Pct}%`;
+            document.getElementById('badge-day4').innerText = `${d4Pct}%`;
+
+            const absoluteTotalItems = 45 + 25 + 25 + 20; // 115 Items
+            const absoluteCompleted = d1cCount + d1dCount + d2Count + d3Count + d4Count;
+            const absoluteMasterPercentage = Math.round((absoluteCompleted / absoluteTotalItems) * 100);
+
+            document.getElementById('master-progress-bar').style.width = `${absoluteMasterPercentage}%`;
+
+            // Evaluate unlocking Day 5 Proctored Exam (Requires 100% processing thresholds)
+            const examBtn = document.getElementById('btn-day5');
+            if(absoluteMasterPercentage === 100) {
+                examBtn.classList.remove('locked');
+                examBtn.removeAttribute('disabled');
+                examBtn.innerText = "Day 5: Proctored Exam 🚀";
+            } else {
+                examBtn.classList.add('locked');
+                examBtn.setAttribute('disabled', 'true');
+                examBtn.innerText = "Day 5: Proctored Exam 🔐";
+            }
+        }
+
+        function resetAllProgress() {
+            if(confirm("Are you sure you want to wipe all progress? This clears everything back to 0%.")) {
+                localStorage.clear();
+                window.location.reload();
+            }
+        }
+
+        // Day 5 System Orchestrations
+        function triggerExamLaunchSequence() {
+            document.getElementById('exam-instructions-modal').style.display = 'flex';
+        }
+
+        function launchProctoredExamViewport() {
+            document.getElementById('exam-instructions-modal').style.display = 'none';
+            document.getElementById('secure-exam-overlay').style.display = 'block';
+            
+            // Build out exam questions dynamically
+            const formBin = document.getElementById('proctored-exam-form');
+            formBin.innerHTML = '';
+            
+            const mockQuestions = [
+                { q: "What metric dynamic signature explicitly marks cascading database proxy lockouts?", a: ["Thread pool starvation limits crossed", "BGP metric leakage routing rules", "Asynchronous file frame drop rates"], c: 0 },
+                { q: "How should an administrator mitigate system split-brain cluster mutations instantly?", a: ["Execute node fence arrays using STONITH tools", "Re-route edge ingress limits manually", "Drop active TTL configurations down to zero"], c: 0 }
+            ];
+
+            mockQuestions.forEach((item, idx) => {
+                const block = document.createElement('div');
+                block.className = 'exam-question-card';
+                block.innerHTML = `<div class="exam-question-text">Q${idx+1}: ${item.q}</div>`;
+                
+                item.a.forEach((opt, oIdx) => {
+                    block.innerHTML += `
+                        <label class="exam-option-wrapper">
+                            <input type="radio" name="question-${idx}" value="${oIdx}"> ${opt}
+                        </label>
+                    `;
+                });
+                formBin.appendChild(block);
+            });
+
+            // Activate anti-cheat protection loops
+            window.addEventListener('blur', executeSecurityLockoutProtocol);
+        }
+
+        function executeSecurityLockoutProtocol() {
+            document.getElementById('cheat-lockout-screen').style.display = 'flex';
         }
 
         function evaluateExamSubmission() {
-            window.removeEventListener('blur', triggerCheatLockout);
-            alert("Certification examination submission compiled successfully. Engineering validation score calculation returned metric rate: 90% - PASS.");
-            
-            // Clean up stored state array structures completely upon final exam completion pass
-            localStorage.removeItem(STORAGE_KEY);
-            location.reload();
+            alert("Certification exam system processed successfully! Metrics dispatched to evaluation nodes.");
+            window.removeEventListener('blur', executeSecurityLockoutProtocol);
+            document.getElementById('secure-exam-overlay').style.display = 'none';
         }
 
-        // Initialize elements and sync historical session logs back up on initial render loop paths
-        renderDynamicInterfaceBins();
-        updateProgressUI();
+        // On Load Controller Setup Routing Execution Blocks
+        window.addEventListener('DOMContentLoaded', () => {
+            initStorageAndState();
+            renderInterfaceModules();
+            calculateGlobalProgressMetrics();
+
+            // Return to the last visited tab configuration context if saved
+            const savedTab = localStorage.getItem(STORAGE_TAB_KEY);
+            if (savedTab) {
+                navigateToSection(savedTab);
+            }
+        });
     </script>
 </body>
 </html>
