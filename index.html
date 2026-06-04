@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operational Support Administrator Training Program</title>
+    <title>Enterprise Operational Support Administrator Training Program</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
@@ -92,15 +92,19 @@
         .exam-option-wrapper { display: block; background: white; border: 1px solid #cbd5e1; padding: 20px; margin-bottom: 15px; border-radius: 6px; cursor: pointer; line-height: 1.7; font-size: 1rem; }
         #cheat-lockout-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; color: white; z-index: 1000000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         
-        .reset-btn { background-color: transparent; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-top: auto; text-align: center; transition: all 0.2s; }
-        .reset-btn:hover { color: var(--danger-color); border-color: var(--danger-color); background: rgba(239, 68, 68, 0.1); }
+        .reset-progress-btn {
+            background: transparent; border: 1px dashed rgba(255, 255, 255, 0.2); color: #94a3b8;
+            padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-top: auto;
+            text-align: center; transition: all 0.2s ease;
+        }
+        .reset-progress-btn:hover { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: var(--danger-color); }
     </style>
 </head>
 <body>
 
     <div id="sidebar">
         <div>
-            <h2>Operational support Admin</h2>
+            <h2>Ops Academy</h2>
             <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:5px;">Overall Training Progress</p>
             <div class="global-progress-bar-container">
                 <div class="global-progress-fill" id="master-progress-bar"></div>
@@ -112,7 +116,7 @@
         <button class="day-btn" id="btn-day4" onclick="navigateToSection('day4-section')">Day 4: 20 Architectural Cases <span class="badge-percent" id="badge-day4">0%</span></button>
         <button class="day-btn locked" id="btn-day5" onclick="triggerExamLaunchSequence()" disabled>Day 5: Proctored Exam 🔐</button>
         
-        <button class="reset-btn" onclick="resetAllProgress()">Reset Saved Progress</button>
+        <button class="reset-progress-btn" onclick="clearSavedProgress()">Reset Tracking Progress</button>
     </div>
 
     <div id="main-viewport">
@@ -122,7 +126,7 @@
             
             <div class="instruction-banner">
                 <h4>📋 Day 1 Multi-Part Instructions</h4>
-                <p>Review the baseline architectural text below. You must systematically review the 20 real-world systemic case study modules by marking them read, and input unique technical verification answers for all 25 advanced 9-to-10 line operational drills to satisfy Day 1 thresholds.</p>
+                <p>Review the baseline architectural text below. You must systematically review the 20 real-world systemic case study modules by marking them read, and input unique technical verification answers for all 25 advanced operational drills to satisfy Day 1 thresholds.</p>
             </div>
 
             <div class="theory-block">
@@ -197,12 +201,10 @@
     </div>
 
     <script>
-        // LocalStorage keys setup
-        const STORAGE_STATE_KEY = "ops_admin_training_state";
-        const STORAGE_TEXT_KEY = "ops_admin_training_text_inputs";
-        const STORAGE_TAB_KEY = "ops_admin_training_active_tab";
+        const STORAGE_STATE_KEY = "ops_support_tracking_state_final";
+        const STORAGE_TEXT_KEY = "ops_support_text_inputs_final";
+        const STORAGE_TAB_KEY = "ops_support_active_tab_final";
 
-        // Baseline global state object template
         let moduleTrackingState = {
             day1_cases: new Array(20).fill(false),
             day1_drills: new Array(25).fill(false),
@@ -211,37 +213,155 @@
             day4: new Array(20).fill(false)
         };
 
-        // Key-Value map for keeping raw user typed solutions cached across browser reloads
         let textInputsState = {};
 
-        // Mock Datasets Generators to dynamically build programmatic sections cleanly
-        const d1CasesData = Array.from({length: 20}, (_, i) => ({
-            text: `[DAY 1 CASE STUDY #${i+1}: Global Edge Proxy Dynamic Scenario]\nAt exactly ${10 + i}:12 UTC, a high density edge configuration error caused unhandled microservice ingress drops across targeted regional clusters. System metrics flagged connection bottlenecks.`,
-            solution: `PROPOSED REMEDIATION PROCEDURES FOR CASE #${i+1}: Route edge gateway endpoints systematically through backup active topologies.`
-        }));
+        // --- 100% EXPLICITLY HARDCODED INDIVIDUAL DATASETS FOR ALL DAYS ---
 
-        const genericDrillGenerator = (dayNum, count) => Array.from({length: count}, (_, i) => ({
-            id: `day${dayNum}_drill_${i}`,
-            text: `[DAY ${dayNum} DIAGNOSTIC RUNTIME INTENSIVE DRILL #${i+1}]\nLOG LEVEL: CRITICAL\nTIMESTAMP: ERROR_SEQUENCE_STAMP_${dayNum}_${i}\nEXCEPTION: Systemic resource limit violation identified during transaction parsing algorithms.\nTRACE: Thread termination exception at stack frame layer. Resource allocation context constraints dropped execution arrays cleanly down to parent execution pools. Action Required.`
-        }));
+        // Day 1: 20 Cases (Populated as requested from part of your file snippet, filled completely)
+        const d1CasesData = [
+            { text: "[DAY 1 CASE STUDY #1: Global Edge Proxy Failover Timing]\nAt exactly 04:12 UTC, the primary edge proxy group located within the EU-West region stopped routing traffic to upstream microservice ingress points. Inspection of edge proxies identified that an unhandled buffer length configuration caused edge workers to systematically drop connections from regional cellular load balancers.\nTelemetry systems registered a 35% drop in operational throughput across external check routers within 120 seconds.\nInternal support teams discovered that memory spaces allocated to edge proxy workers were saturated with old request handles that failed to close properly.\nThis caused cascading connection timeouts across the downstream billing proxy arrays, blocking checkout processing.", solution: "SOLUTION: Inject an updated timeout allocation rule through the global traffic controller plane. Flush out existing connection handle backlogs on the regional load balancers and route peripheral consumer pools away from the degraded cluster spaces to healthy mirror instances." },
+            { text: "[DAY 1 CASE STUDY #2: Transactional Database Connection Pool Exhaustion]\nDuring a flash promotional event, the core relational database processing layer experienced full pool saturation inside the checkout microservice.\nApplication server worker processes spent more than 8,000 milliseconds waiting to acquire connection sockets from the database manager pool.\nThis execution delay caused the container scheduling matrix to mark the backend instances as unhealthy, triggering a cyclic termination loop.\nTotal transaction failures increased across all API interfaces, returning HTTP 504 Gateway errors to web clients.\nDB logs showed that active query locks held by long-running analytics jobs prevented transactional threads from acquiring row write flags.", solution: "SOLUTION: Execute an immediate termination string against long-running analytical processes on the cluster master node. Temporarily adjust connection pool configuration maximums on checkout containers to 250 threads and isolate analytics routines on read replicas." },
+            { text: "[DAY 1 CASE STUDY #3: Asynchronous Cache Eviction Memory Leak]\nSystems analytics flags recorded an unexpected out-of-memory crash across the user profile cache cluster.\nInvestigation confirmed that cache keys generated by mobile application instances omitted appropriate Time-To-Live (TTL) metadata configurations.\nThe cluster memory footprint expanded continuously until it reached physical server memory safety limits.\nWhen memory allocations hit 98%, the system's internal process killer terminated the main memory data store to protect host kernel stability.\nThis forced all user profile query volumes directly to underlying relational database instances, causing database connection drops.", solution: "SOLUTION: Deploy an emergency script to scan cache namespaces and apply a default 3600-second TTL to all orphaned structures. Adjust the memory cache eviction policy from 'noeviction' to 'volatile-lru' across all running instances via the management console." },
+            { text: "[DAY 1 CASE STUDY #4: Storage Network Partition Split-Brain Corruptions]\nAn automated storage network firmware update triggered a brief switch port flapping condition within the primary storage layer.\nThis fluctuation broke the communications fabric between two master block storage coordination nodes, causing both systems to claim primary storage group control flags.\nDependent compute nodes split their write channels between both master systems, writing conflicting metadata histories to underlying physical disks.\nFile integrity verification engines detected these structural mismatches and forced block mounts into read-only mode to prevent file system corruption.\nApplication execution pods locked up when attempting to commit state files, producing mass I/O operation error sequences.", solution: "SOLUTION: Forcefully terminate the split-brain state by shutting down the secondary master storage controller unit. Run data alignment diagnostics on the active storage plane, drop mismatched transaction records, and remount block systems in read-write mode." },
+            { text: "[DAY 1 CASE STUDY #5: Ingress Rate Limiter Token Bucket Flooding]\nAn unexpected DDoS attack targeted exposed API endpoints with highly distributed, malformed JSON structures.\nThe central ingress rate-limiting architecture tracking engine became overwhelmed by state tracking operations inside its lookup matrix.\nInstead of safely blocking malicious client signatures, the filter subsystem failed in an open state, allowing raw traffic drops to hit internal microservice clusters.\nDownstream search microservices quickly consumed available CPU capacities while parsing highly nested incoming data payloads.\nNetwork links between the API cluster routing layer and internal backend networks saturated to 100% capacity parameters.", solution: "SOLUTION: Apply a hard perimeter filter block at the cloud distribution framework level to drop malformed data blocks. Reconfigure rate-limiter check nodes to drop unidentified connection profiles when internal request thresholds exceed baseline parameters." },
+            { text: "[DAY 1 CASE STUDY #6: DNS Routing Record Deletion Cascade]\nAn administrative automation script erroneously deleted wildcard routing declarations inside the corporate domain system ledger.\nWithin minutes, edge recursive resolvers dropped access paths to critical business endpoints, breaking application communication frameworks.\nInternal microservice components could no longer resolve backend dependencies, generating mass unhandled name resolution exceptions.\nAutomated monitoring engines registered system outages and triggered pager shifts across all engineering support categories.\nConfiguration tracking history indicated that the deletion bypass flag had been active, skipping standard staging review pipelines entirely.", solution: "SOLUTION: Roll back the system domain registry to the last automated snapshot version from the deployment system. Purge regional caching layers across the edge gateway systems to accelerate record updates across external tracking nodes." },
+            { text: "[DAY 1 CASE STUDY #7: Websocket Connection State Drop Saturation]\nAn overseas data center power failure disconnected over 450,000 persistent websocket application users simultaneously.\nThe active mobile clients immediately executed continuous connection retry logic, targeting alternative regional gateway systems.\nThis incoming traffic volume overwhelmed proxy handshake engines, saturating CPU allocations across the web tier with encryption steps.\nGateway handlers were unable to complete standard connection setups before client-side timeout thresholds expired.\nThis resulted in a tight retry loop that sustained high traffic volumes across the network ingress interfaces.", solution: "SOLUTION: Enable a dynamic jitter profile and an exponential backoff routine within the client connection software update. Inject global perimeter rules to limit new handshake attempts to 5,000 per second while target clusters recover." },
+            { text: "[DAY 1 CASE STUDY #8: Microservice Mesh MTU Mismatch Packet Drops]\nA routine infrastructure update changed the maximum transmission unit (MTU) properties across core compute networking fabrics.\nThe underlying physical switches were configured for jumbo frames, but newly provisioned microservice containers remained at standard MTU configurations.\nWhen large encrypted data packages were exchanged between authentication components, networks dropped these oversized data segments.\nBecause standard diagnostic ping tests used small payload profiles, baseline connection health checks reported normal statuses.\nHowever, actual application transaction requests failed consistently, returning generic network reset errors to client layers.", solution: "SOLUTION: Update container provisioning specifications to explicitly match host network frame dimensions. Execute an orchestrator refresh sweep to rebuild affected containers with aligned MTU constraints." },
+            { text: "[DAY 1 CASE STUDY #9: Distributed Task Scheduler Lock Overlap Deadlocks]\nAn internal timing drift inside the system clock source caused dual instances of an automated task manager to launch at the same time.\nBoth task managers picked up an identical batch of financial settlement records from the processing queue, attempting to apply changes simultaneously.\nThe storage persistence engine encountered recursive database row locks, which blocked both task processing engines.\nSubsequent hourly task updates piled up on the host containers, consuming process identifiers and bringing task processing to a halt.\nDiagnostic dashboards showed hundreds of processes waiting on active row locks within the ledger table structure.", solution: "SOLUTION: Terminate both active task manager processes through the system management console. Synchronize host system clocks with an external atomic time standard, drop duplicate task requests, and clear the locking flags." },
+            { text: "[DAY 1 CASE STUDY #10: Session Storage Secret Key Rotation Deserialization Fault]\nAn automated security management system rotated internal application session signing keys without distributing updates to legacy application tiers.\nWhen users made requests across separate system microservices, older application nodes rejected new authorization structures.\nThis caused the system to drop active user sessions, forcing consumers into a repetitive loop of re-authentication steps.\nCentral authentication systems experienced an 800% increase in login requests, saturating database backends.\nError aggregators recorded high volumes of cryptographic validation failures within application log streams.", solution: "SOLUTION: Roll back active security signing keys to the previous version to stabilize existing user sessions. Deploy configuration updates across all legacy nodes before re-initiating the automated key change procedure." },
+            { text: "[DAY 1 CASE STUDY #11: BGP Route Leak Packet Routing Void]\nAn external telecommunications partner misconfigured internal routing tables, announcing paths for corporate IP blocks.\nThis routing leak pulled internet traffic bound for business services into an unrouted network void, breaking user access lines.\nEdge firewall logging interfaces reported a sudden drop in incoming user connections, while internal system monitors reported normal status.\nNetwork engineers used traceroute utilities to discover that traffic dropped inside external transit carrier systems.\nThis network partition impacted client connections across multiple geographic areas, causing data drops.", solution: "SOLUTION: Contact the external transit provider to clear the misconfigured routing announcements. Inject strict prefix filter controls at border gateway routers to ignore unauthorized path advertisements." },
+            { text: "[DAY 1 CASE STUDY #12: IAM Policy Evaluation API Call Throttling]\nA newly deployed microservice architecture initiated explicit security permission checks for every individual data object fetch operation.\nThis high call volume quickly breached maximum account API limit parameters for the cloud platform's security evaluation layer.\nThe platform responded by throttling identity check requests, blocking permission checks for all company environments.\nCore infrastructure management systems could no longer check resource access rights, causing application components to fail.\nInternal log files recorded persistent 'ThrottlingException: Rate exceeded' error strings across all microservice layers.", solution: "SOLUTION: Implement a localized, short-term caching structure for permission evaluations inside the application source code. Deploy a configuration update to replace individual object checks with single batched entitlement queries." },
+            { text: "[DAY 1 CASE STUDY #13: Object Storage Metadata Synchronization Lag]\nA high-volume document management system uploaded over ten million image files into an object storage container within one hour.\nThe storage provider's internal metadata catalog experienced replication backlogs when synchronizing indexing records across target zones.\nWhen users attempted to retrieve documents immediately after upload, the storage interface returned HTTP 404 missing object codes.\nApplication index tracking systems marked these files as corrupted, triggering automated deletion workflows.\nThis data sync delay caused file retrieval inconsistencies across secondary user interface entry portals.", solution: "SOLUTION: Cancel automated deletion workflows within the document processing management engine. Introduce a progressive lookup retry delay for file verification steps before marking records as missing." },
+            { text: "[DAY 1 CASE STUDY #14: Container Logging Daemon Kernel Hangs]\nAn internal logging daemon container hit hard thread constraints while processing extensive stack traces from debugging systems.\nThe logging daemon locked up file handles across host environments, blocking application containers from writing to standard output channels.\nBecause application code blocks used synchronous write mechanisms for log outputs, worker threads stalled waiting for the file system to respond.\nEntire application node groups stopped processing inbound network calls, causing external load balancers to drop instances from target pools.\nSystem telemetry showed flatlined CPU usage alongside maximized active connection indicators on impacted server nodes.", solution: "SOLUTION: Update the host configuration to use non-blocking, asynchronous logging strategies. Restart the host logging daemons to free locked file handles and restore container execution paths." },
+            { text: "[DAY 1 CASE STUDY #15: Message Queue Dead-Letter Queue Flooding Loop]\nA malformed payment validation response payload was routed into a high-throughput transaction processing message queue.\nThe consumer application failed to parse the payload formatting, generating an error and routing the message to a dead-letter queue.\nAn automation script mistakenly re-queued items from the dead-letter queue back into the primary processing queue without applying fixes.\nThis configuration created a loop where the malformed message consumed application processing capacity, blocking new messages.\nProcessing latency metrics for valid payment transactions increased, causing downstream order fulfillment systems to stall.", solution: "SOLUTION: Disable the automated re-queue script on the dead-letter tracking interface. Purge the malformed payload from the message queue and update consumer logic to discard unparseable structures." },
+            { text: "[DAY 1 CASE STUDY #16: Telemetry Collection Agent Memory Saturation]\nAn update to an infrastructure monitoring agent included a bug that caused it to retain system metric objects in local memory arrays.\nOver twelve hours, the monitoring agent consumed available system RAM across hundreds of application production host environments.\nWhen host memory allocations approached maximum limits, the operating system's out-of-memory utility terminated critical system processes.\nThis caused application nodes to drop offline, leading to unexpected service disruptions across multiple product lines.\nSystem administrators lacked real-time diagnostic visibility because the tracking agents crashed first.", solution: "SOLUTION: Use secure administrative terminals to execute a remote kill instruction against running metric agent versions. Deploy a stable, rolled-back version of the monitoring agent to restore system visibility." },
+            { text: "[DAY 1 CASE STUDY #17: TLS Handshake Cryptographic Cipher Mismatches]\nA corporate infrastructure security update disabled legacy cipher suites across all public web gateway systems.\nLegacy desktop systems used by high-volume corporate clients could not complete TLS handshakes during API synchronization routines.\nClient connections failed during initial setup steps, producing generic connection errors within client application windows.\nProxy access records showed elevated rates of handshake rejections without processing data blocks.\nBackend log streams remained empty because the connection phase failed before payload delivery occurred.", solution: "SOLUTION: Temporarily restore the standard intermediate security profile on edge gateways to accommodate legacy clients. Distribute an out-of-band application update package to clients to upgrade their local cipher negotiation engines." },
+            { text: "[DAY 1 CASE STUDY #18: Storage Controller Write-Back Cache Battery Fault]\nA backup battery unit failing on a primary storage hardware controller caused the storage array to shift its caching strategy.\nThe controller moved from high-speed write-back mode to synchronous write-through mode to prevent data loss risks.\nDisk write operations dropped from 15,000 IOPS to fewer than 900 IOPS, causing queue blocks to build up.\nDatabase engines waiting for log updates stalled, triggering transaction timeouts down the line.\nPhysical infrastructure alerts flagged the voltage drop on the storage rack cabinet controller array.", solution: "SOLUTION: Replace the degraded backup battery pack on the hardware storage array controller. Temporarily route non-critical log volumes to secondary flash units to relieve pressure on the main write engine." },
+            { text: "[DAY 1 CASE STUDY #19: Microservice Circular Dependency Thread Lock]\nA hotfix package deployed to an inventory manager microservice introduced an undocumented backend path dependency loop.\nThe inventory manager required responses from the pricing manager, which in turn requested validation from the inventory manager.\nThis cross-dependent lookup sequence consumed available container request threads across both system boundaries within minutes.\nHealth check responders timed out under the heavy load, prompting orchestrators to restart the application environments.\nThe cyclic nature of the dependency loop immediately consumed thread assets upon every container initialization phase.", solution: "SOLUTION: Deploy an immediate emergency code rollback to the previous stable structural build version. Update automated integration testing pipelines to block circular references during build packaging steps." },
+            { text: "[DAY 1 CASE STUDY #20: Edge Router BGP Multi-Path Asymmetry Fault]\nA routing update configuration mistake at a cloud provider caused asymmetric packet deliveries to occur across edge paths.\nInbound web requests reached backend servers via East-Coast routing portals, while outbound answers tried to exit through West-Coast networks.\nStateful core perimeter firewalls along the path dropped the outbound answers because they lacked matching inbound validation histories.\nWeb users experienced dropped connections, while server resource logs reported high counts of abandoned socket frames.\nNetwork path traces showed traffic loops forming within internal network distribution zones.", solution: "SOLUTION: Reset the border routing multi-path parameters to force symmetrical entry and exit paths for the affected network zones. Clear state tracks on perimeter security firewalls to force a clean re-evaluation of connection lifecycles." }
+        ];
 
-        const day1DrillsData = genericDrillGenerator(1, 25);
-        const day2DrillsData = genericDrillGenerator(2, 25);
-        const day3DrillsData = genericDrillGenerator(3, 25);
-        const day4CasesData = Array.from({length: 20}, (_, i) => ({
-            id: `day4_case_${i}`,
-            text: `[DAY 4 ARCHITECTURAL CASE COMPONENT #${i+1}]\nAn anomalous cluster network partition occurred across peripheral data spaces, decoupling local state data validation routines completely away from transactional synchronization points.`
-        }));
+        // Day 1: 25 Drills
+        const d1DrillsData = [
+            { id: "d1_d1", text: "[DAY 1 DRILL #1: Application Memory Allocation Limit Diagnostic]\nSystem Outage Reference: TRACE-D1-DR1\nEnvironment Context: Cloud Compute Block-2B / Pod-D01\nError Code Signature: ERR_D1_MEM_ALLOC_FAIL_01\nLog Entry Detail:\n[WARN] java.lang.OutOfMemoryError: Java heap space exceeded in system engine context.\n[CRIT] Process thread engine-worker-4 aborted transaction task due to memory exhaustion.\n[FAIL] Container health state changed to degraded after runtime memory pool limits reached.\nIdentify configuration corrections to expand max heap allocations without causing host system page faults." },
+            { id: "d1_d2", text: "[DAY 1 DRILL #2: Linux Process System Handle Max Capacity Warning]\nSystem Outage Reference: TRACE-D1-DR2\nEnvironment Context: Edge Routing Node-1A / Box-E02\nError Code Signature: ERR_D1_FILE_DESCR_MAX_02\nLog Entry Detail:\n[WARN] fs.file-max parameter threshold breached on local operating system instance.\n[CRIT] nginx: accept4() failed (24: Too many open files) during edge traffic processing.\n[FAIL] Dropping incoming socket connections due to process descriptor table constraints.\nProvide the operational command sequences to increase file descriptor allocations inside the system kernel settings." },
+            { id: "d1_d3", text: "[DAY 1 DRILL #3: Relational DB Connection Timeout Under Peak Ingress]\nSystem Outage Reference: TRACE-D1-DR3\nEnvironment Context: Database Node Master-1 / DB-M03\nError Code Signature: ERR_D1_DB_CONN_TIMEOUT_03\nLog Entry Detail:\n[WARN] Connection pool pool-checkout saturated: 100 active, 0 idle, 45 threads waiting.\n[CRIT] TimeoutException: Client request failed to acquire database connection socket handle.\n[FAIL] API routing layer returned HTTP 500 internal server error status codes.\nFormulate an operational strategy to clear stuck connection handles and realign pool maximum capacity values." },
+            { id: "d1_d4", text: "[DAY 1 DRILL #4: Ephemeral Port Depletion on Web Gateway Ingress Proxy]\nSystem Outage Reference: TRACE-D1-DR4\nEnvironment Context: Web Traffic Ingress-4C / Proxy-P04\nError Code Signature: ERR_D1_EPH_PORT_EXHAUST_04\nLog Entry Detail:\n[WARN] Cannot assign requested address on outbound proxy connection call sequences.\n[CRIT] Network layer indicates all ephemeral socket allocations within the 32768-61000 range are full.\n[FAIL] Internal services are isolated from upstream API distribution interfaces.\nState the sysctl network parameters required to reduce socket reuse timeout delays and resolve port allocation issues." },
+            { id: "d1_d5", text: "[DAY 1 DRILL #5: Shared Storage File System Write Boundary Contention]\nSystem Outage Reference: TRACE-D1-DR5\nEnvironment Context: Network Storage Array-1D / Volume-V05\nError Code Signature: ERR_D1_DISK_WRITE_LOCK_05\nLog Entry Detail:\n[WARN] File locking manager reports unexpected wait times on shared volume mount points.\n[CRIT] flock: Resource temporarily unavailable while attempting to lock state ledger documents.\n[FAIL] Batch processing schedules aborted due to missing file write access flags.\nOutline the operational commands to find and clear stuck file locking locks on a shared mount path." },
+            { id: "d1_d6", text: "[DAY 1 DRILL #6: Local Disk Space Capacity Exhaustion inside Root Mount]\nSystem Outage Reference: TRACE-D1-DR6\nEnvironment Context: Compute Node Group-3A / Host-H06\nError Code Signature: ERR_D1_ROOT_DISK_FULL_06\nLog Entry Detail:\n[WARN] Target partition /dev/sda1 reports 100% capacity utilization metrics.\n[CRIT] systemd-journald: Failed to write system log entries due to lack of space.\n[FAIL] Docker daemon cannot build or save runtime layers, halting image deployments.\nSpecify the file search syntax to isolate deleted but still open file descriptors that are consuming system storage." },
+            { id: "d1_d7", text: "[DAY 1 DRILL #7: Zombie Process Generation Accumulation System Failure]\nSystem Outage Reference: TRACE-D1-DR7\nEnvironment Context: Application Container Cluster-1B / Node-N07\nError Code Signature: ERR_D1_ZOMBIE_PID_LIMIT_07\nLog Entry Detail:\n[WARN] Operating system process table size approaching maximum limit thresholds.\n[CRIT] kernel: fork: Cannot allocate memory; process identifier assignments are full.\n[FAIL] Subprocess tasks fail to clean up exit statuses, leaving orphaned tracks in memory.\nDetail the terminal pipeline command string to find zombie parent process IDs and clear them from the operating system." },
+            { id: "d1_d8", text: "[DAY 1 DRILL #8: Memory Swap Thrashing on Local Virtual Hypervisor Host]\nSystem Outage Reference: TRACE-D1-DR8\nEnvironment Context: Compute Engine Core-5A / Virtual-V08\nError Code Signature: ERR_D1_SWAP_THRASHING_08\nLog Entry Detail:\n[WARN] kswapd0 process utilizing 99% CPU allocation properties over extended periods.\n[CRIT] System response times elevated; high I/O wait metrics recorded on swap partitions.\n[FAIL] Core service components are timing out because of disk-to-memory swapping lags.\nDetermine the operational approach to modify swap space priority values and adjust local system memory retention rules." },
+            { id: "d1_d9", text: "[DAY 1 DRILL #9: Ingress Domain Resolution DNS Cache Poisoning Detection]\nSystem Outage Reference: TRACE-D1-DR9\nEnvironment Context: Internal Resolver Subsystem / Name-N09\nError Code Signature: ERR_D1_DNS_SEC_VALIDATION_09\nLog Entry Detail:\n[WARN] Resolved address mismatch recorded for primary service lookup domain routes.\n[CRIT] DNSSEC validation failures detected across incoming lookup answers.\n[FAIL] Traffic attempts are being directed away from secure corporate network endpoints.\nDesign the resolution approach to flush regional resolver caches and verify domain authority entries." },
+            { id: "d1_d10", text: "[DAY 1 DRILL #10: Time Synchronization Asymmetry Across Distributed System Nodes]\nSystem Outage Reference: TRACE-D1-DR10\nEnvironment Context: Security Validation Cluster / Time-T10\nError Code Signature: ERR_D1_CLOCK_SKEW_REJECT_10\nLog Entry Detail:\n[WARN] Authentication token evaluation failed due to clock skew calculations.\n[CRIT] Local node clock differs from cluster tracking source by more than 300 seconds.\n[FAIL] Cryptographic handshakes are rejected, blocking access across service zones.\nWrite the network time synchronization tool commands to correct clock offsets and maintain server group tracking alignment." },
+            { id: "d1_d11", text: "[DAY 1 DRILL #11: Automated SSL/TLS Expiration Certificate Validation Failure]\nSystem Outage Reference: TRACE-D1-DR11\nEnvironment Context: Customer Gateway Balancer / Ingress-I11\nError Code Signature: ERR_D1_CERT_EXPIRED_11\nLog Entry Detail:\n[WARN] inbound connection dropped: SSL handshake failed due to validation status.\n[CRIT] Certificate verification indicates the primary domain public key expired at 00:00 UTC.\n[FAIL] External clients encounter security warning blocks, preventing user authentication.\nProvide the command sequence to find certificate expiry dates and deploy updated key stores to edge load balancers." },
+            { id: "d1_d12", text: "[DAY 1 DRILL #12: Network Interface Card Packet Error Rate Threshold Breach]\nSystem Outage Reference: TRACE-D1-DR12\nEnvironment Context: Host Server Interface-eth0 / Network-N12\nError Code Signature: ERR_D1_NIC_CRC_ERROR_12\nLog Entry Detail:\n[WARN] Interface eth0 reports elevated counts of cyclic redundancy check packet drops.\n[CRIT] Transmission channel degradation observed; frame error rates trending upward.\n[FAIL] Application cluster synchronization speeds are dropping, causing data retry cycles.\nState the network tool commands to evaluate physical link metrics and adjust interface ring buffer settings." },
+            { id: "d1_d13", text: "[DAY 1 DRILL #13: Supervised Process Core Dump Generation Loop Failure]\nSystem Outage Reference: TRACE-D1-DR13\nEnvironment Context: Microservice Engine Base-2C / Host-H13\nError Code Signature: ERR_D1_CORE_DUMP_LOOP_13\nLog Entry Detail:\n[WARN] Application worker crash detected; initiating core storage dump sequence.\n[CRIT] Storage system flooded with consecutive 4GB dump files inside the /tmp directory.\n[FAIL] Disk write capacity exhausted, preventing system recovery and diagnostics.\nDetail the process monitoring adjustments required to control core dump sizes and prevent system storage fills." },
+            { id: "d1_d14", text: "[DAY 1 DRILL #14: Corrupted Local Package Repository Index Metadata Block]\nSystem Outage Reference: TRACE-D1-DR14\nEnvironment Context: System Update Pipeline / Registry-R14\nError Code Signature: ERR_D1_REPO_INDEX_CORRUPT_14\nLog Entry Detail:\n[WARN] Package manager cannot parse index signatures from mirror target structures.\n[CRIT] Hash sum mismatch recorded during deployment file verification checks.\n[FAIL] Operational maintenance windows are blocked because new package updates cannot install.\nSpecify the operational sequence to clear local repository cache indexes and download updated tracking metadata." },
+            { id: "d1_d15", text: "[DAY 1 DRILL #15: CPU Cache Line Inter-Core Contention False Sharing]\nSystem Outage Reference: TRACE-D1-DR15\nEnvironment Context: High-Performance Engine Node / Compute-C15\nError Code Signature: ERR_D1_CACHE_LINE_LOCK_15\nLog Entry Detail:\n[WARN] Hardware performance counters indicate elevated cache line invalidation loops.\n[CRIT] Core utilization metrics show 100% busy states with low operational throughput yields.\n[FAIL] Multi-threaded processing tasks are stalling on inner memory coordination points.\nExplain the profiling tools and process placement configurations used to reduce cache contention on compute nodes." },
+            { id: "d1_d16", text: "[DAY 1 DRILL #16: Operating System Entropy Pool Exhaustion Cryptographic Stall]\nSystem Outage Reference: TRACE-D1-DR16\nEnvironment Context: Secure API Node Array-4B / Security-S16\nError Code Signature: ERR_D1_ENTROPY_POOL_DRAIN_16\nLog Entry Detail:\n[WARN] Available system entropy metrics dropped below minimum safety limits (100 bits).\n[CRIT] Secure random token generation calls are blocking on /dev/random output files.\n[FAIL] Token generation stalls are causing API authentication timeouts for connected web applications.\nProvide the configuration corrections to enable supplementary background entropy daemons on a virtual machine host." },
+            { id: "d1_d17", text: "[DAY 1 DRILL #17: Broken Linux Inode Tracking Structure Storage Allocation]\nSystem Outage Reference: TRACE-D1-DR17\nEnvironment Context: Shared Logging Store-2D / Storage-S17\nError Code Signature: ERR_D1_INODE_EXHAUSTION_17\nLog Entry Detail:\n[WARN] df -i command reports 100% inode utilization on targeted storage volumes.\n[CRIT] touch: Cannot create file structure: No space left on device partition.\n[FAIL] Storage volumes have remaining gigabytes, but cannot accept new files due to index limits.\nFormulate the operational cleanup script syntax to find and delete millones of zero-byte tracking files." },
+            { id: "d1_d18", text: "[DAY 1 DRILL #18: App Container Linux Cgroup Memory Pressure Thrashing]\nSystem Outage Reference: TRACE-D1-DR18\nEnvironment Context: Container Worker Isolation Layer / Pod-P18\nError Code Signature: ERR_D1_CGROUP_OOM_KILL_18\nLog Entry Detail:\n[WARN] Kernel cgroup notification engine reports memory usage limits reached.\n[CRIT] isolation-agent: Process container-worker-1 terminated by OOM-killer logic.\n[FAIL] Applications are entering a crash loop because memory usage spikes on initialization.\nIdentify the configuration values inside the deployment definition to adjust container memory thresholds safely." },
+            { id: "d1_d19", text: "[DAY 1 DRILL #19: Broken Local Shared Memory Segment IPC Allocation Flags]\nSystem Outage Reference: TRACE-D1-DR19\nEnvironment Context: Shared Database Engine Cache / Host-H19\nError Code Signature: ERR_D1_SHM_ALLOC_FAIL_19\nLog Entry Detail:\n[WARN] shmget: Cannot allocate segment allocation handles for process coordination tasks.\n[CRIT] Inter-process communications failed: Invalid argument parameters encountered.\n[FAIL] Main database instances cannot initialize shared memory segment caching grids.\nWrite out the system properties commands to update max shared memory segment size boundaries." },
+            { id: "d1_d20", text: "[DAY 1 DRILL #20: Host Storage Multipath Communication Channel Isolation Loss]\nSystem Outage Reference: TRACE-D1-DR20\nEnvironment Context: Storage SAN Fabric Ingress / Controller-C20\nError Code Signature: ERR_D1_MULTIPATH_PATH_DOWN_20\nLog Entry Detail:\n[WARN] multipathd: Storage path channel 8:0 dropped validation connectivity metrics.\n[CRIT] Storage path failure: Primary controller link dropped out-of-band communication flags.\n[FAIL] I/O operations are routing over a single connection line, risking system isolation.\nProvide the storage tool infrastructure commands to scan paths and re-establish redundant storage link channels." },
+            { id: "d1_d21", text: "[DAY 1 DRILL #21: Operating System Security Pam Authentication Module Deadlock]\nSystem Outage Reference: TRACE-D1-DR21\nEnvironment Context: Secure Shell Access Portal / Gateway-G21\nError Code Signature: ERR_D1_PAM_LOCK_DEADLOCK_21\nLog Entry Detail:\n[WARN] pam_tally2: Access database file structure locked by abandoned session task.\n[CRIT] sshd: Authentication routines are hanging indefinitely during verification phases.\n[FAIL] Administrator console logins are blocked across all enterprise server instances.\nState the administrative recovery operations to break locked authorization states in single-user mode." },
+            { id: "d1_d22", text: "[DAY 1 DRILL #22: System Logging Daemon Syslog Saturated Socket Queue Dropping]\nSystem Outage Reference: TRACE-D1-DR22\nEnvironment Context: Operations Telemetry Engine / Log-L22\nError Code Signature: ERR_D1_SYSLOG_DROP_22\nLog Entry Detail:\n[WARN] rsyslogd: Output queue space full: Dropping messages from system log streams.\n[CRIT] Internal communication link /dev/log is rejecting new infrastructure tracing lines.\n[FAIL] Auditing and compliance records are incomplete due to log ingestion drops.\nSpecify the configuration parameters to transition logging engines to non-blocking asynchronous memory queues." },
+            { id: "d1_d23", text: "[DAY 1 DRILL #23: Broken System Pipe Buffer Interface Reader Stall Error]\nSystem Outage Reference: TRACE-D1-DR23\nEnvironment Context: Automation Deployment Script Runner / Task-T23\nError Code Signature: ERR_D1_PIPE_BUFFER_STALL_23\nLog Entry Detail:\n[WARN] Upstream data extraction task is blocking on stdout write operations.\n[CRIT] Named pipe buffer allocations are saturated because the downstream reader tool hung.\n[FAIL] Data parsing schedules are frozen halfway, keeping system resources open.\nDetail the process control pipeline methods to safely clear hung reader threads and release data lines." },
+            { id: "d1_d24", text: "[DAY 1 DRILL #24: Enterprise Host Core System Shared Library Version Drift]\nSystem Outage Reference: TRACE-D1-DR24\nEnvironment Context: Compute Node Pool-4A / Server-S24\nError Code Signature: ERR_D1_GLIBC_VERSION_DRIFT_24\nLog Entry Detail:\n[WARN] /lib64/libc.so.6: version GLIBC_2.34 not found in system library index pathways.\n[CRIT] Application deployment binary execution failed due to compiled dependency drifts.\n[FAIL] Newly updated tracking tools cannot execute on older operating system builds.\nOutline the safely orchestrated container staging strategy to isolate runtime environments from shared host software dependencies." },
+            { id: "d1_d25", text: "[DAY 1 DRILL #25: Network Firewall State Allocation Tracking Table Flooding]\nSystem Outage Reference: TRACE-D1-DR25\nEnvironment Context: Security Boundary Firewall / Edge-E25\nError Code Signature: ERR_D1_IPTABLES_CONNTRACK_FULL_25\nLog Entry Detail:\n[WARN] nf_conntrack: Connection tracking table full; dropping new packet streams.\n[CRIT] netfilter: Kernel cannot log new incoming network session parameters safely.\n[FAIL] Valid customer application traffic drops are occurring across edge routers.\nProvide the core kernel runtime configuration adjustments to increase firewall track allocations safely." }
+        ];
 
-        // Application State Initializer
-        function initStorageAndState() {
-            const savedState = localStorage.getItem(STORAGE_STATE_KEY);
-            if (savedState) {
-                try { moduleTrackingState = JSON.parse(savedState); } catch(e) { console.error(e); }
+        // Day 2: 25 Core Infrastructure Drills
+        const d2DrillsData = [
+            { id: "d2_d1", text: "[DAY 2 CORE DRILL #1: Hypervisor Storage Array Kernel Level Lockup]\nAlert Payload Ident: ALERT-D2-SYS-01\nSystem Environment: Physical Linux Hypervisor Host Group #11\nMetrics Context: Kernel File Descriptor Sockets Exhaustion Critical Error\nLog Stream Output:\n[WARN] systemd-udevd[1001]: Worker process timed out while evaluating device paths.\n[CRIT] kernel: [23457.991] vfs_allocate_file_descriptors: Maximum operational pool limits of 65,535 handles reached.\n[FAIL] nginx: accept4() failed (24: Too many open files) during high-throughput client lifecycle transactions.\nAction Required: Write out the exact limits.conf modification syntax and systemctl commands to resolve this infrastructure blockage.", solution: "" },
+            { id: "d2_d2", text: "[DAY 2 CORE DRILL #2: Container Overlay Network Interface Route Loss]\nAlert Payload Ident: ALERT-D2-SYS-02\nSystem Environment: Container Engine Host Node Pool #12\nMetrics Context: Container network endpoint bridge routing rules failure\nLog Stream Output:\n[WARN] docker0 interface link state dropped out-of-band operational status markers.\n[CRIT] network_agent: Failed to reconcile iptables rules for container endpoint virtual interfaces.\n[FAIL] Cross-container application data streams are timing out across internal cluster backplanes.\nAction Required: Detail the configuration commands to flush container network paths and restart bridge interfaces.", solution: "" },
+            { id: "d2_d3", text: "[DAY 2 CORE DRILL #3: Local System Security Auditing Engine Disk Saturation]\nAlert Payload Ident: ALERT-D2-SYS-03\nSystem Environment: Audit Ledger Storage Volume Pool #13\nMetrics Context: Auditd logging subsystem halting system operations via protective rules\nLog Stream Output:\n[WARN] auditd daemon reports space_left action execution thresholds crossed on log storage.\n[CRIT] auditd: System configured to shift root mount into read-only mode upon disk fill alarms.\n[FAIL] Host access lines frozen; no administrative actions can execute to update database parameters.\nAction Required: Provide the configuration steps to clear legacy audit trails and adjust retention rules safely.", solution: "" },
+            { id: "d2_d4", text: "[DAY 2 CORE DRILL #4: Shared File Storage Mount RPC Protocol Interruption]\nAlert Payload Ident: ALERT-D2-SYS-04\nSystem Environment: Enterprise Network File System Mount Point #14\nMetrics Context: NFS client manager connection lockup and RPC tracking timeouts\nLog Stream Output:\n[WARN] nfs: server storage-srv-01 not responding, still trying connectivity sweeps.\n[CRIT] rpcbind: Internal tracking socket queues are full, dropping remote process execution answers.\n[FAIL] Application process chains are stuck in uninterruptible sleep D-states on storage access steps.\nAction Required: Formulate the unmount command strings and recovery workflows to clear hung network file storage mounts.", solution: "" },
+            { id: "d2_d5", text: "[DAY 2 CORE DRILL #5: Linux Memory Out-Of-Memory Multi-Process Execution Cleansing]\nAlert Payload Ident: ALERT-D2-SYS-05\nSystem Environment: Database Host Machine Instance Layer #15\nMetrics Context: Kernel low memory manager executing drastic service process terminations\nLog Stream Output:\n[WARN] kernel: Out of memory: Kill process 4521 (mysqld) score 852 or sacrifice child processes.\n[CRIT] systemd[1]: Core operational relational database process was terminated by kernel logic.\n[FAIL] Customer api access lines dropped completely across all target checkout service environments.\nAction Required: Supply the adjustments required for vm.overcommit_memory and oom_score_adj to protect core database systems.", solution: "" },
+            { id: "d2_d6", text: "[DAY 2 CORE DRILL #6: Systemd Core Service Initialization Timeout Loop]\nAlert Payload Ident: ALERT-D2-SYS-06\nSystem Environment: API Core Process Initializer Daemon #16\nMetrics Context: Systemd unit lifecycle tracking manager timeout exit drops\nLog Stream Output:\n[WARN] auth-service.service: State initialization operation timed out after 90 seconds.\n[CRIT] systemd[1]: auth-service.service: Main process exited, status=1/FAILURE system controls.\n[FAIL] Dependent proxy systems refuse to startup because verification services are missing.\nAction Required: Write out the systemd configuration file properties to expand activation timing bounds.", solution: "" },
+            { id: "d2_d7", text: "[DAY 2 CORE DRILL #7: Secure Shell Daemon Authorization Log File Flooding]\nAlert Payload Ident: ALERT-D2-SYS-07\nSystem Environment: Perimeter Bastion Management Access Host #17\nMetrics Context: Automated secure shell dictionary injection tracking table load blocks\nLog Stream Output:\n[WARN] sshd[8412]: Connection closed by authenticating user root from public endpoint [Invalid].\n[CRIT] auth.log: Ingestion volume scaling past 500MB per min, consuming root partition storage.\n[FAIL] Administrator operations access is hanging due to intense authentication verification tracking backlogs.\nAction Required: Define the tool implementation setups and configuration metrics to automatically block rogue network footprints.", solution: "" },
+            { id: "d2_d8", text: "[DAY 2 CORE DRILL #8: Local System Time Zone Configuration Structural Disalignment]\nAlert Payload Ident: ALERT-D2-SYS-08\nSystem Environment: Financial Transaction Validation Pool #18\nMetrics Context: Local system clock timezone mismatch vs corporate UTC ledger rules\nLog Stream Output:\n[WARN] cron[1204]: Task settlement_run executed at local time offsets instead of standard UTC metrics.\n[CRIT] ledger_sync: Mismatched transaction timestamp entries rejected by secondary banking nodes.\n[FAIL] Batch accounting reporting processes are corrupted with out-of-order execution metrics.\nAction Required: Provide the command steps to realign system time zone files with standard corporate values.", solution: "" },
+            { id: "d2_d9", text: "[DAY 2 CORE DRILL #9: Hardware Storage Driver Read Retry Error Cascade]\nAlert Payload Ident: ALERT-D2-SYS-09\nSystem Environment: Local Hardened Storage Disk Array Node #19\nMetrics Context: SCSI drive controller communication bus resets and hardware block drop tracks\nLog Stream Output:\n[WARN] kernel: sd 2:0:0:1: [sdb] Media error codes encountered during block processing.\n[CRIT] smartd[901]: Device: /dev/sdb, 48 Unallocated sectors flagged for internal recovery tracks.\n[FAIL] I/O operational channels are stalling, forcing database access transactions to backup.\nAction Required: Detail the diagnostic check sequences to verify storage health and extract volume metrics safely.", solution: "" },
+            { id: "d2_d10", text: "[DAY 2 CORE DRILL #10: Host System Network Interface Buffer Overrun Saturation]\nAlert Payload Ident: ALERT-D2-SYS-10\nSystem Environment: Video Asset Processing Server Farm #20\nMetrics Context: Network interface controller driver ring buffer packet drop states\nLog Stream Output:\n[WARN] interface eth1: Rx drop counter incrementing by 1200 packets per layout cycle.\n[CRIT] kernel: net_rx_action: Budget allocations exhausted before clearing socket ring tracks.\n[FAIL] Media stream data deliveries are experiencing packet losses, causing video frame drops.\nAction Required: Specify the configuration command arguments to verify and expand interface device ring queues.", solution: "" },
+            { id: "d2_d11", text: "[DAY 2 CORE DRILL #11: Linux Pluggable Authentication Module Resource Exhaustion]\nAlert Payload Ident: ALERT-D2-SYS-11\nSystem Environment: Enterprise Core Identity Consolidation Point #21\nMetrics Context: PAM access tracking system thread limits reached on validation nodes\nLog Stream Output:\n[WARN] pam_limits[3214]: Failed to initialize environment settings: Resource allocation full.\n[CRIT] login: Cannot create automated session tracking environments for operations workers.\n[FAIL] Automated job management arrays cannot launch background execution scripts.", solution: "" },
+            { id: "d2_d12", text: "[DAY 2 CORE DRILL #12: Local Mount Point Device Disappeared State Exception]\nAlert Payload Ident: ALERT-D2-SYS-12\nSystem Environment: Analytics File Ingestion Storage Point #22\nMetrics Context: Block storage path detachment conditions during active processing tasks\nLog Stream Output:\n[WARN] kernel: EXT4-fs error (device sdc): ext4_lookup: Deleted inode referenced in indices.\n[CRIT] systemd[1]: Storage volume path /mnt/analytics unmounted unexpectedly from target tree.\n[FAIL] Data aggregation schedules failed with bad file descriptor validation errors.\nAction Required: Design the structural file systems check and remount pipeline to verify partition structures.", solution: "" },
+            { id: "d2_d13", text: "[DAY 2 CORE DRILL #13: Process Tracking Tree Process Identifier Exhaustion Event]\nAlert Payload Ident: ALERT-D2-SYS-13\nSystem Environment: Microservices Container Isolation Engine #23\nMetrics Context: Operating system running out of valid process identifier allocations\nLog Stream Output:\n[WARN] kernel: fork: Cannot allocate memory configuration: pid table max limits hit.\n[CRIT] isolated_runtime: Failed to launch health checker process path due to pid index full.\n[FAIL] Host infrastructure can no longer accept remote diagnostic console connections.\nAction Required: State the runtime configuration steps to expand global process identity tables.", solution: "" },
+            { id: "d2_d14", text: "[DAY 2 CORE DRILL #14: Local Name Resolution Caching Service Crash Loop]\nAlert Payload Ident: ALERT-D2-SYS-14\nSystem Environment: Local Core System Name Resolution Layer #24\nMetrics Context: Systemd-resolved internal failure and lookup processing dropouts\nLog Stream Output:\n[WARN] systemd-resolved[412]: Segfault detected inside network pointer validation code lanes.\n[CRIT] systemd[1]: systemd-resolved.service: Scheduled restart execution failed to hold.\n[FAIL] Local systems cannot look up internal service locations or tracking destinations.\nAction Required: Outline the emergency adjustments to replace local lookups with static fallback options.", solution: "" },
+            { id: "d2_d15", text: "[DAY 2 CORE DRILL #15: Kernel Shared Library Version Compatibility Collision]\nAlert Payload Ident: ALERT-D2-SYS-15\nSystem Environment: Legacy Enterprise Management Host Instance #25\nMetrics Context: Shared binary components missing required system symbols\nLog Stream Output:\n[WARN] admin_tool: /lib64/libc.so.6: version GLIBC_2.32 tracking flags not found inside indexes.\n[CRIT] dynamic_linker: Aborting compilation steps for execution verification blocks.\n[FAIL] Operational recovery monitoring scripts are failing to execute across management systems.\nAction Required: Detail how to set isolated search parameters to load binary requirements cleanly.", solution: "" },
+            { id: "d2_d16", text: "[DAY 2 CORE DRILL #16: Local System Message Queue Inter-Process Memory Overflow]\nAlert Payload Ident: ALERT-D2-SYS-16\nSystem Environment: Real-Time Telemetry Processing Machine #26\nMetrics Context: POSIX communication queues hitting absolute operational memory boundaries\nLog Stream Output:\n[WARN] mq_send: Queue identifier 4125 allocation limits reached on local instance parameters.\n[CRIT] analytics_agent: Blocked indefinitely waiting for message space clearance handles.\n[FAIL] Telemetry collection pipelines are dropping monitoring metrics across operations systems.\nAction Required: Write out the system settings modifications to expand message channel limits.", solution: "" },
+            { id: "d2_d17", text: "[DAY 2 CORE DRILL #17: Cryptographic Security Token Generation Space Depletion]\nAlert Payload Ident: ALERT-D2-SYS-17\nSystem Environment: API Gateway Authentication Container #27\nMetrics Context: Host system random number generation pools flatlining below limits\nLog Stream Output:\n[WARN] kernel: Random entropy pool levels dropped below critical validation thresholds.\n[CRIT] crypto_service: Security key generation tasks are stalling on blocking data files.\n[FAIL] Customer login requests are encountering timeouts at edge ingress load balancers.\nAction Required: Document how to activate hardware acceleration tools to restore random pool data.", solution: "" },
+            { id: "d2_d18", text: "[DAY 2 CORE DRILL #18: Storage Device System Directory Corruption Detection]\nAlert Payload Ident: ALERT-D2-SYS-18\nSystem Environment: Database Data Directory Storage Volume #28\nMetrics Context: XFS filesystem file layout structure allocation errors flagged\nLog Stream Output:\n[WARN] kernel: XFS (sdax): Corruption detected in file layout index definitions.\n[CRIT] kernel: XFS (sdax): Metadata block verification failed; force shutting down filesystem files.\n[FAIL] Relational storage nodes dropped offline instantly to protect transactional tracks.\nAction Required: Supply the offline command procedures to repair structural file system layout issues.", solution: "" },
+            { id: "d2_d19", text: "[DAY 2 CORE DRILL #19: App Initialization Script Variable Mapping Drift]\nAlert Payload Ident: ALERT-D2-SYS-19\nSystem Environment: Automated Staging Deployment Host Pool #29\nMetrics Context: Environment property load failures causing runtime initialization crashes\nLog Stream Output:\n[WARN] init_script: Target configuration reference file is completely empty or corrupted.\n[CRIT] runtime_engine: Failed to parse system token data properties during engine startup steps.\n[FAIL] Staging deployment groups are crashing repeatedly in automated configuration loops.\nAction Required: Provide the diagnostic workflows to track down configuration drifts across variables.", solution: "" },
+            { id: "d2_d20", text: "[DAY 2 CORE DRILL #20: Host System Network Traffic Ingress Rule Collision]\nAlert Payload Ident: ALERT-D2-SYS-20\nSystem Environment: Customer Service Ingress Router Instance #30\nMetrics Context: Iptables rule chain processing errors dropping standard communication lines\nLog Stream Output:\n[WARN] netfilter: Rule processing table full; cannot process tracking steps for incoming frames.\n[CRIT] iptables: Failed to inject dynamic security blocklists into processing layout rules.\n[FAIL] Web transaction channels are dropped at the host boundary, blocking user validation calls.\nAction Required: State the command strategies to review processing rules and optimize matching priorities.", solution: "" },
+            { id: "d2_d21", text: "[DAY 2 CORE DRILL #21: Container Orchestration Daemon Endpoint Link Loss]\nAlert Payload Ident: ALERT-D2-SYS-21\nSystem Environment: Container Orchestration Engine Worker Node #31\nMetrics Context: Runtime controller communication channels failing to check sync markers\nLog Stream Output:\n[WARN] containerd: Connection to orchestration API plane dropped with network status codes.\n[CRIT] worker_agent: Cannot report localized application states to master cluster managers.\n[FAIL] Healthy application execution groups are mistakenly terminated by cluster automated controllers.\nAction Required: Formulate the remediation steps to restore container runtime system paths.", solution: "" },
+            { id: "d2_d22", text: "[DAY 2 CORE DRILL #22: Shared Inbound Proxy Execution Stack Buffer Overflow]\nAlert Payload Ident: ALERT-D2-SYS-22\nSystem Environment: Central Identity Routing Gateway Cluster #32\nMetrics Context: Memory layout processing faults within custom edge security checks\nLog Stream Output:\n[WARN] proxy_core: Segfault at address 0000000000ef421c core execution system routes.\n[CRIT] kernel: traps: general protection fault error flags recorded across proxy threads.\n[FAIL] Security boundary gateways are dropping operational sessions for all internal networks.\nAction Required: Detail how to pull debugging core dumps to isolate fault lines within binary files.", solution: "" },
+            { id: "d2_d23", text: "[DAY 2 CORE DRILL #23: Local Host Storage Input Output Scheduler Lockup]\nAlert Payload Ident: ALERT-D2-SYS-23\nSystem Environment: Analytics Batch Data Processing Unit #33\nMetrics Context: Multi-queue block device scheduling systems freezing under high load\nLog Stream Output:\n[WARN] kernel: blk_update_request: Critical I/O timeout encountered on disk drive maps.\n[CRIT] scheduler: Storage elevator loops are locked waiting for controller command slots.\n[FAIL] Batch conversion operations are frozen, stopping dashboard calculation data updates.\nAction Required: Specify the configuration command updates to switch storage queue algorithms.", solution: "" },
+            { id: "d2_d24", text: "[DAY 2 CORE DRILL #24: System Execution System Call Audit Logging Failure]\nAlert Payload Ident: ALERT-D2-SYS-24\nSystem Environment: High Security Transactions Compute Host #34\nMetrics Context: System event reporting queues throwing buffer overflow notifications\nLog Stream Output:\n[WARN] auditd: Audit logging queue space full; message tracking indicators dropped.\n[CRIT] system_safety: Compliance rules demand host lock down when audit trails fail.\n[FAIL] Secure processing channels are dropping execution threads to prevent unlogged actions.\nAction Required: Provide the configuration values to expand system event tracking backlogs safely.", solution: "" },
+            { id: "d2_d25", text: "[DAY 2 CORE DRILL #25: Local Hard Drive Partition Table Validation Error]\nAlert Payload Ident: ALERT-D2-SYS-25\nSystem Environment: Core Infrastructure Recovery Management Node #35\nMetrics Context: Storage disk layout recognition issues on backup recovery volumes\nLog Stream Output:\n[WARN] kernel: GPT: Primary partition tracking structure is corrupted or unreadable.\n[CRIT] parted: Failed to validate target file layout signatures on recovery drive /dev/sdd.\n[FAIL] Automated system backup routines are failing to write daily snapshot archives.\nAction Required: Detail the recovery steps using alternative partition headers to restore access loops.", solution: "" }
+        ];
+
+        // Day 3: 25 Advanced Distributed System Drills
+        const d3DrillsData = [
+            { id: "d3_d1", text: "[DAY 3 ADVANCED DRILL #1: Distributed Coordination Network Partition Event]\nIncident ID: ANOMALY-D3-MESH-01\nNetwork Context: Distributed Consensus Ring / Raft Protocol State Engine\nTelemetry Summary Matrix:\n[WARN] raft_consensus_leader[node-0]: Heartbeat acknowledgment missed from quorum peer instances.\n[CRIT] service_mesh_proxy: Envoy sidecar failed to compile dynamic endpoint routing clusters via xDS API.\n[FAIL] client_ingress: HTTP 503 Service Unavailable returned on cross-region token verification sync steps.\n[INFO] telemetry: Network partition detected between primary ledger nodes and secondary read replica arrays.\nAction Required: Document the exact split-brain isolation workflow and cluster rejoin priority variables to restore synchronization.", solution: "" },
+            { id: "d3_d2", text: "[DAY 3 ADVANCED DRILL #2: Distributed Locking Manager Deadlock String Collision]\nIncident ID: ANOMALY-D3-MESH-02\nNetwork Context: Distributed Redis Lock Matrix / Redlock Lifecycle Management\nTelemetry Summary Matrix:\n[WARN] lock_manager: Resource acquisition hash collision encountered on token key keys.\n[CRIT] thread_pool: 250 worker tasks are locked indefinitely waiting for mutex release indicators.\n[FAIL] Financial clearing schedules are stalled; transaction balances are frozen across systems.\nAction Required: Supply the diagnostic commands to inspect lock parameters and apply override expiration rules.", solution: "" },
+            { id: "d3_d3", text: "[DAY 3 ADVANCED DRILL #3: Service Mesh Routing Loop Cascade Failure]\nIncident ID: ANOMALY-D3-MESH-03\nNetwork Context: Istio Service Mesh Routing Control Plane Configuration\nTelemetry Summary Matrix:\n[WARN] sidecar_ingress: Inbound application request traffic has hit maximum hop threshold limit values (100).\n[CRIT] proxy_mesh: Circular reference found between checkout-service and promotion-service endpoints.\n[FAIL] Ingress nodes are dropping client transactions with 504 gateway timeout responses.\nAction Required: Define the traffic rule configuration updates to break proxy routing loops.", solution: "" },
+            { id: "d3_d4", text: "[DAY 3 ADVANCED DRILL #4: Distributed Database Replication Data Stream Drift]\nIncident ID: ANOMALY-D3-MESH-04\nNetwork Context: Multi-Master Global Database Sync Link Topology\nTelemetry Summary Matrix:\n[WARN] sync_agent: Replication lag metrics between US-East and EU-West scaled past 45 minutes.\n[CRIT] conflict_resolver: Mismatched data object generation values encountered on customer records.\n[FAIL] Customers are seeing outdated account values, generating high volumes of support requests.\nAction Required: Provide the orchestration strategy to manually step forward ledger tracks and align state models.", solution: "" },
+            { id: "d3_d5", text: "[DAY 3 ADVANCED DRILL #5: Event Stream Ingestion Consumer Group Backlog Expansion]\nIncident ID: ANOMALY-D3-MESH-05\nNetwork Context: Apache Kafka Distributed Message Event Logging Fabric\nTelemetry Summary Matrix:\n[WARN] cluster_monitor: Log processing lag metrics on partition 4 expanded by 2.4 million events.\n[CRIT] consumer_group: Processing threads are crashing repeatedly due to unexpected unparseable characters.\n[FAIL] Inventory validation loops are delayed, causing order tracking systems to freeze.\nAction Required: Specify the group reset commands to skip broken event sequences and restore pipeline execution.", solution: "" },
+            { id: "d3_d6", text: "[DAY 3 ADVANCED DRILL #6: Distributed Object Store Internal Balance Inversion]\nIncident ID: ANOMALY-D3-MESH-06\nNetwork Context: Ceph Storage Cluster Placement Group Allocation Management\nTelemetry Summary Matrix:\n[WARN] ceph_monitor: 12 placement groups flagged as completely degraded during system balance steps.\n[CRIT] osd_manager: Storage cluster disk allocation limits crossed on server nodes, stopping replication.\n[FAIL] Object storage writes are failing with immediate disk access failure codes.\nAction Required: Formulate the balance configuration changes to redistribute storage loads across alternative paths.", solution: "" },
+            { id: "d3_d7", text: "[DAY 3 ADVANCED DRILL #7: Microservice Circuit Breaker State Oscillation Wave]\nIncident ID: ANOMALY-D3-MESH-07\nNetwork Context: Resilience4j Circuit Breaker Layer / Core API Gateways\nTelemetry Summary Matrix:\n[WARN] gateway_breaker: Target service transitioned to open status due to high response error rates.\n[CRIT] retry_loop: Uncontrolled traffic waves are hitting target systems during close evaluation cycles.\n[FAIL] Backend services are entering crash loops from immediate load peaks upon reset attempts.\nAction Required: Provide the configuration values to adjust system recovery check delays and smoothing loops.", solution: "" },
+            { id: "d3_d8", text: "[DAY 3 ADVANCED DRILL #8: Distributed Identity Cryptographic Token Signature Deserialization Crash]\nIncident ID: ANOMALY-D3-MESH-08\nNetwork Context: JSON Web Token Authentication Cluster / OAuth2 Endpoints\nTelemetry Summary Matrix:\n[WARN] auth_validator: Cryptographic key parsing errors encountered on cross-region web sessions.\n[CRIT] token_engine: Core security modules are throwing memory faults during parsing steps.\n[FAIL] User session validations are breaking across all global application gateway paths.\nAction Required: Detail the configuration steps to push updated validation keys out to distributed service nodes.", solution: "" },
+            { id: "d3_d9", text: "[DAY 3 ADVANCED DRILL #9: Global Edge Domain CDN Cache Flush System Drop]\nIncident ID: ANOMALY-D3-MESH-09\nNetwork Context: Cloudflare Edge Distribution / Origin Fetch Matrix\nTelemetry Summary Matrix:\n[WARN] content_delivery: Central cache invalidation script threw execution timeout exceptions.\n[CRIT] origin_server: Direct traffic loads to database servers spiked by 1200%, saturating backends.\n[FAIL] Dynamic page generation processes are crashing under heavy web client traffic spikes.\nAction Required: State how to inject throttling controls to shield data origins while cache layers reload.", solution: "" },
+            { id: "d3_d10", text: "[DAY 3 ADVANCED DRILL #10: Distributed Logging Aggregator Queue Memory Overload]\nIncident ID: ANOMALY-D3-MESH-10\nNetwork Context: Logstash Data Processing Pipeline / Elasticsearch Clusters\nTelemetry Summary Matrix:\n[WARN] log_collector: Backpressure indicators activated on data collection interfaces.\n[CRIT] ingest_queue: Internal memory buffer queues full, dropping monitoring records.\n[FAIL] Performance management groups have lost visibility into real-time operational flows.\nAction Required: Write out the configuration parameters to move log caches to durable persistent files.", solution: "" },
+            { id: "d3_d11", text: "[DAY 3 ADVANCED DRILL #11: Microservice Communication Mesh TLS Handshake Rejections]\nIncident ID: ANOMALY-D3-MESH-11\nNetwork Context: Mutual TLS (mTLS) Mesh Certificate Infrastructure\nTelemetry Summary Matrix:\n[WARN] mesh_proxy: mTLS certificate validation failed for target data routes.\n[CRIT] security_manager: Authority chain parsing errors encountered on service certificate checks.\n[FAIL] Internal application modules cannot establish secure communication links, blocking data transfer.", solution: "" },
+            { id: "d3_d12", text: "[DAY 3 ADVANCED DRILL #12: Distributed Cache System Stampede Cache Invalidation Outage]\nIncident ID: ANOMALY-D3-MESH-12\nNetwork Context: Distributed Memcached Memory Grid Layer\nTelemetry Summary Matrix:\n[WARN] cache_grid: Core system data keys expired simultaneously across the cluster configuration.\n[CRIT] database_proxy: Concurrent lookup requests hit underlying transactional storage systems.\n[FAIL] Relational data layers are unresponsive due to massive unmitigated search requests.\nAction Required: Document how to build probabilistic key retention structures to prevent mass expiries.", solution: "" },
+            { id: "d3_d13", text: "[DAY 3 ADVANCED DRILL #13: Cloud Platform Infrastructure API Account Call Limit Blocking]\nIncident ID: ANOMALY-D3-MESH-13\nNetwork Context: Cloud Vendor Orchestration API Resource Management Plane\nTelemetry Summary Matrix:\n[WARN] platform_agent: Rate exceeded notifications received from infrastructure vendor APIs.\n[CRIT] scale_manager: Dynamic capacity additions are blocked during high traffic demands.\n[FAIL] Application groups cannot expand worker container counts, leading to capacity stalls.\nAction Required: Define the architectural strategies to add jitter delays and distribute management lookups.", solution: "" },
+            { id: "d3_d14", text: "[DAY 3 ADVANCED DRILL #14: Distributed Event Ledger Partition Leader Loss Event]\nIncident ID: ANOMALY-D3-MESH-14\nNetwork Context: Apache Kafka Partition Replica Leader Management\nTelemetry Summary Matrix:\n[WARN] broker_3: Out-of-sync replica tracking counts increasing on transaction logging paths.\n[CRIT] cluster_coordinator: Replica leader crashed before replicating latest event data blocks.\n[FAIL] Message consumers are blocked waiting for commit confirmations from the queue engine.\nAction Required: Provide the command syntax to choose alternate replica paths and accept data trade-offs safely.", solution: "" },
+            { id: "d3_d15", text: "[DAY 3 ADVANCED DRILL #15: Multi-Region Server Time Clock Skew Cryptographic Rejections]\nIncident ID: ANOMALY-D3-MESH-15\nNetwork Context: Cross-Region Multi-Tenant Cluster Security Interface\nTelemetry Summary Matrix:\n[WARN] token_validator: Expiration evaluations failing due to internal timestamp variations.\n[CRIT] security_gateway: Clock skew between nodes scales beyond maximum limits (15 seconds).\n[FAIL] Cross-region application calls are dropped as suspicious, blocking international traffic flows.\nAction Required: Supply the synchronization updates to realign distributed tracking clocks globally.", solution: "" },
+            { id: "d3_d16", text: "[DAY 3 ADVANCED DRILL #16: Distributed Search Engine Index Shard Splitting Crash]\nIncident ID: ANOMALY-D3-MESH-16\nNetwork Context: Elasticsearch Cluster Shard Index Allocation Operations\nTelemetry Summary Matrix:\n[WARN] cluster_health: Cluster status transitioned to red; 4 primary data shards are unassigned.\n[CRIT] index_manager: Shard migration tasks failed due to file structure corruptions on nodes.\n[FAIL] In-app customer product searches are throwing immediate backend system failures.\nAction Required: Write down the routing update commands to re-allocate shards and restore cluster states.", solution: "" },
+            { id: "d3_d17", text: "[DAY 3 ADVANCED DRILL #17: Microservice Mesh API Gateway Configuration Schema Break]\nIncident ID: ANOMALY-D3-MESH-17\nNetwork Context: Kong API Gateway Ingress Routing Index Controller\nTelemetry Summary Matrix:\n[WARN] gateway_core: Failed to validate incoming configuration update against runtime schema indexes.\n[CRIT] ingress_controller: Target configuration loading dropped; rolling back to past stable paths.\n[FAIL] New product service routes are unreachable by external web application integrations.\nAction Required: Outline the tracking methods to validate gateway properties before pushing live updates.", solution: "" },
+            { id: "d3_d18", text: "[DAY 3 ADVANCED DRILL #18: Distributed File System Block Replication Interruption]\nIncident ID: ANOMALY-D3-MESH-18\nNetwork Context: GlusterFS Redundant Storage Volume Storage Grid\nTelemetry Summary Matrix:\n[WARN] glusterd: Split-brain status confirmed on volume records /data/user_docs.\n[CRIT] brick_manager: Size mismatch indicators recorded across independent data nodes.\n[FAIL] User attachment download tasks are pulling corrupted data files or failing entirely.\nAction Required: Detail the steps to check transaction numbers and pick the winning file records safely.", solution: "" },
+            { id: "d3_d19", text: "[DAY 3 ADVANCED DRILL #19: Microservice Orchestrator Mesh Pod Allocation Flapping]\nIncident ID: ANOMALY-D3-MESH-19\nNetwork Context: Kubernetes Orchestrator Pod Scheduling Core Matrices\nTelemetry Summary Matrix:\n[WARN] scheduler: Pod placement tasks failing due to conflicting port declarations.\n[CRIT] kubelet_worker: Application containers are constantly starting up and crashing on nodes.\n[FAIL] Internal service address directories are constantly shifting, disrupting down-stream connections.\nAction Required: Provide the deployment template modifications to isolate port spaces and stabilize setups.", solution: "" },
+            { id: "d3_d20", text: "[DAY 3 ADVANCED DRILL #20: Global Database Connection Pool Read Replica Dropout]\nIncident ID: ANOMALY-D3-MESH-20\nNetwork Context: Cloud Relational Read-Replica Load Distribution Array\nTelemetry Summary Matrix:\n[WARN] connection_router: Read replica node instances dropped out of active load pools.\n[CRIT] replication_monitor: Hardware storage controller failures encountered on target read nodes.\n[FAIL] Global search traffic redirected to primary database nodes, slowing system updates.\nAction Required: State the architecture update commands to spin up replacement read instances quickly.", solution: "" },
+            { id: "d3_d21", text: "[DAY 3 ADVANCED DRILL #21: Distributed Batch Computation MapReduce Task Staging Fault]\nIncident ID: ANOMALY-D3-MESH-21\nNetwork Context: Apache Hadoop Big Data Computation System Infrastructure\nTelemetry Summary Matrix:\n[WARN] resource_manager: Application master container exited with unexpected error status flags.\n[CRIT] task_tracker: Internal memory allocations exceeded allocation maximums on node groups.\n[FAIL] Daily data analytics reports are stuck, delaying corporate revenue updates.\nAction Required: Formulate the allocation properties to optimize chunk sizes and thread bounds.", solution: "" },
+            { id: "d3_d22", text: "[DAY 3 ADVANCED DRILL #22: Microservice Trace Telemetry Agent Buffer Saturation]\nIncident ID: ANOMALY-D3-MESH-22\nNetwork Context: OpenTelemetry Distributed Trace Collection Network Fabric\nTelemetry Summary Matrix:\n[WARN] telemetry_collector: Processing memory thresholds exceeded safety guidelines (92%).\n[CRIT] trace_processor: Export calls to backend indexing dashboards are timing out continuously.\n[FAIL] Application server execution performance checks are failing under high telemetry traffic.\nAction Required: Detail the sampling adjustments required to reduce tracking data sizes down to stable counts.", solution: "" },
+            { id: "d3_d23", text: "[DAY 3 ADVANCED DRILL #23: Distributed Configuration Store Key Value Sync Failure]\nIncident ID: ANOMALY-D3-MESH-23\nNetwork Context: etcd Distributed Key-Value Core Store Cluster\nTelemetry Summary Matrix:\n[WARN] etcd_server: Inbound configuration update proposals rejected by majority consensus.\n[CRIT] raft_monitor: Storage disk write latency spikes are stalling quorum coordination steps.\n[FAIL] Network configurations cannot update across container runtime nodes, locking up changes.\nAction Required: Specify the operational adjustments to isolate key storage on dedicated physical drives.", solution: "" },
+            { id: "d3_d24", text: "[DAY 3 ADVANCED DRILL #24: Enterprise Service Mesh Ingress Proxy Secret Certificate Sync Fault]\nIncident ID: ANOMALY-D3-MESH-24\nNetwork Context: HashiCorp Vault Secret Injection / Service Mesh Sidecars\nTelemetry Summary Matrix:\n[WARN] secret_agent: Failed to pull updated TLS key assets from central secret servers.\n[CRIT] sidecar_proxy: Expired credential records remain active within edge network tools.\n[FAIL] Inbound connection streams are dropped by client software due to out-of-date certificates.\nAction Required: Provide the command procedures to force credential updates across proxy sidecars.", solution: "" },
+            { id: "d3_d25", text: "[DAY 3 ADVANCED DRILL #25: Cross-Region Event Router Route Ingress Dropping Wave]\nIncident ID: ANOMALY-D3-MESH-25\nNetwork Context: Enterprise Event Router Hub / Cloud Event Bus Infrastructure\nTelemetry Summary Matrix:\n[WARN] event_hub: Event bridge path routing rules are missing appropriate target system descriptors.\n[CRIT] dead_letter_log: High volumes of transaction update messages are moving to error holding pools.\n[FAIL] Cross-region application databases are out of sync, delaying customer order flows.\nAction Required: Document the configuration steps to restore event routing paths and reprocess error queues.", solution: "" }
+        ];
+
+        // Day 4: 20 Architectural Cases
+        const d4CasesData = [
+            { id: "d4_c1", text: "[DAY 4 ARCHITECTURAL CASE #1: Global Multi-Region Traffic Failover Collapse]\nDesign Scenario Archetype: Global Infrastructure Disaster Recovery Evaluation Framework\nFailure Vector: Regional DNS Route Leak & Persistent Storage Corruption\nSystem Architecture State:\n- Availability Zone A: Master transactional relational data engine (Status: Degraded / Lockup)\n- Availability Zone B: Active-passive secondary warm mirror instance (Status: Out of Sync / Lagging)\n- Edge Traffic Director: Multi-region failover policy failed to redirect traffic due to dead cached health markers.\n- Impact Assessment: Global payment validation flows dropped by 65% for consumers connecting via cellular routing networks.\nAction Required: Detail the multi-tier cross-region failover sequence, secondary ledger alignment parameters, and proxy flush steps.", solution: "" },
+            { id: "d4_c2", text: "[DAY 4 ARCHITECTURAL CASE #2: Hybrid Cloud Network Interface Core Gateway Dropout]\nDesign Scenario Archetype: Multi-Tier Hybrid Connectivity Architecture\nFailure Vector: Primary border gateway protocol connection line disconnect on dedicated paths\nSystem Architecture State:\n- On-Premises Data Center: Main consumer profile database servers (Status: Isolate/ unreachable)\n- Public Cloud Space: Application processing frontends and static web storage elements (Status: Functional)\n- Interconnect Portal: Redundant network paths failed to bring up alternative routing rules during hardware glitches.\n- Impact Assessment: Cloud-hosted frontends return immediate user account read timeouts to internet clients.\nAction Required: Map out the fallback routing adjustments and border router changes to move traffic to fallback paths.", solution: "" },
+            { id: "d4_c3", text: "[DAY 4 ARCHITECTURAL CASE #3: Distributed Document Management Object Storage Replication Outage]\nDesign Scenario Archetype: Multi-Region Active-Active Object Storage Grid Architecture\nFailure Vector: Object tracking metadata replication lockups across global network lines\nSystem Architecture State:\n- Region 1 (Primary Location): Asset ingestion microservice committing millions of payload blocks (Status: Up)\n- Region 2 (Backup Location): Mirror index tracking storage instance trying to ingest matching data blocks (Status: Stalled)\n- Replication Pipeline: High write concurrency levels created lock collisions within global index tracking directories.\n- Impact Assessment: Users in remote locations encounter document missing errors when querying file systems.\nAction Required: Design the structural database update procedures to align document indexes without losing data.", solution: "" },
+            { id: "d4_c4", text: "[DAY 4 ARCHITECTURAL CASE #4: Enterprise Identity Federation Single Sign-On Multi-Tier Outage]\nDesign Scenario Archetype: Identity Management Integration Framework\nFailure Vector: Token signature validation key expiration waves across microservice environments\nSystem Architecture State:\n- Security Token Service: Central key management server rotated encryption properties without notification (Status: Active)\n- Application Clusters: Hundreds of decoupled microservice pods caching old verification profiles (Status: Broken)\n- Ingress Proxies: Denying user session credentials automatically upon every backend cross-verification attempt.\n- Impact Assessment: Entire enterprise consumer base logged out simultaneously; automated re-logins are failing.\nAction Required: Define the automated key distribution pipelines to realign validation structures across running apps.", solution: "" },
+            { id: "d4_c5", text: "[DAY 4 ARCHITECTURAL CASE #5: Real-Time Financial Ledger Event Sourcing Replay Saturation]\nDesign Scenario Archetype: High-Throughput Event Sourced Transaction Infrastructure\nFailure Vector: Database file corruption on central event logs requiring complete message updates\nSystem Architecture State:\n- Event Store: Read-only backup ledger structure containing nine hundred million historical entries (Status: Recovered)\n- Application Views: Transient in-memory databases processing the event log stream to build balances (Status: Stalled)\n- System Constraints: Processing pipelines hit compute maximums, turning a standard 10-minute update into a multi-hour lag.\n- Impact Assessment: Online account platforms showing completely blank transaction lists for global users.\nAction Required: Design a batched state-snapshot approach to bypass event replays and restore real-time records.", solution: "" },
+            { id: "d4_c6", text: "[DAY 4 ARCHITECTURAL CASE #6: Microservice Mesh API Gateway Cascading Connection Failure]\nDesign Scenario Archetype: Service Mesh Edge Ingress Architecture\nFailure Vector: Broken circuit breaker parameters causing connection pool saturation down-stream\nSystem Architecture State:\n- Public API Gateways: Ingesting high-density web mobile application client calls (Status: Maximized)\n- Account Validation Services: Experiencing resource drag due to lockups within sub-tier dependencies (Status: Degraded)\n- Mesh Configurations: Circuit configurations failed to open lines, allowing high traffic to crash backend nodes.\n- Impact Assessment: Complete gateway infrastructure outage; edge routers return HTTP 503 errors globally.\nAction Required: Formulate the architectural adjustments to implement strict traffic limitations and isolate failed nodes.", solution: "" },
+            { id: "d4_c7", text: "[DAY 4 ARCHITECTURAL CASE #7: Distributed In-Memory Cache Grid Split-Brain Partition Network Fault]\nDesign Scenario Archetype: In-Memory Multi-Node Caching Ingress Cluster\nFailure Vector: Network switch failures separating a 12-node cache infrastructure into two groups\nSystem Architecture State:\n- Partition Group A (7 Nodes): Continued accepting key write operations from web application components (Status: Active)\n- Partition Group B (5 Nodes): Continued processing conflicting updates from asynchronous batch processing scripts (Status: Active)\n- Reconciliation Plane: Network paths restored; nodes began throwing data validation faults on key updates.\n- Impact Assessment: Users encounter data rollbacks and session drops when connecting to alternate clusters.\nAction Required: Map out the validation logic to drop conflicting cache allocations and reload data from systems of record.", solution: "" },
+            { id: "d4_c8", text: "[DAY 4 ARCHITECTURAL CASE #8: Cloud-Native Elastic Container Orchestrator Resource Exhaustion Wave]\nDesign Scenario Archetype: Highly Scalable Containerized Microservice Cluster\nFailure Vector: Bad resource allocation limits leading to widespread container teardowns\nSystem Architecture State:\n- Kubernetes Master Nodes: Processing resource requests under sudden load increases (Status: Overloaded)\n- Application Pods: CPU allocation limits configured too tightly, triggering immediate node moves (Status: Evicted)\n- Physical Infrastructure Hosts: Flooded with initialization requests, breaking internal networking connections.\n- Impact Assessment: Complete service delivery blackout; internal cluster routing entries point to dead nodes.\nAction Required: Write the deployment configuration changes to stabilize container staging rules and protect core resources.", solution: "" },
+            { id: "d4_c9", text: "[DAY 4 ARCHITECTURAL CASE #9: Relational Database Shard Configuration Route Map Leak]\nDesign Scenario Archetype: Horizontally Sharded High-Volume Transaction Database\nFailure Vector: Central database location directory data corruption, losing track of data records\nSystem Architecture State:\n- Lookup Coordinator: Directory tables mapping customer IDs to target database shards failed (Status: Corrupted)\n- Database Shard Nodes 1-8: Holding transactional data fields securely across system nodes (Status: Up but Isolated)\n- Ingress Routers: Directing customer update records randomly to incorrect storage locations, throwing errors.\n- Impact Assessment: High data integrity degradation risks; customer updates are failing or saving incorrectly.\nAction Required: Detail the emergency recovery workflows to restore location maps and verify record positions across shards.", solution: "" },
+            { id: "d4_c10", text: "[DAY 4 ARCHITECTURAL CASE #10: Multi-Tenant Enterprise Software API Token Throttling Lockup]\nDesign Scenario Archetype: Shared Multi-Tenant B2B Cloud Service Architecture\nFailure Vector: Malformed script execution within a single tenant tenant consuming shared resource pools\nSystem Architecture State smokes:\n- API Request Routers: Shared lookup endpoints serving hundreds of corporate enterprise partners (Status: Choked)\n- Rogue Client Instance: Initiated uncontrolled loops of nested searches without authentication parameters (Status: Flooding)\n- Isolation Subsystems: Rate limiter failed to pinpoint the tenant ID, applying throttling limits to all clients instead.\n- Impact Assessment: Global service outage for all business clients, missing contractual performance metrics.\nAction Required: Design a prioritized tenant traffic separation strategy to isolate rogue users without impacting others.", solution: "" },
+            { id: "d4_c11", text: "[DAY 4 ARCHITECTURAL CASE #11: Distributed Message Broker Storage Disk Saturation Deadlock]\nDesign Scenario Archetype: Asynchronous Message Queue Event Fabric Architecture\nFailure Vector: High volumes of unread tracking records filling up physical message broker storage partitions\nSystem Architecture State:\n- Queue Master Nodes: Storing incoming transaction tracking records on local disk partitions (Status: Saturated)\n- Downstream Processing Apps: Crashed due to version mismatches, stopping message consumption workflows (Status: Down)\n- Queue Protections: Network interfaces locked down tightly to prevent data writes without storage space.\n- Impact Assessment: Upstream billing systems blocked from publishing transactions, stalling downstream logistics.\nAction Required: Provide the emergency data management workflows to shift unread messages to backup storage pools safely.", solution: "" },
+            { id: "d4_c12", text: "[DAY 4 ARCHITECTURAL CASE #12: Global Content Delivery Origin Connection Timeout Wave]\nDesign Scenario Archetype: Global Edge Distribution / Dynamic Content Generation Ingress\nFailure Vector: TLS handshake tracking configuration mistakes on edge routing servers\nSystem Architecture State:\n- Global CDN Locations: Routing public web application transactions to central data origins (Status: Active)\n- Central Web Gateways: Dropping cryptographic handshake steps due to missing intermediate certificate entries (Status: Degraded)\n- Monitoring Dashboards: Displaying high rates of user interface dropped connections from different locations.\n- Impact Assessment: Public e-commerce properties unreachable for 80% of global web application users.\nAction Required: Detail the configuration corrections to restore intermediate certificate authorities across gateway components.", solution: "" },
+            { id: "d4_c13", text: "[DAY 4 ARCHITECTURAL CASE #13: Hybrid Data Infrastructure Cloud Sync Tunnel Failure]\nDesign Scenario Archetype: Secure Hybrid Cloud Relational Synchronization Topology\nFailure Vector: IPSec VPN tunnel connection drops caused by security configuration shifts\nSystem Architecture State:\n- Local Core Hardware: Running core customer account tracking legacy data systems (Status: Up)\n- Vendor Cloud Space: Running real-time customer support messaging user interface engines (Status: Up)\n- Encryption Gateway: Phase 2 parameter disalignments disconnected secure network lines across locations.\n- Impact Assessment: Customer support agents cannot access real-time balances, blocking assistance lines.\nAction Required: Formulate the network parameter changes to synchronize security keys and restore hybrid data pipelines.", solution: "" },
+            { id: "d4_c14", text: "[DAY 4 ARCHITECTURAL CASE #14: Distributed Analytics Engine Master Node Memory Saturation]\nDesign Scenario Archetype: Distributed Big-Data Analytics Query Infrastructure\nFailure Vector: Complex recursive query strings consuming available memory space on coordination nodes\nSystem Architecture State:\n- Analytics Master Node: Parsing incoming data grouping requests from corporate analysts (Status: OOM Stalled)\n- Analytics Data Workers: Holding data rows securely across storage node arrays (Status: Idle / Waiting)\n- System Coordination: Resource managers failed to enforce query memory limits, causing host locks.\n- Impact Assessment: Corporate reporting platforms frozen, stopping data analysis and business monitoring.\nAction Required: Design query resource constraints and setup alternate master systems to maintain data tool availability.", solution: "" },
+            { id: "d4_c15", text: "[DAY 4 ARCHITECTURAL CASE #15: Cross-Region Key Management Secret Encryption Outage]\nDesign Scenario Archetype: Multi-Region Central Cryptographic Key Architecture\nFailure Vector: Region-to-region network failures blocking access to data decryption keys\nSystem Architecture State:\n- Region A (Key Center): Holding primary data decryption keys within security modules (Status: Active)\n- Region B (App Cluster): Running customer checkout processing engines for local markets (Status: Isolated)\n- Decryption Pipelines: Local calls to read secure values timed out because connection networks dropped.\n- Impact Assessment: Checkout engines cannot process customer payment files, returning immediate credit processing errors.\nAction Required: Design localized key caching architectures and safe fallback procedures to maintain operations during breaks.", solution: "" },
+            { id: "d4_c16", text: "[DAY 4 ARCHITECTURAL CASE #16: Enterprise Service Mesh Namespace Isolation Failure]\nDesign Scenario Archetype: Multi-Tenant Internal Microservice Communication Fabric\nFailure Vector: Misconfigured access guidelines allowing development applications to access production domains\nSystem Architecture State:\n- Production Environment: Running critical user transaction ledger databases (Status: Active)\n- Staging Environment: Running unverified load test automation scripts within developer test benches (Status: Active)\n- Network Mesh Rules: Missing explicit namespace boundaries allowed test tools to target production endpoints.\n- Impact Assessment: Production databases flooded with simulated load testing data records, corrupting analytics metrics.\nAction Required: Construct the explicit service mesh access policies and network boundaries to separate data groups.", solution: "" },
+            { id: "d4_c17", text: "[DAY 4 ARCHITECTURAL CASE #17: Global Telemetry Storage Index Shard Fragmentation Outage]\nDesign Scenario Archetype: High-Density Global Operational Metrics Ingestion Cluster\nFailure Vector: Too many tiny time-series table allocations crashing telemetry indexing nodes\nSystem Architecture State:\n- Telemetry Storage Ingress: Processing millions of performance records from global application builds (Status: Choked)\n- Data Storage Layout: Creating thousands of separate partitions per hour, hitting system limits (Status: Corrupted)\n- Tracking Interfaces: Search response times elevated past 60 seconds, blinding performance tracking groups.\n- Impact Assessment: Operations management teams have no visibility into active production issues across platforms.\nAction Required: Devise a consolidated data index strategy to combine small metric groups into managed tracking files.", solution: "" },
+            { id: "d4_c18", text: "[DAY 4 ARCHITECTURAL CASE #18: Distributed Object Cache Memory Management Failure]\nDesign Scenario Archetype: Enterprise High-Performance Shared Memory Grid System\nFailure Vector: Misconfigured eviction settings causing old session records to block memory updates\nSystem Architecture State:\n- Memory Cache Cluster: Storing temporary customer user lookup sessions for rapid data access (Status: Saturated)\n- Application Servers: Attempting to commit new user sign-in configurations into memory systems (Status: Rejected)\n- System Settings: Max memory limits reached; cache rules rejected updates instead of deleting old data rows.\n- Impact Assessment: New users cannot log in to corporate portals; mobile app platforms throw errors.\nAction Required: Re-engineer the memory eviction configurations and set proactive cleanup routines to preserve memory spaces.", solution: "" },
+            { id: "d4_c19", text: "[DAY 4 ARCHITECTURAL CASE #19: Web Application Ingress Load Balancer Sticky Session Outage]\nDesign Scenario Archetype: Stateful Multi-Tier Web Application Hosting Architecture\nFailure Vector: Local tracking cookie changes causing unequal distribution of customer traffic loads\nSystem Architecture State:\n- Ingress Load Balancers: Dynamic routing components passing traffic to backend server groups (Status: Active)\n- App Server Node 1: Saturated with 95% of active user sessions due to tracking cookie anomalies (Status: Overloaded)\n- App Server Nodes 2-8: Running at less than 5% resource usage levels across the system (Status: Idle)\n- Impact Assessment: Saturated server nodes crash under heavy individual load, breaking sessions for users.\nAction Required: Realign load balancing parameters to use stateless connection methods and decouple tracking cookies.", solution: "" },
+            { id: "d4_c20", text: "[DAY 4 ARCHITECTURAL CASE #20: Multi-Tier Order Processing Distributed State Deadlock]\nDesign Scenario Archetype: Microservices-Based Order Processing Pipeline Architecture\nFailure Vector: Out-of-order event delivery creating cross-dependent transaction locks across services\nSystem Architecture State:\n- Order Creation Service: Holds rows for pending consumer transactions (Status: Locked / Waiting)\n- Billing Management Service: Holds payment records waiting for order confirmation steps (Status: Locked / Waiting)\n- Event Messaging Fabric: Delivered event messages out of order, causing services to lock resources mutually.\n- Impact Assessment: Complete fulfillment pipeline freeze; over thirty thousand purchases stuck in middle states.\nAction Required: Map out an asynchronous transaction design using compensation patterns to break database locks globally.", solution: "" }
+        ];
+
+        // --- Engine Lifecycle Operations ---
+        function initAppEngineAndStorage() {
+            const rawStoredState = localStorage.getItem(STORAGE_STATE_KEY);
+            if (rawStoredState) {
+                try { moduleTrackingState = JSON.parse(rawStoredState); } catch(err) { console.error("Error reading state:", err); }
             }
-            const savedText = localStorage.getItem(STORAGE_TEXT_KEY);
-            if (savedText) {
-                try { textInputsState = JSON.parse(savedText); } catch(e) { console.error(e); }
+            
+            const rawStoredText = localStorage.getItem(STORAGE_TEXT_KEY);
+            if (rawStoredText) {
+                try { textInputsState = JSON.parse(rawStoredText); } catch(err) { console.error("Error reading text:", err); }
             }
         }
 
@@ -249,42 +369,41 @@
             localStorage.setItem(STORAGE_STATE_KEY, JSON.stringify(moduleTrackingState));
         }
 
-        function saveTextInput(key, text) {
-            textInputsState[key] = text;
+        function updateLiveValueState(key, inputString) {
+            textInputsState[key] = inputString;
             localStorage.setItem(STORAGE_TEXT_KEY, JSON.stringify(textInputsState));
         }
 
-        // Section tab processing
         function navigateToSection(sectionId) {
-            document.querySelectorAll('.day-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.day-section').forEach(section => section.classList.remove('active'));
             document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
             
-            const activeSection = document.getElementById(sectionId);
-            if(activeSection) activeSection.classList.add('active');
+            const activeSec = document.getElementById(sectionId);
+            if(activeSec) activeSec.classList.add('active');
 
-            // Find button linked with clicked section view
             const matchingBtn = Array.from(document.querySelectorAll('.day-btn')).find(btn => {
-                return btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sectionId);
+                const targetAttr = btn.getAttribute('onclick');
+                return targetAttr && targetAttr.includes(sectionId);
             });
             if(matchingBtn) matchingBtn.classList.add('active');
-            
+
             localStorage.setItem(STORAGE_TAB_KEY, sectionId);
         }
 
-        // Core Layout Render Engine
-        function renderInterfaceModules() {
+        // --- DOM Generation Factories ---
+        function assembleViewports() {
             // Day 1 Cases
             const d1cBin = document.getElementById('day1-cases-bin');
             d1cBin.innerHTML = '';
             d1CasesData.forEach((item, index) => {
-                const isDone = moduleTrackingState.day1_cases[index];
+                const isCompleted = moduleTrackingState.day1_cases[index];
                 const card = document.createElement('div');
-                card.className = `static-case-item ${isDone ? 'completed' : ''}`;
+                card.className = `static-case-item ${isCompleted ? 'completed' : ''}`;
                 card.innerHTML = `
                     <div class="case-text">${item.text}</div>
-                    <div class="static-solution-block"><strong>Validation Schema:</strong> ${item.solution}</div>
-                    <button class="submit-item-btn ${isDone ? 'done' : ''}" style="margin-top:15px;" onclick="markDay1CaseRead(${index}, this)">
-                        ${isDone ? '✓ Reviewed & Acknowledged' : 'Mark Module as Reviewed'}
+                    <div class="static-solution-block"><strong>Engineering Directive:</strong> ${item.solution}</div>
+                    <button class="submit-item-btn ${isCompleted ? 'done' : ''}" style="margin-top:15px;" onclick="checkOffDay1Case(${index}, this)">
+                        ${isCompleted ? '✓ Verified & Cleared' : 'Acknowledge Module Evaluation'}
                     </button>
                 `;
                 d1cBin.appendChild(card);
@@ -293,136 +412,122 @@
             // Day 1 Drills
             const d1dBin = document.getElementById('day1-drills-bin');
             d1dBin.innerHTML = '';
-            day1DrillsData.forEach((item, index) => {
-                renderInteractiveDrillCard(d1dBin, item, 'day1_drills', index);
-            });
+            d1DrillsData.forEach((item, index) => { buildInteractiveCard(d1dBin, item, 'day1_drills', index); });
 
             // Day 2 Drills
-            const d2dBin = document.getElementById('day2-drills-bin');
-            d2dBin.innerHTML = '';
-            day2DrillsData.forEach((item, index) => {
-                renderInteractiveDrillCard(d2dBin, item, 'day2', index);
-            });
+            const d2Bin = document.getElementById('day2-drills-bin');
+            d2Bin.innerHTML = '';
+            d2DrillsData.forEach((item, index) => { buildInteractiveCard(d2Bin, item, 'day2', index); });
 
             // Day 3 Drills
-            const d3dBin = document.getElementById('day3-drills-bin');
-            d3dBin.innerHTML = '';
-            day3DrillsData.forEach((item, index) => {
-                renderInteractiveDrillCard(d3dBin, item, 'day3', index);
-            });
+            const d3Bin = document.getElementById('day3-drills-bin');
+            d3Bin.innerHTML = '';
+            d3DrillsData.forEach((item, index) => { buildInteractiveCard(d3Bin, item, 'day3', index); });
 
-            // Day 4 Cases
-            const d4cBin = document.getElementById('day4-cases-bin');
-            d4cBin.innerHTML = '';
-            day4CasesData.forEach((item, index) => {
-                renderInteractiveDrillCard(d4cBin, item, 'day4', index);
-            });
+            // Day 4 Cases (Interactive)
+            const d4Bin = document.getElementById('day4-cases-bin');
+            d4Bin.innerHTML = '';
+            d4CasesData.forEach((item, index) => { buildInteractiveCard(d4Bin, item, 'day4', index); });
         }
 
-        function renderInteractiveDrillCard(targetBin, item, stateKey, index) {
-            const isDone = moduleTrackingState[stateKey][index];
-            const uniqueInputKey = `${stateKey}_${index}`;
-            const runtimeSavedText = textInputsState[uniqueInputKey] || "";
-            
-            const card = document.createElement('div');
-            card.className = `drill-item ${isDone ? 'completed' : ''}`;
-            card.innerHTML = `
+        function buildInteractiveCard(containerNode, item, collectionKey, itemIndex) {
+            const isCompleted = moduleTrackingState[collectionKey][itemIndex];
+            const compositeInputId = `${collectionKey}_${itemIndex}`;
+            const cachedValue = textInputsState[compositeInputId] || "";
+
+            const panel = document.createElement('div');
+            panel.className = `drill-item ${isCompleted ? 'completed' : ''}`;
+            panel.innerHTML = `
                 <div class="drill-text">${item.text}</div>
                 <textarea class="solution-box" 
-                    id="input-${uniqueInputKey}" 
-                    placeholder="Provide your technical administrative analysis here..."
-                    oninput="handleTextTyping('${uniqueInputKey}', this.value)"
-                    ${isDone ? 'disabled' : ''}>${runtimeSavedText}</textarea>
-                <button class="submit-item-btn ${isDone ? 'done' : ''}" onclick="submitDrillModule('${stateKey}', ${index}, '${uniqueInputKey}', this)">
-                    ${isDone ? '✓ Core Verification Active' : 'Submit Engineering Resolution'}
+                    id="input-${compositeInputId}" 
+                    placeholder="Provide architecture diagnostics breakdown sequence logs..." 
+                    oninput="updateLiveValueState('${compositeInputId}', this.value)"
+                    ${isCompleted ? 'disabled' : ''}>${cachedValue}</textarea>
+                <button class="submit-item-btn ${isCompleted ? 'done' : ''}" onclick="dispatchDrillSubmission('${collectionKey}', ${itemIndex}, '${compositeInputId}', this)">
+                    ${isCompleted ? '✓ Verification String Active' : 'Submit Infrastructure Remediation'}
                 </button>
             `;
-            targetBin.appendChild(card);
+            containerNode.appendChild(panel);
         }
 
-        // Live typing handlers
-        function handleTextTyping(key, values) {
-            saveTextInput(key, values);
-        }
-
-        // Action Submissions
-        function markDay1CaseRead(index, btnElement) {
+        // --- Event Handlers ---
+        function checkOffDay1Case(index, buttonNode) {
             if(moduleTrackingState.day1_cases[index]) return;
             moduleTrackingState.day1_cases[index] = true;
-            btnElement.classList.add('done');
-            btnElement.innerText = "✓ Reviewed & Acknowledged";
-            btnElement.closest('.static-case-item').classList.add('completed');
+            buttonNode.classList.add('done');
+            buttonNode.innerText = "✓ Verified & Cleared";
+            buttonNode.closest('.static-case-item').classList.add('completed');
             saveStateToStorage();
-            calculateGlobalProgressMetrics();
+            refreshProgressMetrics();
         }
 
-        function submitDrillModule(stateKey, index, uniqueInputKey, btnElement) {
-            if(moduleTrackingState[stateKey][index]) return;
+        function dispatchDrillSubmission(collectionKey, index, compositeInputId, buttonNode) {
+            if(moduleTrackingState[collectionKey][index]) return;
             
-            const targetTextarea = document.getElementById(`input-${uniqueInputKey}`);
-            if(!targetTextarea || targetTextarea.value.trim().length < 10) {
-                alert("Please provide a more comprehensive engineering resolution text description to satisfy metrics tracking.");
+            const targetArea = document.getElementById(`input-${compositeInputId}`);
+            if(!targetArea || targetArea.value.trim().length < 5) {
+                alert("Please declare a substantive engineering diagnostic log to pass parsing filters.");
                 return;
             }
 
-            moduleTrackingState[stateKey][index] = true;
-            targetTextarea.disabled = true;
-            btnElement.classList.add('done');
-            btnElement.innerText = "✓ Core Verification Active";
-            btnElement.closest('.drill-item').classList.add('completed');
+            moduleTrackingState[collectionKey][index] = true;
+            targetArea.disabled = true;
+            buttonNode.classList.add('done');
+            buttonNode.innerText = "✓ Verification String Active";
+            buttonNode.closest('.drill-item').classList.add('completed');
             
             saveStateToStorage();
-            calculateGlobalProgressMetrics();
+            refreshProgressMetrics();
         }
 
-        // Calculations & Metrics updates
-        function calculateGlobalProgressMetrics() {
-            const sum = (acc, val) => acc + (val ? 1 : 0);
-            
-            const d1cCount = moduleTrackingState.day1_cases.reduce(sum, 0);
-            const d1dCount = moduleTrackingState.day1_drills.reduce(sum, 0);
-            const d2Count = moduleTrackingState.day2.reduce(sum, 0);
-            const d3Count = moduleTrackingState.day3.reduce(sum, 0);
-            const d4Count = moduleTrackingState.day4.reduce(sum, 0);
+        // --- Core Calculations Metric Tracking Matrix ---
+        function refreshProgressMetrics() {
+            const evaluatePassedArray = (arr) => arr.reduce((acc, curr) => acc + (curr ? 1 : 0), 0);
 
-            // Calculate percentage profiles per block container space
-            const d1Pct = Math.round(((d1cCount + d1dCount) / 45) * 100);
-            const d2Pct = Math.round((d2Count / 25) * 100);
-            const d3Pct = Math.round((d3Count / 25) * 100);
-            const d4Pct = Math.round((d4Count / 20) * 100);
+            const d1c = evaluatePassedArray(moduleTrackingState.day1_cases);
+            const d1d = evaluatePassedArray(moduleTrackingState.day1_drills);
+            const d2  = evaluatePassedArray(moduleTrackingState.day2);
+            const d3  = evaluatePassedArray(moduleTrackingState.day3);
+            const d4  = evaluatePassedArray(moduleTrackingState.day4);
+
+            const d1Pct = Math.round(((d1c + d1d) / 45) * 100);
+            const d2Pct = Math.round((d2 / 25) * 100);
+            const d3Pct = Math.round((d3 / 25) * 100);
+            const d4Pct = Math.round((d4 / 20) * 100);
 
             document.getElementById('badge-day1').innerText = `${d1Pct}%`;
             document.getElementById('badge-day2').innerText = `${d2Pct}%`;
             document.getElementById('badge-day3').innerText = `${d3Pct}%`;
             document.getElementById('badge-day4').innerText = `${d4Pct}%`;
 
-            const absoluteTotalItems = 45 + 25 + 25 + 20; // 115 Items
-            const absoluteCompleted = d1cCount + d1dCount + d2Count + d3Count + d4Count;
-            const absoluteMasterPercentage = Math.round((absoluteCompleted / absoluteTotalItems) * 100);
+            const grandTotalItems = 45 + 25 + 25 + 20; // 115 total validation milestones
+            const overallCompletedCount = d1c + d1d + d2 + d3 + d4;
+            const absolutePercentageValue = Math.round((overallCompletedCount / grandTotalItems) * 100);
 
-            document.getElementById('master-progress-bar').style.width = `${absoluteMasterPercentage}%`;
+            document.getElementById('master-progress-bar').style.width = `${absolutePercentageValue}%`;
 
-            // Evaluate unlocking Day 5 Proctored Exam (Requires 100% processing thresholds)
-            const examBtn = document.getElementById('btn-day5');
-            if(absoluteMasterPercentage === 100) {
-                examBtn.classList.remove('locked');
-                examBtn.removeAttribute('disabled');
-                examBtn.innerText = "Day 5: Proctored Exam 🚀";
+            // Evaluate Proctored Exam Release State
+            const d5Btn = document.getElementById('btn-day5');
+            if(absolutePercentageValue === 100) {
+                d5Btn.classList.remove('locked');
+                d5Btn.removeAttribute('disabled');
+                d5Btn.innerText = "Day 5: Proctored Exam 🚀";
             } else {
-                examBtn.classList.add('locked');
-                examBtn.setAttribute('disabled', 'true');
-                examBtn.innerText = "Day 5: Proctored Exam 🔐";
+                d5Btn.classList.add('locked');
+                d5Btn.setAttribute('disabled', 'true');
+                d5Btn.innerText = "Day 5: Proctored Exam 🔐";
             }
         }
 
-        function resetAllProgress() {
-            if(confirm("Are you sure you want to wipe all progress? This clears everything back to 0%.")) {
+        function clearSavedProgress() {
+            if(confirm("Are you sure you want to completely clear your tracked logs? This resets your progress back to 0%.")) {
                 localStorage.clear();
                 window.location.reload();
             }
         }
 
-        // Day 5 System Orchestrations
+        // --- Day 5 Final Certification Operations ---
         function triggerExamLaunchSequence() {
             document.getElementById('exam-instructions-modal').style.display = 'flex';
         }
@@ -430,55 +535,53 @@
         function launchProctoredExamViewport() {
             document.getElementById('exam-instructions-modal').style.display = 'none';
             document.getElementById('secure-exam-overlay').style.display = 'block';
-            
-            // Build out exam questions dynamically
-            const formBin = document.getElementById('proctored-exam-form');
-            formBin.innerHTML = '';
-            
-            const mockQuestions = [
-                { q: "What metric dynamic signature explicitly marks cascading database proxy lockouts?", a: ["Thread pool starvation limits crossed", "BGP metric leakage routing rules", "Asynchronous file frame drop rates"], c: 0 },
-                { q: "How should an administrator mitigate system split-brain cluster mutations instantly?", a: ["Execute node fence arrays using STONITH tools", "Re-route edge ingress limits manually", "Drop active TTL configurations down to zero"], c: 0 }
+
+            const formSpace = document.getElementById('proctored-exam-form');
+            formSpace.innerHTML = '';
+
+            const examBankData = [
+                { q: "Which routing configuration error directly generates systemic socket resource exhaustions on high-throughput proxies?", o: ["Improper file descriptor soft limits", "Orphaned distributed cache TTL parameters", "Jumbo frame network interface drops"], c: 0 },
+                { q: "What metric behavior characterizes a Raft consensus split-brain condition?", o: ["Persistent frame size compression anomalies", "Missed heartbeat loops between divided node quorums", "wildcard DNS routing infrastructure removals"], c: 1 }
             ];
 
-            mockQuestions.forEach((item, idx) => {
-                const block = document.createElement('div');
-                block.className = 'exam-question-card';
-                block.innerHTML = `<div class="exam-question-text">Q${idx+1}: ${item.q}</div>`;
+            examBankData.forEach((questionItem, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'exam-question-card';
+                card.innerHTML = `<div class="exam-question-text">Q${qIdx + 1}: ${questionItem.q}</div>`;
                 
-                item.a.forEach((opt, oIdx) => {
-                    block.innerHTML += `
+                questionItem.o.forEach((optionValue, oIdx) => {
+                    card.innerHTML += `
                         <label class="exam-option-wrapper">
-                            <input type="radio" name="question-${idx}" value="${oIdx}"> ${opt}
+                            <input type="radio" name="exam-q-${qIdx}" value="${oIdx}"> ${optionValue}
                         </label>
                     `;
                 });
-                formBin.appendChild(block);
+                formSpace.appendChild(card);
             });
 
-            // Activate anti-cheat protection loops
-            window.addEventListener('blur', executeSecurityLockoutProtocol);
+            window.addEventListener('blur', activateIsolationLockout);
         }
 
-        function executeSecurityLockoutProtocol() {
+        function activateIsolationLockout() {
             document.getElementById('cheat-lockout-screen').style.display = 'flex';
         }
 
         function evaluateExamSubmission() {
-            alert("Certification exam system processed successfully! Metrics dispatched to evaluation nodes.");
-            window.removeEventListener('blur', executeSecurityLockoutProtocol);
+            alert("Certification answers parsed and logged! Metrics evaluation terminal complete.");
+            window.removeEventListener('blur', activateIsolationLockout);
             document.getElementById('secure-exam-overlay').style.display = 'none';
         }
 
-        // On Load Controller Setup Routing Execution Blocks
+        // --- Initialize On Load ---
         window.addEventListener('DOMContentLoaded', () => {
-            initStorageAndState();
-            renderInterfaceModules();
-            calculateGlobalProgressMetrics();
+            initAppEngineAndStorage();
+            assembleViewports();
+            refreshProgressMetrics();
 
-            // Return to the last visited tab configuration context if saved
-            const savedTab = localStorage.getItem(STORAGE_TAB_KEY);
-            if (savedTab) {
-                navigateToSection(savedTab);
+            // Safe Active Panel Tab Fallback
+            const cachedTab = localStorage.getItem(STORAGE_TAB_KEY);
+            if (cachedTab) {
+                navigateToSection(cachedTab);
             }
         });
     </script>
