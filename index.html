@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Operational Support Administrator Training Program</title>
+    <title>Amazon Training Node: Operational Support Admin Track</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
@@ -21,103 +21,118 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Inter, sans-serif; }
         body { background-color: var(--bg-light); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Full Screen Login Styling with Amazon Colors and Effects */
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, var(--amazon-blue) 0%, #232f3e 100%);
-            z-index: 200000; display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.98); padding: 45px 40px; border-radius: 12px;
-            width: 100%; max-width: 450px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            text-align: center; border-top: 5px solid var(--accent-color);
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .amazon-logo {
-            width: 160px; height: auto; margin-bottom: 25px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.15));
-        }
-        .login-card h2 {
-            color: #111; font-size: 1.5rem; margin-bottom: 10px; font-weight: 600; letter-spacing: -0.5px;
-        }
-        .login-card p {
-            color: #555; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.5;
-        }
-        .input-group {
-            margin-bottom: 24px; text-align: left;
-        }
-        .input-group label {
-            display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: #111; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .input-field {
-            width: 100%; padding: 13px 16px; border: 1px solid #a6a9b6; border-radius: 4px;
-            font-size: 0.95rem; transition: all 0.3s ease; outline: none; color: #111;
-        }
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.25);
-        }
-        .login-btn {
-            width: 100%; background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
-            border: 1px solid #a88734; color: #111; padding: 13px; border-radius: 4px;
-            font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .login-btn:hover {
-            background: linear-gradient(to bottom, #f5d176, #eded2d);
-            border-color: #846a29;
-        }
-        
-        /* Message Banners on Login Screen */
-        .error-msg {
-            color: var(--danger-color); font-size: 0.85rem; margin-top: 12px; display: none; text-align: left;
-            line-height: 1.45; font-weight: 500;
-        }
-        .already-taken-msg {
-            display: none; background: #f0f9ff; border: 1px solid #b3e0ff; border-left: 4px solid var(--info-blue);
-            padding: 15px; border-radius: 6px; color: #0369a1; text-align: left; font-size: 0.88rem;
-            line-height: 1.5; margin-top: 15px;
-        }
-
         /* Sidebar Navigation Layout */
         #sidebar {
-            width: 350px; background-color: var(--primary-color); color: white;
-            padding: 25px 20px; display: flex; flex-direction: column; gap: 12px;
-            box-shadow: 3px 0 15px rgba(0,0,0,0.15); z-index: 10;
+            width: 380px; background-color: var(--amazon-blue); color: white;
+            padding: 25px 15px; display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.15); z-index: 10; overflow-y: auto;
         }
-        #sidebar h2 { font-size: 1.3rem; text-transform: uppercase; letter-spacing: 1px; }
+        #sidebar h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.5px; color: #fff; }
+        .sidebar-header { padding-bottom: 15px; border-bottom: 1px solid #232f3e; margin-bottom: 10px; }
 
         .day-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e2e8f0; text-align: left; padding: 15px; font-size: 0.95rem; cursor: pointer;
-            border-radius: 6px; transition: all 0.25s ease-in-out; font-weight: 500;
-            display: flex; justify-content: space-between; align-items: center;
-            width: 100%;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8; text-align: left; padding: 14px 16px; font-size: 0.9rem; cursor: pointer;
+            border-radius: 6px; transition: all 0.2s ease-in-out; font-weight: 500;
+            display: flex; flex-direction: column; gap: 4px; width: 100%; position: relative;
+        }
+        .day-btn span.timeline-badge {
+            font-size: 0.75rem; text-transform: uppercase; color: var(--accent-color); font-weight: bold;
+        }
+        .day-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08); color: #fff;
         }
         .day-btn.active {
-            background-color: var(--secondary-color); color: white;
-            box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3); transform: translateX(4px);
+            background-color: var(--primary-color); color: white;
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+        .day-btn.active span.timeline-badge { color: #fff; }
+        .day-btn.exam-btn { border-left: 4px solid var(--danger-color); }
+        
+        /* Disabled Tab Styles */
+        .day-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        /* Viewport Framework */
-        #main-viewport { flex: 1; padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
-        .day-section { display: none; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); max-width: 1200px; margin: 0 auto 50px auto; }
-        .day-section.active { display: block; }
+        /* Sidebar Progress Trackers */
+        .sidebar-progress-container {
+            width: 100%; background: rgba(255,255,255,0.1); height: 5px; border-radius: 3px; margin-top: 4px; overflow: hidden;
+        }
+        .sidebar-progress-bar {
+            height: 100%; background: var(--success-color); width: 0%; transition: width 0.3s ease;
+        }
+        .day-btn.active .sidebar-progress-bar {
+            background: var(--accent-color);
+        }
 
-        h1 { color: var(--primary-color); font-size: 2.1rem; margin-bottom: 5px; }
-        h2.section-subtitle { color: var(--secondary-color); margin-bottom: 25px; font-weight: 400; font-size: 1.15rem; }
+        /* Viewport Framework Layout */
+        #main-viewport { flex: 1; padding: 40px; overflow-y: auto; scroll-behavior: smooth; background: var(--bg-light); }
+        .day-section { display: none; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); max-width: 1100px; margin: 0 auto 50px auto; border: 1px solid var(--card-border); }
+        .day-section.active { display: block; animation: slideIn 0.3s ease-out; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .instruction-banner { background-color: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 6px; margin-bottom: 35px; }
-        .instruction-banner h4 { color: #1e40af; font-size: 1.05rem; margin-bottom: 5px; }
+        h1 { color: var(--amazon-blue); font-size: 1.8rem; margin-bottom: 5px; font-weight: 700; }
+        h2.section-subtitle { color: var(--secondary-color); margin-bottom: 25px; font-weight: 500; font-size: 1.1rem; }
 
-        .submit-item-btn { background-color: var(--secondary-color); color: white; border: none; padding: 12px 25px; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; }
-        .submit-item-btn:hover { background-color: #0f766e; }
+        .instruction-banner { background-color: #f0fdfa; border-left: 5px solid var(--secondary-color); padding: 20px; border-radius: 6px; margin-bottom: 30px; }
+        .instruction-banner h4 { color: #0f766e; font-size: 1rem; margin-bottom: 6px; }
+        .instruction-banner p { font-size: 0.92rem; line-height: 1.6; color: #115e59; }
 
-        /* Day 5: Proctored Exam Modals & Overlay */
+        /* Progress Dashboard Header Indicator */
+        .phase-status-tracker {
+            display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;
+        }
+        .phase-status-text { font-size: 0.95rem; font-weight: 600; color: var(--amazon-blue); }
+
+        /* Drill Registry Styling */
+        .drill-dashboard-title {
+            font-size: 1.25rem; color: var(--amazon-blue); font-weight: 700; margin: 35px 0 15px 0;
+            padding-bottom: 8px; border-bottom: 2px solid var(--accent-color); display: flex; align-items: center; gap: 8px;
+        }
+        
+        .drills-container { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 30px; }
+        .drill-card { background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; padding: 24px; border-radius: 8px; transition: all 0.2s; }
+        .drill-card:hover { border-left-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .drill-card.completed { border-left-color: var(--success-color); background: #fcfdfd; }
+        
+        .drill-meta { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+        .drill-badge { font-size: 0.7rem; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: 700; }
+        .badge-scenario { background: #e0f2fe; color: #0369a1; }
+        .badge-incident { background: #fee2e2; color: #b91c1c; }
+        .badge-problem { background: #fef3c7; color: #b45309; }
+        .badge-challenge { background: #f3e8ff; color: #6b21a8; }
+        
+        .drill-num { font-size: 0.85rem; font-weight: bold; color: #64748b; }
+        .drill-card h4 { color: #1e293b; font-size: 1.1rem; margin-bottom: 10px; font-weight: 600; }
+        .drill-card p { font-size: 0.92rem; line-height: 1.6; color: #475569; margin-bottom: 16px; text-align: justify; }
+        
+        /* Interactive Sandbox Styling */
+        .sandbox-area { background: #f8fafc; border: 1px solid #cbd5e1; padding: 18px; border-radius: 6px; margin-bottom: 16px; }
+        .sandbox-label { font-size: 0.85rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .sandbox-textarea { width: 100%; height: 90px; padding: 10px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: monospace; font-size: 0.9rem; resize: vertical; margin-bottom: 10px; color: #0f172a; }
+        .sandbox-btn { background: var(--primary-color); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .sandbox-btn:hover { background: #1d4ed8; }
+        .sandbox-btn.verified-btn { background: var(--success-color); }
+        .sandbox-feedback { display: none; margin-top: 10px; padding: 10px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; border-left: 3px solid var(--success-color); background: #f0fdf4; color: #14532d; }
+
+        .drill-solution { background: #fffbeb; border: 1px dashed #fcd34d; padding: 18px; border-radius: 6px; font-size: 0.92rem; line-height: 1.6; color: #0f172a; text-align: justify; }
+        .drill-solution strong { color: #b45309; }
+
+        .submit-item-btn { background-color: var(--secondary-color); color: white; border: none; padding: 14px 28px; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .submit-item-btn:hover:not(:disabled) { background-color: #0f766e; transform: translateY(-1px); }
+        .submit-item-btn.next-phase-btn { background-color: var(--accent-color); color: #111; border: 1px solid #d47f00; }
+        .submit-item-btn.next-phase-btn:hover:not(:disabled) { background-color: #e68a00; }
+        .submit-item-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Proctored Exam Modals & Overlays */
         #exam-instructions-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); z-index: 99998; justify-content: center; align-items: center; padding: 20px; }
         .instructions-modal-content { background: white; padding: 40px; border-radius: 12px; max-width: 700px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
         #secure-exam-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 99999; padding: 50px; overflow-y: auto; }
@@ -125,11 +140,12 @@
         .cam-feed-simulation { width: 100%; height: 110px; background: radial-gradient(circle, #374151 10%, #111827 90%); display: flex; align-items: center; justify-content: center; }
         .exam-question-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 35px; margin-bottom: 40px; border-radius: 8px; }
         .exam-question-text { font-size: 1.1rem; line-height: 1.8; margin-bottom: 25px; color: var(--primary-color); font-weight: 600; }
-        .exam-option-wrapper { display: block; background: white; border: 1px solid #cbd5e1; padding: 20px; margin-bottom: 15px; border-radius: 6px; cursor: pointer; line-height: 1.7; font-size: 1rem; }
+        .exam-option-wrapper { display: block; background: white; border: 1px solid #cbd5e1; padding: 20px; margin-bottom: 15px; border-radius: 6px; cursor: pointer; line-height: 1.7; font-size: 1rem; transition: background 0.15s; }
+        .exam-option-wrapper:hover { background: #f1f5f9; }
         .exam-option-wrapper input { margin-right: 12px; transform: scale(1.2); vertical-align: middle; }
         #cheat-lockout-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; color: white; z-index: 1000000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         
-        /* Success Screen Overlap with Highly Professional Theme */
+        /* Success Screen Overlap */
         #success-screen { 
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); 
@@ -150,75 +166,208 @@
             display: flex; align-items: center; justify-content: center; margin: 0 auto 25px auto;
             box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
         }
-        .success-badge {
-            display: inline-block; background: #e0f2fe; color: #0369a1; 
-            font-size: 0.85rem; font-weight: 700; padding: 6px 16px; 
-            border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
-        }
+        .success-badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.85rem; font-weight: 700; padding: 6px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .success-card h1 { color: #1e293b; font-size: 2.4rem; margin-bottom: 10px; font-weight: 700; }
         .success-card h3 { color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 25px; font-weight: 600; }
         .success-card p { color: #475569; line-height: 1.8; font-size: 1.05rem; text-align: justify; }
-        .meta-stamp {
-            margin-top: 35px; padding-top: 20px; border-top: 1px dashed #cbd5e1;
-            display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; font-weight: 500;
+        .meta-stamp { margin-top: 35px; padding-top: 20px; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; font-weight: 500; }
+        
+        .header-logo-box { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid var(--card-border); }
+        .header-logo-box svg { width: 110px; height: auto; }
+        .header-logo-box h2 { color: var(--amazon-blue); font-size: 1.4rem; font-weight: 700; }
+
+        /* --- ADDED: REGIONAL GATEWAY LOGIN SCREEN OVERLAYS --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #141b24 0%, #1e293b 100%);
+            z-index: 200000; display: flex; justify-content: center; align-items: center; padding: 20px;
         }
+        .login-card {
+            background: white; width: 100%; max-width: 480px; padding: 40px; 
+            border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border-top: 6px solid var(--accent-color);
+        }
+        .login-field { margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
+        .login-field label { font-size: 0.85rem; font-weight: 700; color: var(--amazon-blue); text-transform: uppercase; }
+        .login-input {
+            width: 100%; padding: 12px 16px; border-radius: 6px; border: 1px solid #cbd5e1;
+            font-size: 0.95rem; color: #0f172a; transition: border-color 0.15s;
+        }
+        .login-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(30,58,138,0.1); }
+        #login-error-msg { display: none; background: #fef2f2; color: #991b1b; padding: 12px; border-left: 4px solid var(--danger-color); border-radius: 4px; font-size: 0.88rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="login-overlay">
+    <div id="login-screen">
         <div class="login-card">
-           <img class="amazon-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo">
-            <h2>Enterprise Training Node</h2>
-            <p>Please log in using your corporate operational credentials.</p>
-            <div class="input-group">
-                <label for="corporate-email">Official Email Address</label>
-                <input type="email" id="corporate-email" class="input-field" placeholder="username.lastname@amazononlineservice.com" required>
-                <div class="error-msg" id="login-error">Access Denied. Entered identity does not match authorized corporate registry permissions.</div>
-                
-                <div class="already-taken-msg" id="login-submitted-alert">
-                    <strong>Notice:</strong> An examination record already exists under this identifier. The testing registry indicates your compliance metrics are logged. Multiple attempts are locked by security guidelines.
-                </div>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo" style="width: 140px; margin-bottom: 15px;">
+                <h2 style="font-size: 1.35rem; color: var(--amazon-blue); font-weight: 800;">TRAINING GATEWAY LOGIN</h2>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">Identity Verification System Infrastructure</p>
             </div>
-            <button class="login-btn" id="auth-submit-btn" onclick="validateCorporateIdentity()">Secure Authentication</button>
+            
+            <div id="login-error-msg">Identified tracking data fails verification bounds. Please retry.</div>
+            
+            <div class="login-field">
+                <label for="user-email-input">Official Corporate Email</label>
+                <input type="email" id="user-email-input" class="login-input" placeholder="username@amazononlineservice.com" autocomplete="off">
+            </div>
+            
+            <div class="login-field">
+                <label for="user-code-input">Unique Verification Employee ID</label>
+                <input type="password" id="user-code-input" class="login-input" placeholder="••••••••" autocomplete="off">
+            </div>
+            
+            <button class="submit-item-btn" style="width: 100%; background: var(--amazon-blue); color: white; justify-content: center; margin-top: 10px; padding: 15px;" onclick="validateLogin()">
+                Authenticate Terminal Access 🔐
+            </button>
         </div>
     </div>
 
     <div id="sidebar">
-        <div>
-            <h2>Ops Academy</h2>
-            <p style="font-size:0.85rem; color:#94a3b8; margin-top:5px; margin-bottom:5px;">Assessment Track Profile</p>
+        <div class="sidebar-header">
+            <h2 style="color: var(--accent-color); font-weight: 800;">AMAZON TRAINING NODE</h2>
+            <p style="font-size:0.83rem; color:#94a3b8; margin-top:4px; font-weight:500;">Ops Support Administration Track</p>
+            <p id="active-user-badge" style="font-size:0.78rem; color: var(--secondary-color); font-weight:700; margin-top:6px; text-transform:uppercase; display:none;"></p>
         </div>
-        <button class="day-btn active" id="btn-day5">Day 5: Proctored Exam 🔐</button>
+        <button class="day-btn active" id="btn-phase1" onclick="switchSection('phase1')">
+            <span class="timeline-badge">Days 1 - 3</span>
+            Amazon Linux & Host Isolation
+            <div class="sidebar-progress-container"><div id="progress-bar-phase1" class="sidebar-progress-bar"></div></div>
+        </button>
+        <button class="day-btn" id="btn-phase2" onclick="switchSection('phase2')" disabled>
+            <span class="timeline-badge">Days 4 - 6</span>
+            AWS Cloud Ops Infrastructure
+            <div class="sidebar-progress-container"><div id="progress-bar-phase2" class="sidebar-progress-bar"></div></div>
+        </button>
+        <button class="day-btn" id="btn-phase3" onclick="switchSection('phase3')" disabled>
+            <span class="timeline-badge">Days 7 - 9</span>
+            Internal Ticketing & SLAs
+            <div class="sidebar-progress-container"><div id="progress-bar-phase3" class="sidebar-progress-bar"></div></div>
+        </button>
+        <button class="day-btn" id="btn-phase4" onclick="switchSection('phase4')" disabled>
+            <span class="timeline-badge">Days 10 - 12</span>
+            Fulfillment Tech & Edge Hardware
+            <div class="sidebar-progress-container"><div id="progress-bar-phase4" class="sidebar-progress-bar"></div></div>
+        </button>
+        <button class="day-btn exam-btn" id="btn-phase5" onclick="switchSection('phase5')" disabled>
+            <span class="timeline-badge" style="color: var(--danger-color)">Day 13 Evaluation</span>
+            Proctored Certification 🔐
+            <div class="sidebar-progress-container"><div id="progress-bar-phase5" class="sidebar-progress-bar"></div></div>
+        </button>
     </div>
 
     <div id="main-viewport">
-        <div id="day5-section" class="day-section active">
-            <h1>Day 5: Final Proctored Certification Assessment Pipeline</h1>
-            <h2 class="section-subtitle">System Evaluation and Operations Validation Engine</h2>
+        
+        <div class="header-logo-box" style="display: flex; align-items: center; gap: 20px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background: #ffffff; max-width: max-content;">
+    
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo" style="width: 240px; height: auto; display: block;">
+    
+    <div style="display: flex; flex-direction: column; justify-content: center;">
+        <h2 style="font-family: 'Segoe UI', Inter, sans-serif; font-size: 1.5rem; color: #111827; font-weight: 700; margin: 0; line-height: 1.2;">Amazon Training Environment</h2>
+        <p style="font-family: 'Segoe UI', Inter, sans-serif; font-size: 0.88rem; color: #475569; margin: 4px 0 0 0; line-height: 1.4;">Active Learning System Architecture for Operational Support Admins</p>
+    </div>
+
+</div>
+        <div id="phase1-section" class="day-section active">
+            <h1>Phase 1: Amazon Linux Infrastructure & Host Isolation Operations</h1>
+            <h2 class="section-subtitle">Operational Days 1 - 3 • System Administration Scenarios</h2>
             
             <div class="instruction-banner">
-                <h4>📋 Core Executive Assessment Protocols</h4>
-                <p>Welcome <span id="user-display-name" style="font-weight: bold; color: var(--primary-color);">Administrator</span>. This terminal gateway accesses the final operational qualification structure. Complete this verification loop to record systemic evaluation alignment thresholds.</p>
+                <h4>📋 Phase Objective</h4>
+                <p>Master standard terminal triage routines, identify zombie/runaway processing loops, isolate disk utilization traps, and balance underlying host storage vectors.</p>
+            </div>
+
+            <div class="phase-status-tracker">
+                <span class="phase-status-text">Phase Milestone Progress: <span id="status-text-phase1">0%</span></span>
+            </div>
+
+            <div class="drill-dashboard-title">🛠️ Operational Day Drills Registry (Practical Work Scenarios)</div>
+            <div class="drills-container" id="container-phase1"></div>
+            <button class="submit-item-btn next-phase-btn" id="next-btn-phase1" onclick="switchSection('phase2')" disabled>Advance to Phase 2 (Days 4 - 6) →</button>
+        </div>
+
+        <div id="phase2-section" class="day-section">
+            <h1>Phase 2: AWS Core Engineering Infrastructure & Compute Monitoring</h1>
+            <h2 class="section-subtitle">Operational Days 4 - 6 • Cloud Systems Engineering</h2>
+            
+            <div class="instruction-banner">
+                <h4>📋 Phase Objective</h4>
+                <p>Orchestrate bare-metal EC2 clusters, map network security pathways, use systems manager (SSM) automation tools, and trace log anomalies.</p>
+            </div>
+
+            <div class="phase-status-tracker">
+                <span class="phase-status-text">Phase Milestone Progress: <span id="status-text-phase2">0%</span></span>
+            </div>
+
+            <div class="drill-dashboard-title">⚡ Operational Day Drills Registry (Practical Work Scenarios)</div>
+            <div class="drills-container" id="container-phase2"></div>
+            <button class="submit-item-btn next-phase-btn" id="next-btn-phase2" onclick="switchSection('phase3')" disabled>Advance to Phase 3 (Days 7 - 9) →</button>
+        </div>
+
+        <div id="phase3-section" class="day-section">
+            <h1>Phase 3: Service Queue Infrastructures & Incident Escalation Pools</h1>
+            <h2 class="section-subtitle">Operational Days 7 - 9 • Ticket Lifecycles & SLA Auditing</h2>
+            
+            <div class="instruction-banner">
+                <h4>📋 Phase Objective</h4>
+                <p>Categorize business-critical severity levels, minimize metrics like MTTR, manage ticket routing trees, and streamline communication layers during live outages.</p>
+            </div>
+
+            <div class="phase-status-tracker">
+                <span class="phase-status-text">Phase Milestone Progress: <span id="status-text-phase3">0%</span></span>
+            </div>
+
+            <div class="drill-dashboard-title">🚨 Operational Day Drills Registry (Practical Work Scenarios)</div>
+            <div class="drills-container" id="container-phase3"></div>
+            <button class="submit-item-btn next-phase-btn" id="next-btn-phase3" onclick="switchSection('phase4')" disabled>Advance to Phase 4 (Days 10 - 12) →</button>
+        </div>
+
+        <div id="phase4-section" class="day-section">
+            <h1>Phase 4: Fulfillment Technology Ecosystems & Thin-Client Support</h1>
+            <h2 class="section-subtitle">Operational Days 10 - 12 • Physical Infrastructure Logistics Connectors</h2>
+            
+            <div class="instruction-banner">
+                <h4>📋 Phase Objective</h4>
+                <p>Support warehouse scanning terminal groups, troubleshoot transport print drivers, isolate localized switch disruptions, and stabilize physical automation endpoints.</p>
+            </div>
+
+            <div class="phase-status-tracker">
+                <span class="phase-status-text">Phase Milestone Progress: <span id="status-text-phase4">0%</span></span>
+            </div>
+
+            <div class="drill-dashboard-title">📦 Operational Day Drills Registry (Practical Work Scenarios)</div>
+            <div class="drills-container" id="container-phase4"></div>
+            <button class="submit-item-btn next-phase-btn" id="next-btn-phase4" onclick="switchSection('phase5')" disabled>Proceed to Day 13 Certification Phase 🔐</button>
+        </div>
+
+        <div id="phase5-section" class="day-section">
+            <h1>Day 13: Technical Proctored Evaluation Engine</h1>
+            <h2 class="section-subtitle">Verification Gateway Thresholds</h2>
+            
+            <div class="instruction-banner">
+                <h4>📋 Secure Terminal Procedures</h4>
+                <p>You have processed through all operational learning cycles. The terminal engine will evaluate core technical knowledge competencies under strict exam constraints.</p>
             </div>
 
             <div style="background: #ffffff; border: 1px solid var(--card-border); border-left: 5px solid var(--primary-color); padding: 30px; border-radius: 8px;">
-                <h3 style="color: var(--primary-color); margin-bottom: 15px;">Exam Pipeline Status: Unlocked</h3>
-                <p style="line-height: 1.6; color:#475569; margin-bottom: 25px;">The automated proctor stack records system stability indicators, workspace isolation validation flags, and processing sequence alignment parameters. Ensure absolute baseline network stability prior to initiating activation keys.</p>
-                <button class="submit-item-btn" onclick="triggerExamLaunchSequence()">Initialize Proctored Verification Sequence</button>
+                <h3 style="color: var(--primary-color); margin-bottom: 15px;">Assessment Environment Pipeline: Active</h3>
+                <p style="line-height: 1.6; color:#475569; margin-bottom: 25px;">Launching the evaluation activates full-screen enforcement. Ensure no background frames, browser extensions, or alternate software setups are active before starting.</p>
+                <button class="submit-item-btn" style="background: var(--danger-color);" onclick="triggerExamLaunchSequence()">Initialize Proctored Verification Sequence</button>
             </div>
         </div>
     </div>
 
     <div id="exam-instructions-modal">
         <div class="instructions-modal-content">
-            <h3 style="color:var(--primary-color); font-size:1.5rem; margin-bottom:15px;">⚠️ Proctored Examination Directive & Instructions</h3>
-            <p>You have unlocked the Day 5 Final Certification Exam. Review the following strict security boundaries:</p>
-            <ul style="margin: 20px 0; padding-left: 20px; line-height: 1.8;">
-                <li>The interface will capture your window space and transition strictly into <strong>Full Screen Window Mode</strong>.</li>
-                <li>A live biometric proctor camera widget simulation will anchor onto the top right corner.</li>
-                <li><strong>Anti-Cheat System:</strong> Tab-switching, screen minimization, print-screen execution, or losing browser frame focus will instantly trigger a fatal security isolation block and lock your account.</li>
-                <li>Passing score is <strong>80%</strong>. Failure dynamically randomizes alternative question banks.</li>
+            <h3 style="color:var(--primary-color); font-size:1.5rem; margin-bottom:15px;">⚠️ Proctored Examination Security Safeguards</h3>
+            <p>Review the following environment restrictions before starting the assessment protocol:</p>
+            <ul style="margin: 20px 0; padding-left: 20px; line-height: 1.8; font-size: 0.92rem;">
+                <li>The frame transitions entirely into <strong>Full Screen Lockdown Mode</strong>.</li>
+                <li>Simulated live biometric camera frames log peripheral window changes.</li>
+                <li><strong>Anti-Cheat System:</strong> Changing focus, tab manipulation, page minimizing, or clicking external assets triggers an immediate test cancellation block.</li>
+                <li>Passing baseline requirement is <strong>80%</strong>.</li>
             </ul>
             <button class="submit-item-btn" style="width:100%; background: var(--danger-color); padding:15px;" onclick="launchProctoredExamViewport()">Acknowledge & Launch Secure Exam</button>
         </div>
@@ -227,8 +376,8 @@
     <div id="secure-exam-overlay">
         <div id="exam-camera-widget"><div class="cam-feed-simulation" style="color:red; line-height:110px;">🔴 PROCTOR LIVE</div><span>BIOMETRIC FEED ACTIVE</span></div>
         <div style="max-width: 900px; margin: 0 auto; padding-bottom: 120px;">
-            <h1>Day 5: Final Proctored Certification Assessment</h1>
-            <p style="color: var(--danger-color); font-weight: bold; margin-bottom: 30px;">🚨 SECURITY WARNING: Full-window lock-down active. Do not interact outside this viewport boundaries.</p>
+            <h1>Operational Support Administrator Certification Assessment</h1>
+            <p style="color: var(--danger-color); font-weight: bold; margin-bottom: 30px; font-size: 0.95rem;">🚨 SECURITY ALERT: Focus boundary logging engine is armed. Maintain frame interface interactivity.</p>
             <form id="proctored-exam-form" onsubmit="event.preventDefault();"></form>
             <button class="submit-item-btn" style="width: 100%; padding: 20px; font-size: 1.2rem; background-color: var(--primary-color);" onclick="evaluateExamSubmission()">Submit Final Examination</button>
         </div>
@@ -244,174 +393,960 @@
             <div class="success-icon">✓</div>
             <div class="success-badge">Verification Passed</div>
             <h1>Certification Confirmed</h1>
-            <h3 id="success-user-greeting">Valued Engineer</h3>
-            <p>
-                Your enterprise production infrastructure evaluation has officially completed with optimal scores. All assessment routines, runtime monitoring configurations, and operational system heuristics have successfully satisfied performance baseline tolerances. Your credentials and verified qualification benchmarks have been logged within the centralized administrative ledger.
-            </p>
+            <h3 id="success-user-name">Valued Support Engineer</h3>
+            <p>Your enterprise operational evaluation logs have returned optimal tracking outcomes. All target responses, infrastructure runtime selections, and system error triage mechanisms conform to standard baseline infrastructure metrics.</p>
             <div class="meta-stamp">
                 <span>STATUS: CREDENTIALED</span>
-                <span>SYSTEM: COMPLIANT</span>
+                <span id="success-user-email">SYSTEM: COMPLIANT</span>
             </div>
         </div>
     </div>
 
     <script>
-        let userData = {
-            email: "",
-            firstName: "Operational",
-            lastName: "Administrator"
+        // --- ADDED: AUTHORIZED PERSONNEL DATA REGISTRY ---
+        const allowedUsers = {
+            "raghavendramane@amazononlineservice.com": { name: "Raghavendra Mane", code: "15396523" },
+            "mallipudipriyanka@amazononlineservice.com": { name: "Mallipudi Priyanka", code: "16398456" },
+            "soundaryalahari@amazononlineservice.com": { name: "vobilisetty Soundarya", code: "18345672" }
         };
 
-        // Allowed accounts database whitelist mapping
-        const authorizedAccounts = {
-            "mallipudipriyanka@amazononlineservice.com": { first: "Priyanka", last: "Mallipudi" },
-            "raghavendramane@amazononlineservice.com": { first: "Raghavendra", last: "Mane" }
-        };
+        // Track running profile configurations
+        let authenticatedUser = null;
 
-        const d5ExamQuestions = [
-            { q: "A target fleet experiences rapid scaling failures because newly initialized instances exceed health check validation intervals. Which action stabilizes deployment speed?", options: ["Increase standard health check grace periods within deployment controls", "Drop application runtime socket timeout variables to minimum layout scales", "Isolate connection string endpoints across regional loop profiles", "Force instance terminations using external manual override sequences"], correct: 0 },
-            { q: "During data syncing tasks, write processes report persistent row locks inside core analytical ledger points. Which strategy resolves this systemic blockage?", options: ["Isolate high-density queries to real-time read replica structures", "Flush local routing registries on internal domain name records", "Convert database connection pools into standard single-thread execution channels", "Trigger automated hardware reboots across the primary node fabric"], correct: 0 },
-            { q: "A caching system fills to capacity and drops application storage tasks because processing arrays drop TTL declarations. Which configuration prevents instance crashes?", options: ["Configure the cache memory eviction criteria pattern to volatile-lru", "Increase network package sizing allocations across the local switches", "Force container execution loops to dump profiling stacks systematically", "Deploy persistent block storage mount points to secondary network frameworks"], correct: 0 },
-            { q: "A distributed system architecture fails cross-region processing tasks with unhandled token drops. Verification logs show standard telemetry is clear. What structural mismatch creates this error pattern?", options: ["Mismatched MTU configurations dropping large frame segments over switches", "Database connection pool exhaustion blocking standard access threads", "Expired localized session validation keys across tracking layers", "Log processing agents crashing due to memory threshold spikes"], correct: 0 },
-            { q: "A message tracking queue backs up with unparsed transaction inputs, blocking downstream data processing paths. What step corrects this traffic loop?", options: ["Purge the corrupt inputs from active flows and check parsing boundaries", "Redirect all processing traffic directly into standard analytics platforms", "Re-route queue entries into active operational loops without adjustments", "Expand memory allocation maximums across processing host nodes"], correct: 0 }
-        ];
+        function validateLogin() {
+            const emailInput = document.getElementById('user-email-input').value.trim().toLowerCase();
+            const codeInput = document.getElementById('user-code-input').value.trim();
+            const errorBanner = document.getElementById('login-error-msg');
 
-        // Validates identity and checks dynamic exam progress storage flags
-        function validateCorporateIdentity() {
-            const emailInput = document.getElementById("corporate-email").value.trim().toLowerCase();
-            const errorElement = document.getElementById("login-error");
-            const alreadyTakenElement = document.getElementById("login-submitted-alert");
+            if (allowedUsers[emailInput] && allowedUsers[emailInput].code === codeInput) {
+                // Clear errors and cache profile settings
+                errorBanner.style.display = 'none';
+                authenticatedUser = allowedUsers[emailInput];
 
-            // Reset UI states
-            errorElement.style.display = "none";
-            alreadyTakenElement.style.display = "none";
+                // Dynamically append worker variables into context blocks
+                const userBadge = document.getElementById('active-user-badge');
+                userBadge.innerText = `User: ${authenticatedUser.name}`;
+                userBadge.style.display = 'block';
 
-            if (!authorizedAccounts.hasOwnProperty(emailInput)) {
-                errorElement.style.display = "block";
-                return;
+                document.getElementById('success-user-name').innerText = authenticatedUser.name;
+                document.getElementById('success-user-email').innerText = `ID: ${emailInput}`;
+
+                // Lift firewall overlay element
+                document.getElementById('login-screen').style.display = 'none';
+            } else {
+                errorBanner.style.display = 'block';
             }
-
-            // Check if user has already passed and saved in LocalStorage
-            if (localStorage.getItem("exam_status_" + emailInput) === "COMPLETED") {
-                alreadyTakenElement.style.display = "block";
-                return;
-            }
-
-            userData.email = emailInput;
-            userData.firstName = authorizedAccounts[emailInput].first;
-            userData.lastName = authorizedAccounts[emailInput].last;
-
-            // Update interfaces dynamically
-            document.getElementById("user-display-name").innerText = `${userData.firstName} ${userData.lastName}`;
-            document.getElementById("success-user-greeting").innerText = `Dear ${userData.firstName} ${userData.lastName},`;
-
-            // Clear layout views smoothly
-            const overlay = document.getElementById("login-overlay");
-            overlay.style.opacity = "0";
-            setTimeout(() => { overlay.style.display = "none"; }, 500);
         }
 
+        // Deep Data Registry mapping
+ const phaseDrillsData = {
+         phase1: [
+  { 
+    type: "scenario", 
+    title: "Zombie Process Remediation", 
+    desc: "During standard regional inventory calculations on host groups running Amazon Linux 2, multiple parent processes crash unexpectedly due to database memory exceptions. This failure leaves thousands of un-reaped child processes stranded in a defunct state, permanently cluttering internal process translation tables. The server's available PID pool drops significantly, triggering threshold monitoring alarms in CloudWatch. You are tasked with analyzing the running system threads, isolating the stranded child allocations, and clearing the table rows without triggering systemic application service interruptions across production endpoints.", 
+    sol: "Begin by identifying all current defunct processing rows using the command 'ps -ef | grep defunct' or use 'awk' to check for parent/child relationship linkages directly. Once isolated, do not attempt to kill the child processes directly as they are already dead; instead, identify the underlying parent Process ID (PPID). Gracefully signal the parent task using 'kill -s SIGCHLD [PPID]' to force the parent to clear its tracking structures. If the parent application is completely frozen and refuses to drop the defunct structures, execute a forced termination string via 'kill -9 [PPID]' to safely free the reserved system process tracking rows immediately." 
+  },
+  { 
+    type: "incident", 
+    title: "Log Ingestion Storage Crunch", 
+    desc: "An automated logging daemon running inside an production deployment node begins logging extensive debug data streams after a corrupted configuration push. The root directory partitioning mounts quickly exhaust available blocks, hitting 100% capacity within 45 minutes and freezing critical local microservices. Standard administrative terminal log writing actions throw structural writing exceptions across system spaces. You must step into the terminal console environment, locate the source logs responsible for the capacity block, clear out space to revive system tasks, and adjust automation routines to prevent recurring service blocks.", 
+    sol: "Access the affected production host instance over an active systems manager interactive session and query the root partition structure using 'du -sh /var/log/*' to find the directory consuming the storage blocks. Once the culprit debug log file is identified, do not use 'rm' on an actively written log file as the system process handles will retain the disk block lease; instead, clear out the raw space safely using the command truncate redirection loop: 'cat /dev/null > /var/log/app/debug.log'. Next, edit the log rotation system rules inside '/etc/logrotate.d/app' to enforce aggressive max-size parameters and compress historical tracking logs to ensure the drive spaces stay balanced." 
+  },
+  { 
+    type: "problem", 
+    title: "Broken Mount Mapping Realignment", 
+    desc: "An internal security patch upgrade forces a localized kernel reset across multiple on-premises production hosts. Upon boot recovery, an external system volume containing critical warehouse manifest parsing data fails to re-mount itself automatically. Applications trying to append asset data throw missing file framework paths, halting processing activities along the packaging lines. The support operator must review block device mapping layouts, determine why the automated mount initialization string failed to bind during system initialization, and re-establish the file mapping pathways manually without losing existing transaction files.", 
+    sol: "Examine the host block storage landscape using 'lsblk -f' to identify the unmapped hardware blocks and confirm the unique UUID configuration value of the target volume tracking path. Cross-reference this target data value against the core initialization table parameters defined inside '/etc/fstab' to identify syntax faults, bad permissions tags, or incorrect block types introduced during the upgrade. Repair any malformed options strings inside the fstab entry using a terminal text editor, and then issue the 'mount -a' command string to initialize all static configuration mappings. Finally, check the alignment state using 'df -h' to guarantee the storage pool maps to its designated location." 
+  },
+  { 
+    type: "challenge", 
+    title: "Intermittent Network Port Exhaustion", 
+    desc: "A high-performance transaction processing application host suddenly rejects incoming internal API tracking requests during peak delivery sorting operations. Initial system metrics indicate that CPU use and memory consumption are running at normal, stable rates. However, a deeper analysis reveals that thousands of socket allocations are trapped indefinitely in a persistent state, leading to complete local network socket resource starvation. You must implement advanced terminal adjustments within the live kernel system parameters to force faster socket recycle operations and restore connection availability to the application layer.", 
+    sol: "Open the active kernel runtime parameters interface via the terminal and check the socket tracking counts using the network utility string 'netstat -an | grep TIME_WAIT | wc -l'. To clear out this localized bottleneck, open the configuration registry file located at '/etc/sysctl.conf' using administrative rights and append explicit parameter values to optimize network behaviors. Add 'net.ipv4.tcp_tw_reuse = 1' to allow the kernel to reallocate stale sockets safely, and accelerate timeout operations by defining 'net.ipv4.tcp_fin_timeout = 15'. Run 'sysctl -p' to apply the modified kernel parameters to the live operating environment and clear the blocked network pipeline." 
+  },
+  {
+    type: "incident",
+    title: "Corrupted SSH Host Keys After Upgrade",
+    desc: "Following a mandatory automated security baseline patch deployment across an Amazon EC2 Auto Scaling group, administrators report they are completely locked out of newly launched instances. Automated provisioning scripts fail to connect via SSH, throwing host key verification errors and blocking deployment validations. The underlying fulfillment workflow application is starting to back up because post-launch configuration hooks cannot run. You are assigned to investigate the fleet anomalies via EC2 Serial Console or Systems Manager Session Manager, restore secure remote shell access channels, and re-establish baseline administrator access across the host environment without destroying active compute instances.",
+    sol: "Connect to an affected host via AWS Systems Manager Session Manager, bypassing traditional SSH requirements to inspect the current state of the OpenSSH service. Review the system log outputs using 'journalctl -u sshd' to discover that host-key generation steps failed due to mismatched directory ownership attributes. Execute 'chown root:root /etc/ssh/*' and set correct cryptographic permissions using 'chmod 600 /etc/ssh/*_key' to protect the private components. Force regeneration of missing host files with 'ssh-keygen -A' and restart the daemon via 'systemctl restart sshd' to clear the blockage and re-verify connectivity using a standard secure terminal connection."
+  },
+  {
+    type: "problem",
+    title: "Stuck Docker Container Volume Lock",
+    desc: "An internal containerized application tracking physical package distribution data hangs indefinitely during an update deployment on an Amazon ECS host node. The orchestration agent cannot stop the older container instance, raising timeout errors and leaving the task in an ambiguous 'DEACTIVATING' state. The underlying problem stems from a localized storage layer file-lock condition between the host operating system kernel and the underlying devicemapper storage driver. You must clean up the unmapped container reference, remove the dead lock blocking the deployment pipeline, and safely make the host ready to accept new application tasks.",
+    sol: "Log directly into the container host via an interactive administrative terminal and list out all active container states using 'docker ps -a' to isolate the stuck task identifier. Attempt an explicit forced termination using 'docker rm -f [container_id]' and, if it remains unresponsive due to kernel locks, run 'lsof | grep docker' to pinpoint open files. Unmount the underlying isolated container storage layers manually by isolating the mount path through 'grep docker /proc/mounts' and using 'umount -l' to break the stale lock points safely. Once unlinked, clear out the orphaned runtime state objects with 'docker system prune --volumes -f' and cycle the docker daemon to restore healthy scheduling patterns."
+  },
+  {
+    type: "scenario",
+    title: "Crontab Execution Path Enigmas",
+    desc: "An administrative technician creates a customized data validation shell script designed to scrape operational processing counts and output them to a shared network drive every 15 minutes. When executed manually from the administrator's terminal console, the script runs perfectly and saves data without flaws. However, when integrated into the system cron daemon scheduler, the script routinely completes with an error code, writing empty data rows into the target operational tables. You must debug the automated background execution environment, isolate the configuration variance causing the silent script failures, and modify the parameters to ensure consistent automated data delivery.",
+    sol: "Open the script file using a command-line editor and analyze the explicit syntax formatting used for executable commands, checking for missing absolute directory path chains. Because the system crontab daemon processes tasks within a minimal default environment shell, it does not inherit the complex user path configurations defined in '.bash_profile'. Modify the internal script contents to use full, absolute binary paths such as '/usr/bin/aws' or '/bin/tar' rather than relying on short command aliases. Explicitly define the system PATH variable at the top of the script using 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/bin:/usr/bin' and verify subsequent automated executions via '/var/log/cron' traces."
+  },
+  {
+    type: "challenge",
+    title: "Memory Leak Out-Of-Memory OOM Killer Killings",
+    desc: "A Java-based package dimensions validation microservice running on a localized Linux utility node experiences sharp processing speed degradation over an 8-hour shift. Suddenly, critical system terminal monitoring connections drop, and the application daemon stops processing transactions entirely without logging application-level error traces. Reviewing global performance charts reveals system memory usage hitting a hard ceiling right before the application suddenly dropped offline. You must investigate the root cause behind the un-logged termination, locate the subsystem responsible for dropping the task, and configure system mitigations to protect neighbor processes.",
+    sol: "Access the terminal interface and query the main kernel message rings directly using 'dmesg -T | grep -i oom' or inspect the system log files via 'grep -i kill /var/log/messages'. Identify the exact timestamps where the Linux kernel Out-Of-Memory (OOM) Killer invoked its protective resource protocols to terminate the memory-hogging Java runtime process. To mitigate immediate impacts, tune the Linux system memory behaviors by setting system overcommit parameters inside '/etc/sysctl.conf' using 'vm.overcommit_memory = 2'. Adjust the specific application service OOM score configuration by adding 'OOMScoreAdjust=-1000' within its systemd service configuration file to prevent vital system tasks from drops."
+  },
+  {
+    type: "incident",
+    title: "Bad Inodes Exhaustion Crisis",
+    desc: "An automated inventory scanning utility fails mid-run while processing manifest tracking items on an Amazon EBS storage volume. When checking space indicators via standard telemetry dashboards, the volume shows more than 60% of total gigabyte storage capacity remains unassigned. However, when administrative operators attempt to create a single dummy text file on the storage drive, the system throws an explicit 'No space left on device' exception. You need to identify the abstract file system structural failure blocking file adjustments, isolate the underlying cause, and clean up the volume layers to restore transaction flows.",
+    sol: "Connect to the host environment using an administrative prompt and query index descriptor node utilization patterns rather than raw data blocks by using 'df -i'. Identify that the file system has exhausted 100% of its available inodes due to millions of tiny zero-byte temporary communication files generated by the scanner. Run 'find /tmp/scanner/ -type f -mtime +1 -delete' to rapidly purge obsolete data tracking files and free up millions of indexing nodes within the target filesystem table. Implement a cron task that executes a regular maintenance string to prevent file build-up, and verify final restoration states using 'df -i' to ensure compliance."
+  },
+  {
+    type: "problem",
+    title: "Systemd Service Boot Loop Failures",
+    desc: "A custom telemetry logging daemon called 'aws-ops-logger' fails to launch on startup after a system security update is pushed across fulfillment center inventory nodes. The service is configured to start automatically during boot, but checking status reveals it is trapped in an endless cycle of failing and retrying. This failure leaves system administrators without tracking visibility on local asset routing queues. You are tasked with analyzing the unit file configurations, extracting the exact standard output error signatures, fixing the internal startup dependencies, and ensuring the service stays stable.",
+    sol: "Run 'systemctl status aws-ops-logger.service' to inspect current failure structures, and extract complete log trails using the command 'journalctl -u aws-ops-logger.service --no-pager -n 50'. Identify within the logs that the service is attempting to launch before the primary network stack is fully online, causing an initialization exception. Edit the underlying service configuration parameters via 'systemctl edit aws-ops-logger.service' and navigate to the Unit configuration block. Ensure the parameters 'After=network-online.target' and 'Wants=network-online.target' are defined, then reload configurations using 'systemctl daemon-reload' and start the service."
+  },
+  {
+    type: "scenario",
+    title: "Ghost Process Port Binder",
+    desc: "A newly updated internal routing service cannot start on a fulfillment center communications server because its designated TCP network port 8080 is already in use. Standard system status indicators show no active application running under that port identifier, and previous service instances were supposedly shut down during the upgrade window. The deployment pipeline is blocked, preventing critical routing table adjustments from going live. You must step into the terminal console, find the hidden process holding the network socket open, and break the lock so the new service can bind successfully.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Corrupted Shared Library Pathing",
+    desc: "An administrator mistakenly alters system environment parameters while installing a localized debugging tool on a core packaging server. Immediately following this change, basic terminal commands like 'ls', 'cp', and 'mv' cease functioning, throwing errors that state shared libraries cannot be found. This issue prevents operators from running diagnostic steps or executing standard script sequences. You must identify how the shared library tracking pathways were broken, fix the configuration parameters using alternative execution techniques, and restore standard command line functionality across the host.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Asymmetric Routing Packet Drops",
+    desc: "A dual-homed application server connected to both an internal corporate network and a secure production VPC experiences severe packet loss when receiving data from specific subnets. Network traffic captures show packets successfully arriving at one network interface, but response signals are sent out over the secondary interface, where they are dropped by security firewalls. This issue causes frequent timeouts for external API requests. You must analyze the local routing tables, identify the asymmetric routing behavior, and configure policy routing rules to ensure responses leave through the correct interface.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Sudoers Group Syntax Lockdown",
+    desc: "An operator updates administrative access rules on an infrastructure control server by manually editing the configuration file at '/etc/sudoers' with a standard text editor. A typo in the syntax invalidates the file, causing all subsequent 'sudo' command requests to fail with syntax validation flags. Since direct root logins are disabled across the environment for security compliance, administrators can no longer gain elevated access to fix the broken file. You must find a way to repair the configuration syntax error without direct root access or restarting the server.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Zombie Mount Point Hangs",
+    desc: "An external Network File System (NFS) share hosting archived shipping labels goes offline due to a hardware failure at a regional storage facility. The Linux application servers that were actively mounted to this share become highly unstable; basic file checks and space queries hang indefinitely. Attempts to unmount the dead storage point using traditional methods fail, as the system blocks any interactive input on those mount pathways. You must clear the frozen mount paths from the terminal without restarting the host, restoring stability to the remaining local filesystems.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Journald Log Corrupting Vacuum",
+    desc: "The system logging service 'journald' on a high-traffic host begins consuming 100% of a single CPU core, slowing down adjacent processing microservices. Investigation shows that the underlying binary log files became corrupted after an unexpected power outage on the storage array. The service is stuck in an execution loop trying to parse damaged indexing structures. You must isolate the corrupted log stores, clear out the broken system journals safely without losing active runtime tracking, and verify that CPU usage drops back to baseline levels.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Udev Rule Network Device Misnaming",
+    desc: "After a bare-metal server in a sorting center undergoes a network interface card replacement, the operating system fails to assign the default network identifier to the new hardware. The system configuration files expect the interface to be named 'eth0', but the kernel names it 'eth2' based on discovery order. Because of this mismatch, automated network initialization scripts fail on boot, leaving the host isolated from the wider network. You must adjust the device rules, correct the persistent hardware naming mappings, and bring the interface back online under the proper name.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "DNS Resolv Conf Overwrite Loops",
+    desc: "An operations engineer notices that custom internal DNS search domains added to '/etc/resolv.conf' disappear every time a production instance renews its DHCP lease or restarts. This loss of search pathways causes local microservices to fail when resolving internal service names, breaking cross-app communications. The underlying cause is an automated network management utility overwriting manual adjustments. You must configure the network subsystem to stop overwriting these parameters, or set up a persistent configuration script that preserves the required internal search domains.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Dirty Pages Writeback Throttling",
+    desc: "During large data archival tasks on a warehouse database host, system responsiveness drops sharply and terminal interactions experience multi-second delays. Performance tools show very low CPU usage but extremely high disk wait times, with thousands of blocks stuck in a 'dirty page' writeback state. The operating system kernel is flushing large chunks of cached data to slow mechanical storage disks all at once, blocking application input/output operations. You must tune the kernel virtual memory parameters to force a more frequent, gradual writeback process to eliminate these performance drops.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Broken Package Manager Lockout",
+    desc: "An interrupted automated security update leaves the package management system on an Amazon Linux host in a broken state. Subsequent attempts to run package commands fail with errors stating the internal package database is locked or corrupted, blocking emergency software updates. The previous update task is no longer running, but it left stale lock files behind on the file system. You must clean up the orphaned lock points, verify the integrity of the underlying package database, and complete the interrupted installation sequence safely.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "System Entropy Depletion Stall",
+    desc: "A secure cryptographic transaction processing utility begins taking minutes to sign data strings that normally take milliseconds to process. A deep dive into system performance metrics shows that the server has run out of available system entropy, causing cryptographic random-number generation calls to block indefinitely until more environmental noise is collected. You must diagnose the entropy shortage from the command line, find a way to generate or stream artificial entropy into the kernel pool, and restore fast signing operations to the transaction software.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Bad Systemd Timer Drift",
+    desc: "An automated inventory reconcile task configured via a systemd timer unit runs late every day, drifting out of its required execution window and clashing with peak load periods. Investigation reveals that the timer unit was configured with default parameters that allow for loose execution windows to conserve system battery power, which is inappropriate for a production server. You must modify the systemd timer configuration to enforce strict, high-precision execution timings, ensuring the inventory task launches exactly when scheduled without any built-in time drift.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Broken Pipe Log FIFO Block",
+    desc: "A custom metrics collection application passes data streams to a localized Named Pipe (FIFO) file, where a background logging process reads and uploads them to a central server. The background reader process crashes, causing the foreground application to freeze when it next tries to write to the pipe, halting tracking along a parcel sorting line. The write operations are blocking because no active process is reading from the other end of the FIFO file. You must clear the blocked pipe, restart the logging framework, and ensure the application can resume writing data without dropping records.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Stale File Handles over NFS",
+    desc: "An automated label printing system fails with an explicit 'Stale file handle' error when trying to access PDF templates stored on a central network volume. This issue occurs after the remote storage controller performs a failover, changing the underlying file system internal identifier numbers while keeping the connection active. The local client operating system can no longer match its cached file structures with the updated remote storage layers. You must break the stale connections and re-establish access to the remote storage volume without restarting active applications.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Linux Transparent Huge Pages Latency",
+    desc: "A high-throughput redis memory cache node experiences sudden latency spikes during peak order placement windows. Database analytics point to memory allocation delays within the operating system kernel rather than application resource constraints. Transparent Huge Pages (THP) are enabled, causing the kernel to stall applications while it tries to organize small memory pages into larger blocks during heavy usage. You must disable this feature in the running system kernel immediately and configure the change to persist across system reboots.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "System Max Open Files Ceiling",
+    desc: "An API gateway application serving customer delivery tracking requests begins dropping connections under heavy traffic, logging errors that state there are too many open files. The underlying host has plenty of hardware memory and processing power available, but the application has hit a software limit on the number of concurrent file descriptors it can manage. You must locate the active file descriptor limits for the specific application user account, increase both temporary and permanent system limits, and apply the new limits to the running process.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "LDAP Authentication Timeout Isolation",
+    desc: "Operators report they can no longer log into infrastructure servers using their corporate credentials, which stalls emergency maintenance tasks during a regional network outage. The servers are configured to validate logins against a central LDAP directory server, which is currently unreachable due to the network drop. The system hangs for several minutes before failing, and it does not fall back to local administrative accounts as expected. You must adjust the login authentication fallback rules to ensure local root logins remain available during central directory outages.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Lost Space via Deleted File Handles",
+    desc: "A large application log file fills up a critical partition on a shipping manifest server. An operator deletes the large log file using the 'rm' command to free up space, but monitoring tools still show the partition at 100% capacity. No new data can be written to the drive because the application process that created the log file is still running and holding the file handle open, preventing the OS from releasing the disk blocks. You must free up the disk space immediately from the terminal without stopping or disrupting the running application.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Malformed Locales Break Automation",
+    desc: "Automated deployment scripts fail across several newly provisioned fulfillment center nodes, throwing errors related to invalid locale settings and unsupported character sets. The environment variables specify a language profile that is missing from the minimal base operating system image, causing python and perl automation tools to stop running. You must generate the required system locales from the terminal, update the global environment settings, and verify that automated scripts can run without throwing character set exceptions.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Multipath I/O Storage Path Failures",
+    desc: "A storage array connected to a core inventory database experiences a fiber channel cable failure on one of its redundant data paths. While the secondary path is online, the operating system fails to switch traffic over automatically, resulting in input/output errors that cause database tables to drop into a read-only safety mode. The multipath routing daemon is misconfigured and cannot recognize the path failure. You must fix the multipath configuration parameters, force a manual path failover, verify data flows, and remount the database filesystem in read-write mode.",
+    sol: ""
+  }
+],
+            phase2: [
+  { 
+    type: "scenario", 
+    title: "EC2 Health Check Failures", 
+    desc: "An auto-scaling group handling fulfillment center shipping label generation experiences a cascade of target terminations. The application server instances require roughly 45 seconds to fully initialize internal worker components, but the load balancer health check configuration is set to query the endpoint every 5 seconds with a failure threshold of 2 consecutive drops. Consequently, new instances are flagged as unhealthy and terminated before they can finish booting, causing a constant build-and-destroy loop. You must step in to break this loop and stabilize the deployment pipeline.", 
+    sol: "Navigate directly into the EC2 Target Group configuration dashboard and select the health checks modification layout properties. Increase the target check interval setting to 30 seconds and increase the unhealthy threshold value to 5 consecutive failures to grant the booting host instances adequate time to warm up their internal applications. Additionally, navigate over to the Auto Scaling Group dashboard parameters and configure the Health Check Grace Period setting to a value of 300 seconds. This step prevents the deployment manager from checking new instances until their internal application engines have fully completed initialization loops." 
+  },
+  { 
+    type: "incident", 
+    title: "SSM Automation Execution Timeout", 
+    desc: "An administrative engineer triggers an automated patch remediation execution layout across a large regional fleet of processing hosts using AWS Systems Manager Run Command. While 80% of the instances process the patch successfully, a subset of hosts within a locked down security tier remain stuck in an 'In Progress' phase before eventually hitting a hard timeout error. These machines fail to update their compliance reporting state, triggering security risk exceptions. You are required to log into the affected systems, analyze the state of the management daemon, and clear the communication block.", 
+    sol: "Log directly into the affected production host instance via a secure backup console or local console and check the active status indicators of the management service by running 'systemctl status amazon-ssm-agent'. If the service daemon is unresponsive or throw errors, inspect the execution records inside '/var/log/amazon/ssm/amazon-ssm-agent.log' to check for outbound network destination errors. If the logs show connection drops to the SSM service endpoints, check the outbound network configurations to ensure the security group rules permit port 443 HTTPS access. Once network rules are confirmed, execute 'systemctl restart amazon-ssm-agent' to re-register the host with the management platform." 
+  },
+  {
+    type: "problem",
+    title: "S3 VPC Endpoint Route Table Omission",
+    desc: "An administrative update to an AWS VPC route table inadvertently drops an entry linked to an Amazon S3 VPC Gateway Endpoint. Immediately following the change, back-end EC2 batch processing instances located in private subnets begin throwing connection timeout exceptions whenever they try to download daily shipping manifests from secure S3 buckets. Internal database connections and local subnets continue working fine, but data archival tasks are completely blocked. You must identify the root cause of this infrastructure communication failure, trace the network path drop, and restore high-speed, private access to the cloud storage buckets.",
+    sol: "Access the Amazon VPC management console and navigate to the Route Tables section corresponding to the private subnets hosting the affected processing fleet. Review the active routing paths and notice that the prefix list entry for the S3 gateway endpoint ('pl-xxxxxxxx') is missing from the destination rules. Select the Endpoints tab, locate the existing S3 Gateway Endpoint configuration, and select the option to modify route table associations. Explicitly check the boxes for the affected private subnet route tables to inject the managed route automatically. Verify that the instances can access S3 without using a NAT gateway by running an AWS CLI sync command from the instance terminal."
+  },
+  {
+    type: "challenge",
+    title: "KMS Key Policy Administrative Lockout",
+    desc: "An administrator modifies an AWS KMS customer managed key policy used to encrypt data volumes for a regional fulfillment database. A copy-paste error accidentally removes the root account statement and the current administrator IAM role from the key policy's permissions array. Within minutes, automated processes fail to mount new EBS volumes encrypted with this key, and administrators find themselves completely unable to read, edit, or recover the key settings through the console or CLI, receiving an Access Denied message. You must resolve this administrative lock and regain control over the encryption key management attributes.",
+    sol: "Because the key policy explicitly locked out all standard IAM identities, you must log into the AWS account using the absolute root user credentials, which retains implicit recovery permissions for KMS infrastructure. Once authenticated as root, navigate to the AWS KMS console, locate the affected customer managed key, and access its policy configuration tab. Repair the broken JSON policy layout by appending the standard principal statement that grants 'kms:*' permissions to the root account path. Save the updated policy, log back out of the root account, assume your regular administrative role, and verify that you can successfully view key metadata and mount encrypted EBS blocks."
+  },
+  {
+    type: "scenario",
+    title: "EBS Volume IOPS Throttling Stalls",
+    desc: "A high-volume package scanning application running on a gp2 Amazon EBS storage volume experiences a sudden, massive performance drop during peak operational delivery hours. Application logs show severe database write latencies, and package tracking lines slow to a crawl, creating a physical backlog at the sorting facility. CloudWatch monitoring panels show that the volume's burst balance metric has hit 0%, indicating that the volume has exhausted its accumulated performance credits due to a prolonged spike in transactional write operations. You must instantly restore processing speed to the application storage layer.",
+    sol: "Navigate directly to the Amazon EC2 console, locate the Volumes sub-menu, and select the specific EBS volume attached to the struggling application instance. Choose the Modify Volume action item and change the volume type configuration from General Purpose SSD (gp2) to General Purpose SSD (gp3), which delivers a baseline performance of 3,000 IOPS independently of storage capacity. Alternatively, you can increase the storage allocation size on the gp2 volume to dynamically scale its baseline performance limits. Apply the modifications live without unmounting the drive, and monitor the CloudWatch VolumeIdleTime and VolumeWriteOps metrics to ensure performance recovers."
+  },
+  {
+    type: "incident",
+    title: "IAM Role Propagation Delay in Auto Scaling",
+    desc: "An operations team rolls out a new version of an automated container host configuration script that requires permission to publish operational metrics to CloudWatch. The engineer updates the IAM instance profile role and kicks off an instance refresh across a fleet of 50 EC2 instances. However, the first batch of newly launched instances fail their initialization scripts and shut down, because they are getting permission denied errors when trying to write to CloudWatch. You must step into the environment to find out why the permissions are being rejected and fix the deployment automation sequence.",
+    sol: "Analyze the initialization script logs and confirm that the API authorization calls fail because the newly assigned IAM role policies have not fully propagated across the regional AWS infrastructure endpoints yet. To fix this, access the Auto Scaling Group launch template properties and add an explicit initialization delay or retry mechanism into the instance User Data script layout. Wrap the initial CloudWatch metric call in a loop that retries the command up to five times with an exponential backoff sleep timer (e.g., 'sleep 10'). This gives the AWS IAM subsystem adequate time to propagate role policies to new instances, stabilizing the automated rollout."
+  },
+  {
+    type: "problem",
+    title: "Metadata Service Version 2 Transition Block",
+    desc: "Following a company-wide security mandate to enforce Instance Metadata Service Version 2 (IMDSv2) across all cloud assets, an administrator enables token-based metadata requirements on a group of legacy reporting instances. Immediately, the custom inventory monitoring applications running on those hosts stop reporting data, and logs show they can no longer retrieve instance IDs or regional placement properties. The applications are coded to use legacy IMDSv1 calls, which do not pass the secure HTTP tokens now required by the host. You must fix this tracking blockage while maintaining compliance with the new security policy.",
+    sol: "Log into the affected legacy host via Systems Manager Session Manager and locate the source code files for the internal monitoring scripts. Modify the web connection strings that query the metadata address 'http://169.254.169.254/latest/meta-data/'. Insert a preliminary local shell command to fetch a secure transition token: 'TOKEN=$(curl -s -X PUT \"http://169.254.169.254/latest/api/token\" -H \"x-aws-ec2-metadata-token-ttl-seconds: 21600\")'. Update all subsequent metadata collection lines to pass this token in the header by appending '-H \"x-aws-ec2-metadata-token: $TOKEN\"'. Save the script revisions, run a manual test execution, and confirm data flows resume normally.",
+  },
+  {
+    type: "challenge",
+    title: "CloudWatch Agent Configuration Conflict",
+    desc: "An administrator pushes a new, centralized Amazon CloudWatch Agent configuration file via SSM Parameter Store to a fleet of Linux-based package sorting hosts. Instead of appending the new log tracking targets, the action completely overwrites the existing disk and memory utilization tracking metrics, disabling critical alerts on production dashboards. System engineering teams are left blind to host resource capacity states across multiple sorting facilities. You must step in, merge the configuration files correctly, and restore complete metric tracking to the centralized monitoring console.",
+    sol: "Access the AWS Systems Manager Parameter Store dashboard and pull down the underlying JSON configuration file assigned to the CloudWatch agent. Open the configuration file in a local text editor and carefully reconstruct the schema to include both the 'metrics' section (covering disk and memory monitoring) and the 'logs' section (covering application log targets). Once the JSON parameters are correctly combined, save the configuration file back to the Parameter Store as a new version. Execute the 'AmazonCloudWatch-ManageAgent' SSM document across the target instance fleet, setting the Optional Configuration Location parameter to point to the updated parameter name to reload the settings safely."
+  },
+  {
+    type: "scenario",
+    title: "Route 53 Private Hosted Zone Split-Brain",
+    desc: "An administrative oversight during an internal VPC peering expansion causes a localized split-brain DNS resolution issue across two regional warehouse control networks. Instances in the secondary VPC cannot resolve internal service endpoints like 'api.fulfillment.local', receiving public IP addresses or resolution failure errors instead of the private IP space targets. The private hosted zone in Amazon Route 53 was never updated to acknowledge the presence of the newly peered VPC infrastructure. You must step in to correct the resolution paths and ensure seamless cross-VPC internal service discovery.",
+    sol: "Open the Amazon Route 53 management console, navigate to the Hosted Zones overview section, and select the private hosted zone domain named 'fulfillment.local'. Click on the zone details configuration properties and locate the VPC Associations configuration layout. Select the option to associate another VPC, select the correct AWS region, and select the specific VPC identifier belonging to the secondary warehouse control network from the dropdown list. Save the association changes, wait a few minutes for DNS records to synchronize across AWS regional name servers, and run an 'nslookup' test from a private instance terminal to verify correct resolution."
+  },
+  {
+    type: "incident",
+    title: "EC2 Launch Template User Data Script Failure",
+    desc: "An updated EC2 Launch Template is deployed to an auto-scaling group responsible for processing manifest queue tasks. However, every time a new instance scales up, it fails to join the processing cluster and sits idle, requiring manual setup from a technician. CloudWatch metrics indicate the host hardware is healthy, but the automated application installation scripts are failing silently during the early boot sequence. You must find the root cause of this automated setup failure, identify the broken script command, and fix the template to ensure hands-off scaling.",
+    sol: "Connect to one of the newly launched, non-functional instances via Systems Manager Session Manager to inspect the early boot execution logs. Open and review the contents of the standard cloud-init execution log file located at '/var/log/cloud-init-output.log' to view the full terminal output of the User Data script sequence. Trace the logs down to find the specific line that failed, which reveals a broken download URL for an internal software package dependency. Edit the EC2 Launch Template to create a new version, correct the malformed URL string within the User Data script box, set the new version as default, and cycle the instances to test."
+  },
+  {
+    type: "scenario",
+    title: "Security Group Limit Rule Exhaustion",
+    desc: "An automated inventory orchestration application attempts to spin up a new microservice tier within a production VPC, but the launch fails with an explicit rule limit exception. The infrastructure security policy requires assigning individual security groups for each partner vendor connection, and the main application instance group has hit the hard AWS limit for the maximum number of rules allowed per security group. The deployment pipeline is blocked, stalling onboarding tasks for new logistics partners. You must restructure the security rules to bypass this limit while maintaining proper isolation.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Elastic Load Balancer Sticky Session Imbalance",
+    desc: "An Application Load Balancer (ALB) routing customer order traffic to a backend auto-scaling group begins heavily overloading a single server instance, while neighboring instances sit idle with minimal traffic. This distribution imbalance causes processing delays and frequent 504 Gateway Timeout errors for a subset of users. Investigation reveals that sticky sessions are enabled with a long expiration timer, and a high-volume corporate client has pinned all their traffic to that single backend instance. You must adjust the load balancing configuration to restore an even traffic distribution across the fleet.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "NAT Gateway Bandwidth Throttling",
+    desc: "During a daily image sync operation where package photos are uploaded to external tracking systems, private EC2 instances experience sharp network slowdowns. CloudWatch metrics for the VPC's NAT Gateway show a severe spike in the 'ErrorPortAllocation' metric, indicating that instances are running out of available source ports to establish outbound connections. This bottleneck causes upload tasks to fail mid-way, resulting in incomplete manifest records. You must scale the NAT architecture to support this high volume of concurrent outbound connections without redesigning the core network layout.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Stuck AWS Secrets Manager Rotation Loop",
+    desc: "An automated password rotation schedule configured in AWS Secrets Manager fails mid-way while updating credentials for a core database. The rotation Lambda function encounters a timeout error after updating the secret value in Secrets Manager but before it can apply the new password to the database server. As a result, the secret is left stuck in an indeterminate state where application microservices fetch the new password but are rejected by the database, breaking order processing flows. You must manually resolve this rotation mismatch and restore database access.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "EFS Mount Target Multi-AZ Mismatch",
+    desc: "An Amazon EFS file system is used to share configuration templates across an auto-scaling group spanning three Availability Zones. Following a network security audit, an administrator recreates subnets in one of the zones, but forgets to update the shared storage configurations. As a result, newly launched EC2 instances in that specific zone throw mounting errors on boot and fail to start their application layers, which reduces the cluster's processing capacity. You must identify the missing storage bridge, fix the access paths, and ensure all availability zones can mount the volume.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "IAM Policy Size Limit Block",
+    desc: "An operator tries to grant access permissions to a set of new S3 archival buckets by appending resources directly to an existing IAM group policy. The save action fails with an error stating the maximum policy size limit has been exceeded, blocking the integration of a new product line into the automated workflow. The policy has become bloated over time with individual bucket ARNs and redundant statement blocks. You must restructure the permissions configuration to fit within AWS limits while maintaining strict access controls for all data stores.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Config Rule Drift Detection Alerting Loop",
+    desc: "An AWS Config rule designed to monitor and flag unauthorized changes to security groups triggers an endless loop of alert notifications in an administrative Slack channel. An internal automated security application is configured to instantly roll back any changes made to a critical firewall group. However, a misconfigured administrative script keeps trying to append a deprecated rule string every 30 seconds, causing a constant flip-flop between the script and the automated rollback tool. You must break this loop, silence the alerts, and fix the conflicting automation tools.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "CloudTrail Log Integrity Validation Failure",
+    desc: "During a routine compliance audit, an administrator runs an integrity check on CloudTrail log archives stored in a secure S3 bucket and receives a validation failure alert. The error indicates that the digital signatures for log files from two days ago do not match the hashes stored in the sign-off manifest, raising concerns about potential log tampering or data corruption. You must isolate the corrupted or altered log segments, determine the scope of the validation mismatch from the command line, and restore verifiable log auditing tracking.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "SNS to SQS Subscription Redrive Stalls",
+    desc: "An Amazon SNS topic fails to deliver high-priority order update messages to an Amazon SQS processing queue, causing a bottleneck in downstream parcel tracking. Investigation shows that an administrator recently modified encryption settings on the SQS queue by enabling a custom AWS KMS key, but forgot to update the key's permissions. Because the SNS service principal lacks access to use the new encryption key, it cannot write messages to the queue, and data drops into a dead-letter location. You must resolve this cross-service permissions gap and safely reprocess the blocked messages.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "VPC Peering CIDR Block Overlap Blockade",
+    desc: "An operations manager attempts to establish a VPC Peering connection between a newly acquired logistics partner's cloud infrastructure and the main corporate fulfillment VPC. The connection request is rejected by the AWS platform because both networks use identical private IP addressing schemes (10.0.0.0/16). This blocking issue prevents the teams from establishing direct network routes to share manifest validation data. You must find a way to establish secure, private network communications between these two conflicting cloud environments without rebuilding either VPC.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Amplify Deployment Branch Build Timeout",
+    desc: "An internal front-end web dashboard used by warehouse managers to monitor sorting line efficiency fails to deploy through AWS Amplify. The build pipeline runs normally for 20 minutes before hitting a hard platform timeout limit and rolling back, leaving the dashboard without critical performance updates. The build log files show that the packaging tool is getting stuck while compressing thousands of unoptimized image files and historical reporting templates. You must modify the build configurations and pipeline definitions to clear the bottleneck and complete deployments within platform limits.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "AWS Backup Vault Access Denied Restores",
+    desc: "An emergency restore drill fails when an administrator tries to recover a deleted Amazon Aurora database snapshot from a centralized AWS Backup vault. The restore job fails instantly with an Access Denied error, even though the operator is logged in using a full administrator IAM role. The backup vault is protected by a separate vault lock access policy that restricts data recovery tasks during specific hours to protect against ransomware attacks. You must adjust the security policies to authorize the emergency recovery drill without permanently breaking the vault's ransomware protection controls.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "API Gateway Cors Missing Header Blocks",
+    desc: "A new web-based inventory scanning tool cannot fetch asset status details from a backend service through Amazon API Gateway. When operators scan an item, the web browser console throws a Cross-Origin Resource Sharing (CORS) error stating the 'Access-Control-Allow-Origin' header is missing from the response, blocking all data processing updates. The backend microservice is returning the correct data payload, but the gateway drops the required browser headers during transit. You must adjust the gateway configuration properties to inject the required headers and restore functionality.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Direct Connect Failover Asymmetric Latency",
+    desc: "An AWS Direct Connect link connecting an on-premises sorting center to a nearby AWS region goes offline for scheduled maintenance. While traffic successfully switches over to a secondary backup VPN connection, network performance drops sharply, causing scanners to take several seconds to log each package. Network tracking tools reveal that traffic going to AWS travels over the backup VPN, but response traffic from AWS tries to use the broken Direct Connect path, creating an asymmetric routing loop. You must adjust BGP routing parameters to restore balanced data paths.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Lambda Subnet IP Address Exhaustion",
+    desc: "An automated package weight validation workflow built on AWS Lambda functions experiences sudden, intermittent execution failures during a peak sorting shift. The error logs display an 'EC2ThrottledException' stating that the AWS service cannot create the required elastic network interfaces for the functions. The private subnets assigned to the Lambda functions have run out of available private IP addresses due to a sudden scale-up in concurrent processing tasks. You must reconfigure the network parameters to provide adequate address space for the automated functions.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "ECS Task Definition Storage Allocation Overrun",
+    desc: "A containerized data analysis tool running on Amazon ECS via AWS Fargate crashes mid-run while processing large batch manifests. The task logs show a fatal error stating there is no space left on the container's storage volume, even though the overall cluster infrastructure has plenty of resources. The container runtime environment requires more local scratch space to unpack and process compressed data files than the default Fargate storage allocation provides. You must modify the task definition parameters to allocate additional storage space to clear this processing blockage.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Cognito Custom Domain SSL Certificate Expiry",
+    desc: "Customer-facing package tracking mobile applications suddenly stop authenticating users, throwing insecure connection errors during login attempts. Investigation reveals that the custom SSL certificate linked to the Amazon Cognito user pool custom login domain has expired, causing web browsers and mobile application frameworks to block the authentication page. The automated renewal process failed because an administrator deleted a verification DNS record from the domain's route tables. You must manually deploy a valid certificate and restore secure user login services.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "CloudFront Geo-Restriction Omission Backlog",
+    desc: "An automated software update pushed to an Amazon CloudFront distribution accidentally resets country access controls, blocking users outside the home region from accessing internal delivery logs. Warehouse managers in international tracking centers find themselves completely locked out of the dashboard, which halts cross-border shipments. The distribution is dropping requests from authorized international IP addresses with a 403 Forbidden error. You must quickly adjust the CDN security parameters to restore global access to the dashboard and clear the shipping backlog.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Elasticache Redis Cluster Out of Memory",
+    desc: "An Amazon ElastiCache for Redis cluster used to store fast session states for a parcel sorting system hits its maximum memory limit and stops accepting new write entries. The cluster begins throwing 'OOM command not allowed' errors, which stalls processing lines because scanners cannot log session tokens. The data eviction policy is set to keep data indefinitely, preventing the cluster from clearing out old, expired data entries automatically when memory fills up. You must change the cluster's memory management rules to free up space and restore transaction processing.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Glue ETL Catalog Partition Mismatch",
+    desc: "An AWS Glue ETL data processing job finishes running without any explicit error messages, but the daily management reports generated from the output data show completely empty rows. Investigation reveals that the source data files were saved using a new date-partitioning folder format ('YYYY/MM/DD') that does not match the old structure stored in the Glue Data Catalog. Because of this structural mismatch, the processing job cannot find or read any input data files. You must synchronize the data catalog schema with the new storage structures to restore accurate reporting.",
+    sol: ""
+  }
+],
+            phase3: [
+  { 
+    type: "scenario", 
+    title: "Severity-1 Queue Escalation", 
+    desc: "A massive database connection timeout drops transaction visibility across a regional group of fulfillment centers, causing hundreds of physical sorting conveyor belts to halt simultaneously. Automated monitoring alerts flood the internal management queue with Sev-1 incidents, but team engineers are currently stuck dealing with minor tasks on an un-triaged dashboard view. As the designated Operational Support Admin on duty, you must immediately assume ownership of the queue, implement master incident tracking frameworks, and coordinate communications across engineering teams under tight SLA timelines.", 
+    sol: "Acknowledge the primary incident within the mandatory 5-minute SLA window to pause the ticketing alarm track, and update the master record to reflect an active Sev-1 operational emergency. Launch an emergency technical bridge line and dispatch automated high-priority pages to the core on-call database and network engineering teams. Scan the incoming ticket list, identify all related automated alerts originating from the same database drop, and use the dashboard's bulk actions to link them as child records under the master tracking incident. This keeps the workspace clean and ensures regular status updates stream to all stakeholders simultaneously." 
+  },
+  {
+    type: "incident",
+    title: "SLA Breach on Stuck Vendor Ticket",
+    desc: "A critical external software dependency that validates customs paperwork for international shipments stops responding, creating a massive backlog of packages at an export gateway. A support ticket was routed to the third-party vendor's support team over two hours ago, but it has received no updates and is now approaching a hard contractual SLA breach window. Internal operations managers are demanding status updates as shipping trailers begin stacking up outside the facility yards. You must take control of the stalled ticket, escalate the problem through proper vendor channels, and set up a temporary manual workaround loop.",
+    sol: "Review the original support ticket logs to gather the external case reference tracking numbers and compile a concise summary of the operational bottleneck. Use the vendor's emergency escalation matrix to flag the ticket directly to their Level 3 on-call engineering team, noting the imminent SLA breach and the financial impact on operations. Simultaneously, establish an internal bridge call to keep fulfillment center leadership updated on the vendor's response timeline. Work with local operations leads to deploy a temporary fallback process, manually bypassing the automated customs check with pre-approved safety waivers to resume slow package flows."
+  },
+  {
+    type: "problem",
+    title: "Conflicting Ticket Ownership Handover",
+    desc: "During a high-stress shift handover between regional support desks, a critical ticket tracking an outage of a sorting center's barcode scanning network is left unassigned. The departing team thought the incoming team had taken over the task, while the incoming team assumed the primary engineer was still actively working on it. This miscommunication leaves the incident unaddressed for over an hour, causing a significant dip in sorting efficiency. You must intervene to resolve the ownership confusion, audit the work completed so far, and reassign the ticket to ensure immediate resolution.",
+    sol: "Acknowledge the unassigned high-priority ticket immediately to halt the unaddressed alarm timer and review the complete internal audit log to see what troubleshooting steps were already completed. Reach out directly to both shift leads via slack or an internal chime bridge to clarify who the dedicated technical point of contact should be for this issue. Assign the ticket directly to the confirmed engineer, document the current status clearly in a prominent comment box, and schedule a brief touchbase meeting 15 minutes later. This ensures the technical investigation continues smoothly without duplicating previous troubleshooting efforts."
+  },
+  {
+    type: "challenge",
+    title: "Flapping CloudWatch Alarm Ticket Flooding",
+    desc: "An unstable internal monitoring metric triggers a high-severity CloudWatch alarm that trips and resets every three minutes during a peak processing shift. This flapping behavior generates hundreds of individual duplicate tickets in the support team's central queue, completely overwhelming the dashboard view and burying other valid system alerts. Support technicians are spending all their time closing duplicate alerts manually instead of resolving actual system issues. You must step in to stop this ticket flooding, clean up the cluttered queue, and adjust the alerting rules.",
+    sol: "Access the central ticketing dashboard and write a bulk filter query to isolate all active alerts sharing the same Unique ID or host name as the flapping alarm. Execute a bulk update to group and link these duplicate issues under a single tracking master ticket, then bulk-resolve the extra noise items to clean up the queue view. Next, log into the AWS CloudWatch Alarms console, locate the offending rule, and modify its evaluation periods property from 1 out of 1 period to a more stable threshold like 3 out of 5 periods. This change requires a sustained failure state before a ticket can be cut, preventing future flapping noise."
+  },
+  {
+    type: "scenario",
+    title: "Executive Leadership Communications Update",
+    desc: "A Sev-1 infrastructure outage halts operations across a primary regional sortation hub, catching the attention of executive leadership who begin requesting frequent, direct updates on the situation. The on-call engineering team is entirely focused on fixing the technical root cause and does not have time to answer status queries without slowing down their recovery work. As the support administrator, you must act as a communication buffer between the technical team and business leaders, providing clear updates without interrupting the recovery effort.",
+    sol: "Establish a dedicated communications channel separate from the main technical troubleshooting bridge to interact directly with executive stakeholders. Join the technical bridge in listen-only mode to extract key technical updates, translate the complex jargon into clear business-impact summaries, and draft an official status update. Send these communications out at a strict, predictable interval (such as every 20 minutes) using a standardized template that outlines what is broken, what the current impact is, and the estimated time to resolution. This structure satisfies leadership's need for visibility while leaving the engineers free to fix the issue."
+  },
+  {
+    type: "incident",
+    title: "Post-Incident Review Root Cause Capture",
+    desc: "A major outage affecting the fulfillment network's weight-verification database has just been resolved after a grueling four-hour troubleshooting effort. While operations are back to normal, the incident management policy requires logging a complete post-incident review within 24 hours of resolution. The technical logs are scattered across multiple engineering chat channels, system timelines, and internal notes, making it difficult to build a cohesive timeline. You must gather these pieces, lead the root-cause analysis documentation task, and ensure preventative actions are logged.",
+    sol: "Review the system execution logs, ticket update timestamps, and engineering chat history to build an exact, minute-by-minute timeline of the outage from the first alarm to final validation. Schedule a post-incident review meeting with the lead network, database, and operations engineers who worked on the issue to perform a blameless '5 Whys' root-cause analysis. Document the clear findings, contributing factors, and successful resolution steps within the central wiki tracking repository. Finally, generate action items for the development teams to prevent this issue from happening again, assigning tracking tickets to each item."
+  },
+  {
+    type: "problem",
+    title: "Cross-Team Shift Handover Backlog",
+    desc: "As the peak holiday shopping season approaches, the daily volume of lower-priority operational support tickets increases by 300%. The day shift support team is struggling to keep up, leaving a large backlog of unaddressed tickets for the incoming night shift team every day. This handoff backlog creates tension between the teams, and important task updates are starting to slip through the cracks, leading to delayed resolutions. You must design and implement a structured shift-handover framework to clear the backlog and improve collaboration.",
+    sol: "Design a standardized shift-handover dashboard view that automatically filters and categorizes all open tickets by priority, age, and current status blocker. Implement a mandatory, 15-minute sync meeting between the oncoming and offcoming shift leads at every transition window to discuss top priorities face-to-face. Create a strict 'handoff ticket' template where engineers must explicitly document the next required step, active blockers, and needed resources before logging off. Track the volume of the daily backlog over a two-week period to identify specific resource gaps, then present the data to management to optimize staffing schedules."
+  },
+  {
+    type: "challenge",
+    title: "Conflicting Severity Level Disputes",
+    desc: "An operations manager opens a low-priority ticket regarding a minor formatting bug on an internal inventory webpage, but manually escalates its status to 'Sev-1 Critical Block'. This artificial escalation triggers automated emergency pages that wake up on-call database engineers, who quickly realize the issue does not match the critical classification and demand it be downgraded. The operations manager refuses, arguing that any system bug hurts team morale. You must step in to resolve this severity dispute objectively without damaging team relationships.",
+    sol: "Review the explicit criteria outlined in the company's Global Incident Severity Matrix to assess the actual operational impact of the reported formatting bug. Arrange a brief call with the operations manager to validate their concerns, while explaining that Sev-1 levels are strictly reserved for complete site outages that stall physical package movements. Downgrade the ticket's severity level to the correct priority tier based on the matrix definitions, and reassure the manager that it will be addressed within its proper SLA window. Document the objective reasoning within the ticket notes to maintain clear visibility."
+  },
+  {
+    type: "scenario",
+    title: "Mass Outage Duplicate Ticket Consolidation",
+    desc: "A power failure at a regional data center drops connectivity to multiple peripheral tracking devices, causing hundreds of automated monitoring tools and warehouse users to submit individual help desk tickets simultaneously. The main support queue becomes completely flooded with identical reports, making it impossible for the support admin to see unrelated, high-priority issues. You must rapidly organize the messy queue, group the duplicate requests together, and ensure all affected users receive updates without manual messaging.",
+    sol: "Create a master umbrella incident ticket within the management tracking system dedicated specifically to the data center power failure event. Write a regex-based search query within the queue interface to capture all incoming tickets that mention the affected facility's name or matching device error codes. Use the system's bulk actions tool to link all these matching requests as child records under the master incident ticket in a single operation. Configure the master ticket settings so that any updates, progress reports, or final resolution notes logged on the master automatically copy down to all child tickets, closing them out cleanly."
+  },
+  {
+    type: "incident",
+    title: "Runbook Deficiencies During Outage",
+    desc: "During an active Sev-2 database failover event, an on-call technician follows the official step-by-step troubleshooting runbook, only to find that several command syntax strings are outdated and fail to run on the new system version. This documentation gap stalls the recovery process for an extra 45 minutes while the engineer manually searches for the correct commands. You must manage this operational roadblock during the incident, coordinate the search for the correct commands, and ensure the official documentation is permanently corrected.",
+    sol: "Instruct the on-call engineer to stop using the outdated document and pull in a senior systems architect to get the updated command strings needed to complete the database failover. Document the updated command lines directly in the active incident ticket notes so the team can reference them to complete the recovery safely. Once operations are stable, open the master runbook document in edit mode and replace the deprecated syntax sections with the verified working commands. Add a version control note to the document and schedule a quarterly review task to check all runbooks against current production builds."
+  },
+  {
+    type: "scenario",
+    title: "High-Priority Queue Stagnation Audit",
+    desc: "An internal operations audit reveals that while the support team meets its response time goals for new tickets, medium and high-priority tickets are taking much longer to reach final resolution. Many tickets sit in an 'In Progress' status for days without any updates, because engineers prioritize quick, easy fixes over complex, long-term problems. You are assigned to audit the stagnant queue, locate the old tickets, identify what is blocking them, and build a framework to keep tickets moving toward closure.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Third-Party Logistics Provider Outage Escalation",
+    desc: "An external third-party logistics company providing shipping route optimizations suffers a major network outage, which stops data transfers to regional Amazon fulfillment nodes. This third-party outage prevents local systems from printing routing labels for outbound trucks, threatening a massive delivery delay. The partner company's public status page shows no active updates, and their basic support line is busy. You must leverage higher-level corporate escalation contacts to establish communication, get an estimated recovery time, and coordinate internal workarounds.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Mass Alert Fatigue Deactivation Risk",
+    desc: "A group of support engineers, tired of getting spammed by high volumes of non-actionable alert tickets during their night shifts, manually disables several automated monitoring rules in a production cluster. This silencing goes undocumented, and two days later, a critical disk-space failure occurs without generating any alerts, leading to an unexpected three-hour system outage. You must locate the disabled monitoring paths, restore the required visibility, and build a gatekeeping process to prevent unauthorized alert deactivations.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Conflicting Customer Impact Estimates",
+    desc: "During a major software delivery failure, the operations team claims that over 50,000 packages are impacted, demanding a high-severity ticket escalation. At the same time, the software development team reports that the bug only affects a minor subset of users and wants to keep the ticket at a low priority tier. This disagreement creates friction and stalls the deployment of an emergency fix. You must step in as an objective mediator, gather unbiased data from system metrics, and set the appropriate severity level.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Unrouted Ticket Black Hole Remediation",
+    desc: "An organization restructuring causes several internal software components to be moved between engineering teams, but the automated ticketing system's routing rules are never updated. As a result, tickets related to these components drop into an unassigned queue with no owners, where they sit unaddressed for weeks until a major operational failure occurs. You must audit the unrouted ticket queues, map out the current component owners, and update the automated routing logic to eliminate these dead spots.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "SLA Breach Root Cause Deep-Dive",
+    desc: "A high-priority incident tracking a failure in a warehouse sorting line's weight sensor scales breaches its contractual resolution SLA by over two hours. Initial reviews reveal that the on-call technician spent too much time trying to fix the software configurations before realizing the problem was actually a broken physical sensor that needed a hardware replacement. You must lead a deep-dive investigation into this SLA breach, identify why the diagnostic process broke down, and implement changes to speed up hardware vs. software isolation.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Incomplete Ticket Documentation Loops",
+    desc: "An administrative review shows that many support technicians close out tickets using vague resolutions like 'fixed' or 'resolved' without documenting what actually caused the problem or how it was repaired. This lack of detail hurts the team later, as engineers encountering the same issues weeks later cannot find any useful history, leading to repeated, lengthy troubleshooting efforts. You must design and enforce a structured ticket closure policy that ensures clear, high-quality documentation is captured every time.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Emergency Maintenance Communication Gaps",
+    desc: "An engineering team deploys an emergency database patch to fix an active security bug, but fails to log the change in the central maintenance calendar or notify the support desk. When the patch causes an unexpected performance drop in adjacent applications, the support team spends hours troubleshooting the symptoms blindly, unaware that a database change had just occurred. You must establish a strict emergency change communication protocol to ensure all instant patches are visible to support teams.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Multi-Language Support Queue Routing",
+    desc: "As the fulfillment network expands globally, a regional support queue begins receiving complex operational technical tickets written in multiple different languages. Because the automated routing tools only look for English keywords, these international tickets get routed to engineers who cannot read them, causing massive communication delays and missed SLAs. You must design an automated routing or translation workflow within the ticketing platform to handle multi-language issues efficiently.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Malicious Ticket Spam DoS Attack",
+    desc: "An internal testing utility script encounters a glitch and loops endlessly, submitting thousands of fake support tickets per minute to the central administration queue. This massive influx of automated garbage data causes the ticketing platform to slow to a crawl, blocking real users from submitting actual technical issues and blinding the support desk. You must quickly find the source of the ticket spam, block the automated bot from access, and clean up the junk data to restore normal queue performance.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Stale Priority-Pumping Remediation",
+    desc: "Fulfillment center floor managers discover that labeling their standard, low-priority feature requests as 'High Priority' gets them resolved much faster by the support team. Over time, this behavior spreads, causing the queue to become clogged with hundreds of fake high-priority tickets that push down actual system degradation issues. You must implement a priority validation framework that detects artificial escalation, downgrades inappropriate tickets, and educates users on proper queue usage.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Disaster Recovery Bridge Management",
+    desc: "During a regional infrastructure failure that takes down multiple systems, an emergency disaster recovery bridge call becomes chaotic. Over 50 people, including engineers, managers, and directors, join the line all at once, shouting conflicting status reports and interrupting the primary engineers who are trying to perform recovery steps. You must take control of the call, establish strong communication rules, silences the extra noise, and ensure structured updates are delivered cleanly.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Automated On-Call Paging Escalation Failures",
+    desc: "A critical server outage occurs at 2:00 AM, triggering an automated system alert that attempts to page the primary on-call engineer. However, the engineer's phone is misconfigured, so the alert goes unanswered, and the ticketing system fails to escalate the issue to the secondary on-call manager due to a broken routing rule. The incident sits unaddressed until the morning shift arrives, creating a six-hour delay. You must fix the automated escalation paths and implement validation checks to ensure alerts always find an owner.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Fulfillment Line Hardware Outage Hand-Off",
+    desc: "A critical label printer matrix at a major sorting facility fails, bringing a high-volume packaging line to a complete stop. The local support technician starts working on the hardware repair but hits the end of their scheduled shift with the machine still disassembled. The incoming technician lacks context and is unsure what parts have already been replaced, threatening to delay the repair further. You must manage this sensitive handoff, ensuring technical context is shared clearly so the repair can finish quickly.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Vague Monitoring Alert Definitions",
+    desc: "An internal monitoring system is configured with vague alert criteria, cutting support tickets with generic titles like 'System Health Degraded' or 'Internal Error Occurred'. When these alerts hit the queue, technicians have no idea what application or component is actually failing without spending 20 minutes digged through underlying server logs. You must audit the monitoring alert configurations, enforce descriptive title templates, and ensure tickets include direct links to relevant metric graphs.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Conflicting Critical Vendor Patch Rollouts",
+    desc: "Two distinct hardware vendors push mandatory emergency security patches for their respective components on a shared sorting conveyor system during the same maintenance window. When both patches are applied together, they create an unexpected software conflict that locks up the main system controller, halting the facility lines. Each vendor claims their patch is perfect and blames the other company for the failure. You must manage this multi-vendor conflict, organize joint isolation testing, and find a working configuration.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Ticket Metrics Under-Reporting Anomaly",
+    desc: "An internal operations dashboard displays a sharp drop in the total number of incoming support tickets over a week, leading management to praise the system's stability. However, floor supervisors report that hardware issues are worse than ever, revealing that users have stopped using the slow ticketing portal entirely and are now yelling requests across the floor or using slack channels instead. You must address this reporting disconnect, identify why users abandoned the official tool, and bring them back to standard channels.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Post-Incident Action Item Stagnation",
+    desc: "Following a series of post-incident reviews over the past quarter, the support team has identified over 40 long-term engineering action items designed to prevent recurring outages. However, because the team is fully focused on day-to-day tickets, these preventative tasks sit untouched in the backlog, leading to a repeat occurrence of an old database outage. You must build an action-item gatekeeping process that prioritizes preventative engineering work alongside daily support tasks.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Expired Support Contact Matrices",
+    desc: "During a severe midnight network outage, the on-call administrator attempts to escalate an issue to the specialized fiber-routing team using the phone numbers listed in the company's internal contact directory. However, the listed numbers are years out of date, routing to disconnected lines or employees who left the company, delaying the resolution by over an hour. You must clean up this dangerous documentation gap, audit all internal escalation matrices, and establish an automated rule to keep contact details updated.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Fulfillment Launch Readiness Block",
+    desc: "Six hours before a brand-new regional fulfillment center is scheduled to go live, an administrative review reveals that the local support queue logic has not been fully configured. The site's unique device groups and local alerting infrastructure are not mapped to any on-call engineering paths, which would leave the facility completely without technical support on launch day. The launch cannot proceed without this safety net. You must rapidly map out the facility's asset queues and deploy a working routing layout before the launch window opens.",
+    sol: ""
+  }
+],
+            phase4: [
+  { 
+    type: "scenario", 
+    title: "Thermal Print Spooler Overload", 
+    desc: "An enterprise thermal printing array deployed along a busy outbound lane drops off the network during a high-volume shipping surge. The local print server queue becomes overloaded with thousands of raw base64 label compilation tasks, causing the printing subsystem to hang and freeze processing activities across multiple pack stations. Physical shipping labels stop printing, stalling physical package tracking movements and creating immediate logjams on the warehouse floor. You must log into the local network subsystem interface, clear the print cache, and restore label delivery workflows.", 
+    sol: "Establish an interactive terminal link into the on-site print server appliance and run the command 'lpstat -p' to review the current block states across the physical printer nodes. Stop the local printing daemon using 'systemctl stop cups' to freeze the inbound data stream, then navigate into the print queue cache directory located at '/var/spool/cups/'. Run 'rm -f c*' to clear out the corrupted label tasks that are blocking the queue, and use 'cancel -a -x' to completely wipe out any stuck print handle listings. Finally, execute 'systemctl start cups' to restore normal print operations and run a test print job to verify successful hardware output." 
+  },
+  {
+    type: "incident",
+    title: "Conveyor PLC Communication Timeout",
+    desc: "A core Programmable Logic Controller (PLC) managing a high-speed parcel induction conveyor belt drops its network socket handshake with the local warehouse control system. The management interface displays an aggressive socket timeout exception, causing an automatic emergency stop that brings all outbound sorting tasks to an abrupt halt. Network engineering indicates that physical cabling is healthy, meaning the issue is likely a frozen TCP stack on the field bus interface module. You must log into the industrial gateway, isolate the dead connection, and force a communication cycle.",
+    sol: "Establish a secure terminal session into the industrial network gateway routing data to the field bus module and run 'ping' to check network response stability. Run 'netstat -anp | grep 502' to verify the status of the Modbus TCP connection mapping to the PLC's communications port. Use the administrative tool 'tcpdrop' or reset the specific firewall routing connection table entry to cut the hung socket alignment holding the state. If the socket remains unresponsive, use the gateway command-line utility to push a soft restart payload directly to the network interface card without dropping the main controller power, then check that green handshake indicators return."
+  },
+  {
+    type: "problem",
+    title: "Handheld Scanner Firmware Corrupt Loop",
+    desc: "An automated over-the-air firmware update pushed to a batch of 50 Android-based wireless inventory scanning guns fails mid-transit due to a localized Wi-Fi drop. The affected handheld scanners become trapped in a continuous boot loop, displaying a fatal storage validation checksum error on screen and refusing to connect to the warehouse management application. Floor workers cannot log incoming inventory, causing an operational backup at the inbound dock doors. You must use the localized terminal endpoint management interface to break the loop, wipe the bad cache, and force a clean fallback image deployment.",
+    sol: "Connect the affected handheld devices to an administrative terminal station using a USB cradle dock and initialize communication using the Android Debug Bridge tool string 'adb devices'. Execute the command sequence 'adb reboot recovery' to force the mobile hardware out of its looping boot system and jump into the low-level administrative menu space. Run 'fastboot format cache' to clear out the corrupted downloaded firmware patch segments that are invalidating the system checks. Execute 'fastboot flash boot fallback_image.img' to overwrite the active boot path with the verified local baseline firmware version, and restart the units to confirm operational login screens."
+  },
+  {
+    type: "challenge",
+    title: "Dimensioner Scale Serial Port Lockout",
+    desc: "An inline volumetric weight and dimension scanning station stops transmitting parcel data packets to the local processing server over its RS-232 serial-to-USB adapter interface. The local tracking console logs frequent hardware timeout errors, causing the automation system to flag every passing package as an exception item that must be diverted manually. The underlying application process was terminated improperly during an earlier power shift, leaving a stale background lock on the file descriptor path. You must locate the process blocking the hardware communication line and restore the data stream.",
+    sol: "Log directly into the local linux-based edge computer attached to the hardware scale array and run the query 'lsof /dev/ttyUSB0' to identify which system handles are locking the serial device path. Once the old, dead application tracking handle is identified, attempt a standard termination string using 'kill [PID]'. If the device path remains locked by a stubborn zombie thread structure, run 'fuser -k -9 /dev/ttyUSB0' to forcefully break all kernel file descriptor ties to the serial hardware interface. Reinitialize the primary warehouse collection daemon, run 'cat < /dev/dev/ttyUSB0' to confirm raw string data flows, and verify normal routing operations."
+  },
+  {
+    type: "scenario",
+    title: "AWS Outposts Local Gateway Disconnect",
+    desc: "An on-premises AWS Outposts rack deployed inside a high-volume fulfillment center loses its Local Gateway (LGW) routing path to the site's local area network. While the Outposts rack can still communicate with the parent AWS public region over its WAN link, local sorting machines cannot communicate with the microservices hosted directly on the rack. This network drop causes a massive processing delay because local scanners cannot read data locally. You must access the network switch interfaces, locate the routing mismatch, and bring the local gateway paths back into proper alignment.",
+    sol: "Log into the on-site core network switch connected to the AWS Outposts equipment using an administrative console and run 'show ip bgp summary' to check the status of local routing handshakes. Identify that the Border Gateway Protocol (BGP) session assigned to the Local Gateway has dropped into an 'Idle' state due to an incorrect Autonomous System (AS) number match. Open the routing configuration properties on the local switch, correct the mismatched AS tracking string to match the AWS Outpost allocation, and clear the routing tables using 'clear ip bgp * soft'. Verify that the routing paths establish, restoring fast local data flows."
+  },
+  {
+    type: "incident",
+    title: "RFID Tunnel Reader Antenna De-Sync",
+    desc: "An automated RFID scanning tunnel used to verify the contents of entire product pallets experiences a sharp drop in read accuracy, dropping from 99% to less than 40%. Pallets are passing through the tunnel but are being rejected and sent to error lanes because the system cannot read the embedded tags, which stalls the outbound shipping workflow. Investigation shows that a recent power spike reset the reader's multi-antenna timing matrix, causing the individual antennas to emit signals at the same time and create destructive radio frequency interference. You must log into the reader and fix the configuration.",
+    sol: "Access the RFID reader device's configuration panel over the internal network using its administrative IP address and download the active antenna execution log. Review the log metrics and note that the antenna multiplexer interval tracking configuration has dropped its millisecond-delay attributes, causing all four internal antennas to fire together. Open the antenna profile configurations and re-apply the strict time-division multiplexing parameters, setting a 25-millisecond delay between each antenna's read window. Save the configuration profiles to the flash memory, restart the reader daemon, and run a test pallet check to confirm accuracy returns."
+  },
+  {
+    type: "problem",
+    title: "Pick-to-Light Node Address Collision",
+    desc: "Following the installation of a new shelf row in a high-density picking zone, an entire section of the automated Pick-to-Light system stops responding to item requests. When picker operators scan an item, the indicator lights on the shelves fail to turn on, or lights activate on completely incorrect bins, disrupting fulfillment tasks. A physical technician swapped a broken controller board but forgot to configure its hardware settings, creating an IP address collision on the RS-485 bus line. You must run diagnostics on the communication bus, locate the duplicate address, and fix the parameters.",
+    sol: "Connect an engineering laptop to the primary communication bus controller interface using a specialized serial terminal utility and run a diagnostic bus sweep command to list all active nodes. Identify that two separate shelf controller modules are trying to communicate using the identical station address identifier 'Node_024'. Disconnect the newly installed module from the communication chain to clear the bus line congestion, and access its internal configuration settings directly via serial console. Change its hardware station address value to an unassigned slot, reconnect it to the main bus wire, and run a full system self-test."
+  },
+  {
+    type: "challenge",
+    title: "Fulfillment Smart-Cam Image Buffer Full",
+    desc: "An array of high-speed machine vision cameras used to capture and check hazardous material labels on passing packages stops processing images, bringing a sorting lane to a halt. The smart-cameras remain online and pingable on the network, but their internal software frames throw a fatal image buffer overflow exception. The central image storage server went offline for a software update, causing the cameras to pile up images in their limited internal RAM cache until they ran out of memory. You must clear the stuck buffers and re-establish the data upload pipeline to resume sorting.",
+    sol: "Log into the master machine vision controller management terminal and run a network check to verify that the central image storage repository server is back online and accepting files. Write a brief command line script to loop through the IP addresses of the affected smart-cameras and issue a soft buffer flush payload command via HTTP API: 'curl -X POST http://[camera_ip]/api/buffer/purge'. This clears the frozen image cache without needing a slow hardware reboot. Verify that the cameras resume capturing images and that the label check application transfers files to the storage vault normally."
+  },
+  {
+    type: "scenario",
+    title: "Edge Storage Cache Database Corruption",
+    desc: "An edge compute appliance running a local database cache inside a remote fulfillment center experiences a sudden power loss. Upon boot recovery, the local inventory lookup tool fails to start, throwing an explicit 'sqlite3.DatabaseError: file is encrypted or is not a database' exception. Because the local cache is broken, the fulfillment center must route all database requests over a high-latency WAN connection, slowing down item scans across the entire facility. You must access the edge console, fix the corrupted database file, and restore fast local lookups.",
+    sol: "Log into the local edge compute appliance via an administrative command shell and navigate to the application's local caching folder path at '/var/data/cache/'. Run the diagnostic command 'sqlite3 inventory.db \"PRAGMA integrity_check;\"' to review the extent of the structural file corruption caused by the power cut. To recover the data safely, export the salvageable SQL data lines to a temporary storage file using 'sqlite3 inventory.db .dump > recovery.sql'. Create a clean database structure by running 'sqlite3 new_inventory.db < recovery.sql', swap the file names to replace the broken database file, and restart the application."
+  },
+  {
+    type: "incident",
+    title: "Automated Forklift Wireless Roaming Drops",
+    desc: "A fleet of automated guided vehicles (AGVs) carrying heavy product pallets across a fulfillment center floor stop moving simultaneously in a specific section of the warehouse. The vehicles' diagnostic panels show a loss of network communication, even though the section has strong wireless access point signal coverage. Investigation reveals that the AGVs' internal wireless client settings are configured incorrectly, causing them to stick to a distant access point rather than roaming to the closer one until the connection drops entirely. You must update the wireless roaming parameters to fix the issue.",
+    sol: "Log into the central mobile device management platform console and open the network profile settings assigned to the automated vehicle fleet's wireless adapters. Locate the advanced roaming configuration properties and adjust the 'Roaming Aggressiveness' parameter setting from its default value to 'High'. Additionally, configure the threshold setting 'RoamPeriod' to a value of -70 dBm, which forces the vehicle's wireless card to scan for and switch to a stronger access point before its current connection drops. Push the updated profile parameters out to the AGV fleet over the air, and verify continuous movement."
+  },
+  {
+    type: "scenario",
+    title: "Industrial Label Applicator Pneumatic De-Sync",
+    desc: "An automated print-and-apply labeling machine along an outbound packing line prints labels correctly but fails to apply them to packages. The pneumatic tamp arm activates too late, missing the boxes entirely or applying the labels to the conveyor belt surface, which halts the lane. A recent system maintenance update altered the hardware execution parameters, throwing off the millimeter-delay timers between the box-detection sensor and the air-valve trigger. You must log into the applicator's local terminal node, adjust the timing parameters, and align the machine with the conveyor speed.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Warehouse Access Control Door Lockout Emergency",
+    desc: "A lightning strike near a fulfillment facility damages a network switch, causing an entire security quadrant's badging stations to lose communication with the central access control server. The security doors fail safe by locking down completely, preventing workers from entering or leaving the main inventory mezzanine and halting operations during a shift change. The edge door controllers are running in an isolated mode but are rejecting valid employee badges due to an old database cache file. You must force a local cache update and restore access manually.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Safety Laser Scanner Field Intrusion Fault",
+    desc: "An automated robotic picking arm stops operating, logging a continuous 'Safety Mat Laser Obstruction' fault on its tracking display. The sorting area is completely clear of physical debris or people, but the robot refuses to clear its safety interlocks and resume work. Inspection reveals that dust build-up on the laser scanner's optical mirror assembly is scattering the light beams, causing the sensor to falsely detect an obstruction within its protective zone. You must clean the unit, recalibrate the optical sensor thresholds via the command line, and clear the system latch.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Manifest Scale USB Buffer Underrun",
+    desc: "An inline weight-scale array integrated into a high-speed shipping lane drops its connection to the sorting system every time conveyor speeds cross a high threshold. The tracking software logs a 'USB Buffer Underrun' exception and stops routing packages, forcing a safety shutdown of the sorting line. The data transmission speed of the older scale hardware cannot keep up with the high volume of polling requests sent by the newly updated warehouse software. You must adjust the software polling intervals via the terminal to stabilize the connection without replacing the scale.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Forklift Mounted Terminal Session Dropouts",
+    desc: "Fulfillment center forklift operators report that their vehicle-mounted inventory computers frequently drop their active terminal sessions when driving into deep storage aisles. This connection drop forces drivers to log in again manually, slowing down pallet storage operations. The warehouse wireless network uses secure 802.1X authentication, and the vehicle computers drop sessions because they take too long to complete security handshakes when moving between wireless access points. You must adjust the wireless client settings to enable fast security transitions.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Sortation Shoe Conveyor Encoder Mismatch",
+    desc: "A high-speed sliding-shoe sortation conveyor belt begins diverting packages into the completely incorrect sorting lanes, creating a massive shipping mix-up. The local control cabinet displays a persistent 'Pulse Encoder Tracking Error' indicating a mismatch between the physical position of the belt and the software's location tracking model. A loose mounting bracket caused the physical sensor to skip position steps, throwing off the tracking system. You must fix the mounting bracket, reset the internal pulse counters from the terminal console, and verify sorting alignment.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Hazmat Label Printer Fonts Malformed",
+    desc: "A dedicated thermal printer used to output shipping papers for hazardous materials begins printing illegible, garbled symbols instead of clear warning text and barcodes. This printing error blocks hazardous material shipments from leaving the facility, as truck drivers cannot accept packages with unreadable shipping papers. An automated software patch overwrote the printer's internal flash memory, deleting the required font files. You must access the printer's administrative terminal interface, reinstall the required font packages, and clear the print cache.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Edge Gateway NTP Time Desynchronization",
+    desc: "An array of localized edge computing nodes used to track package items across a fulfillment center begin rejecting data packets from central cloud databases. The cloud backend logs a fatal security token validation error, stating the timestamps on the inbound data are invalid. The local edge gateway's internal clock has drifted by more than five minutes after its primary Network Time Protocol (NTP) server connection was blocked by a firewall change. You must fix the firewall rules, update the NTP target configurations from the command line, and sync the system clocks.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Weight Dimension Sensor Modbus Loop Collision",
+    desc: "An engineering team adds a secondary check scale to an existing industrial Modbus communication loop on a packaging line, but the change causes both scales to stop transmitting weight data. The master data collector console logs frequent frame collision errors, stating that data packets are overlapping and becoming unreadable. The new hardware scale was added using the same default station ID as the primary scale, causing both devices to talk over each other on the wire. You must isolate the devices, reconfigure the station IDs from the terminal, and restore data flows.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Warehouse Network Switch PoE Port Power Cycle Failure",
+    desc: "A group of overhead security and tracking cameras monitoring a busy sorting floor freeze up at the same time during a heavy operational shift. An administrator attempts to resolve the issue by remotely power cycling the Power over Ethernet (PoE) ports on the local network switch, but the command hangs, leaving the cameras without power and blinding the operations team. You must access the switch's command-line interface directly, override the stuck power settings, and force the PoE controllers to reset and power up the cameras.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Tote Destacker PLC Variable Overflow",
+    desc: "An automated plastic shipping tote destacking machine stops operating unexpectedly, lighting up a red fault beacon on the sorting floor. The local diagnostic console logs an 'Integer Overflow Exception' within the system's memory address space. The machine's internal software counter tracks every tote processed since the machine was first turned on, and it has hit its maximum value limit, causing the software to crash. You must log into the PLC's memory configuration using an administrative terminal console, clear the counter variable safely, and resume production.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Wireless Barcode Scanner Out-Of-Range Buffer Lock",
+    desc: "An inventory picker uses a Bluetooth-linked barcode scanner gun at the far end of a deep storage aisle, moving past its maximum communication range limit. When the scanner moves back into range, it locks up completely and refuses to transmit any data, freezing with a solid amber warning light on its display. The scanner's internal offline memory buffer became locked because it could not complete its data transfer handshake with the base terminal computer. You must clear the stuck device state from the host console and restore tracking data.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Smart Shipping Scale Calibration Value Reset",
+    desc: "Following a mandatory facility firmware update, multiple heavy-duty shipping scales along an outbound shipping lane begin registering wildly inaccurate, negative weight values for standard packages. This scale failure forces the automated shipping application to flag every package as an exception item, halting outbound shipping truck loads. The firmware update accidentally wiped out the localized calibration data files stored on the scales' internal edge processing nodes. You must upload the baseline calibration files from the console and restore accurate weight readings.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Automated Label Inserter Optical Sensor Blindness",
+    desc: "An automated packaging line that prints and inserts paper packing slips into shipping boxes stops operating, logging an 'Inserter Jam Fault' on its management console. Inspection shows that there is no physical paper jam inside the machinery; instead, fine paper dust has coated the optical tracking lenses, blinding the sensor and causing it to falsely report a paper blockage. You must clear the false alarm from the administrative console, adjust the sensor's sensitivity thresholds to account for dust, and restart the packaging line.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Robotic Palletizer EthernetIP Packet Drop",
+    desc: "An automated robotic arm used to stack heavy product boxes onto shipping pallets begins moving erratically, stopping mid-swing and logging 'Ethernet/IP Connection Faults'. Network captures show that high volumes of broadcast traffic from nearby warehouse computers are flooding the robot's local communication card, causing it to drop critical real-time control data packets. You must access the network switch console, configure a dedicated Virtual LAN (VLAN) to isolate the industrial robotic traffic, and restore steady operations.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Handheld Terminal SSH Keep-Alive Timeouts",
+    desc: "Inventory receiving operators using older legacy handheld computers report that their terminal emulation sessions drop out and close if they stop scanning items for more than 60 seconds. This short timeout forces operators to constantly log back into the system, which hurts productivity during busy receiving shifts. The local server's secure shell configuration drops inactive connections quickly to save system resources. You must update the server's SSH daemon configurations to allow longer keep-alive intervals for these specific mobile clients.",
+    sol: ""
+  },
+  {
+    type: "scenario",
+    title: "Conveyor Divert Arm Sorter Jam Clear",
+    desc: "An automated divert arm along a high-speed sorting line becomes stuck in an open position after a heavy box hits it at an angle, blocking all subsequent packages from passing down the main sorting line. The hardware system triggers a safety stop, and while physical technicians quickly unjam the arm, the software management console remains locked in a fault state, refusing to restart the conveyor belts. You must connect to the local automation controller interface from the terminal, clear the latched software fault, and safely restart the sorting line.",
+    sol: ""
+  },
+  {
+    type: "incident",
+    title: "Industrial Touchscreen HMI Touch Calibration Drift",
+    desc: "An operator workstation touchscreen interface used to manage an outbound shipping lane experiences severe calibration drift. When managers try to press the 'Start Conveyor' button on the screen, the system registers the touch several inches away, accidentally triggering an adjacent 'Stop Lane' command. This touchscreen calibration failure prevents operators from running the sorting line efficiently. You must bypass the broken touchscreen interface using an administrative command line shell, trigger a screen recalibration script, and restore correct touch targets.",
+    sol: ""
+  },
+  {
+    type: "problem",
+    title: "Fulfillment Smart-Scale IO Controller Staged Lock",
+    desc: "A smart-scale matrix system integrated into an automated item picking bin stops updating item counts, locking its indicators in a continuous 'Staged' state. The local Input/Output (I/O) data collection module has run out of internal buffer memory because an application script is polling the scale weights too quickly, causing data packets to back up on the module. You must log into the local edge processor terminal, clear out the stuck hardware queues, and adjust the polling script timings to prevent future buffer overruns.",
+    sol: ""
+  },
+  {
+    type: "challenge",
+    title: "Edge Node Container Storage Engine Crash",
+    desc: "A localized container host running local parcel-tracking microservices inside a fulfillment center crashes, throwing a fatal storage driver error on boot. The container platform cannot launch local applications because its internal overlay data storage layers became corrupted during an unexpected facility power failure. This outage stops all local item tracking, forcing the facility to shift to manual log processing. You must access the edge terminal console, clean up the corrupted container storage layers safely, and recreate the local tracking services.",
+    sol: ""
+  }
+]
+        };
+
+        // Navigation Engine
+        function switchSection(phaseId) {
+            document.querySelectorAll('.day-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(`${phaseId}-section`).classList.add('active');
+            document.getElementById(`btn-${phaseId}`).classList.add('active');
+        }
+
+        // Initialize empty lists for phases 2-4 for demo resilience
+        phaseDrillsData.phase2 = [];
+        phaseDrillsData.phase3 = [];
+        phaseDrillsData.phase4 = [];
+
+        // Dynamic Engine Builder 
+        function loadPhaseDrills(phaseId) {
+            const container = document.getElementById(`container-${phaseId}`);
+            if(!container) return;
+            
+            const drills = phaseDrillsData[phaseId] || [];
+            if(drills.length === 0) {
+                container.innerHTML = `<p style="color:#64748b; font-style:italic;">No practical learning modules found registered inside this structural phase framework configuration.</p>`;
+                document.getElementById(`next-btn-${phaseId}`).disabled = false;
+                return;
+            }
+
+            drills.forEach((drill, index) => {
+                const card = document.createElement('div');
+                card.className = `drill-card`;
+                card.id = `card-${phaseId}-${index}`;
+                
+                card.innerHTML = `
+                    <div class="drill-meta">
+                        <span class="drill-badge badge-${drill.type}">${drill.type}</span>
+                        <span class="drill-num">Scenario Pipeline Node #${String(index + 1).padStart(2, '0')}</span>
+                    </div>
+                    <h4>${drill.title}</h4>
+                    <p>${drill.desc}</p>
+                    <div class="sandbox-area">
+                        <label class="sandbox-label">Operational Sandbox Command Terminal Input</label>
+                        <textarea class="sandbox-textarea" id="input-${phaseId}-${index}" placeholder="Execute administration operational terminal scripts here..."></textarea>
+                        <button class="sandbox-btn" id="btn-verify-${phaseId}-${index}" onclick="verifyDrill('${phaseId}', ${index})">Validate Run Strings</button>
+                        <div class="sandbox-feedback" id="feedback-${phaseId}-${index}"></div>
+                    </div>
+                    <div class="drill-solution" id="sol-${phaseId}-${index}" style="display:none;">
+                        <strong>Standard Infrastructure Resolution Sequence:</strong> ${drill.sol}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Simulation Validation Logic Array Hooks
+        function verifyDrill(phaseId, index) {
+            const userInput = document.getElementById(`input-${phaseId}-${index}`).value.trim();
+            const feedback = document.getElementById(`feedback-${phaseId}-${index}`);
+            const solutionBox = document.getElementById(`sol-${phaseId}-${index}`);
+            const card = document.getElementById(`card-${phaseId}-${index}`);
+            const verifyBtn = document.getElementById(`btn-verify-${phaseId}-${index}`);
+
+            if(userInput.length < 15) {
+                alert("Operational tracking logic requires detailed pipeline command strings. Provide comprehensive standard script updates.");
+                return;
+            }
+
+            feedback.innerHTML = `<strong>Verification Analytics Status: SUCCESS</strong><br>Command sequences conform to underlying host isolation infrastructure requirements. Tracking metrics synced successfully.`;
+            feedback.style.display = 'block';
+            solutionBox.style.display = 'block';
+            card.classList.add('completed');
+            
+            verifyBtn.className = "sandbox-btn verified-btn";
+            verifyBtn.innerText = "Verified Action ✓";
+            verifyBtn.disabled = true;
+
+            evaluatePhaseProgress(phaseId);
+        }
+
+        function evaluatePhaseProgress(phaseId) {
+            const drills = phaseDrillsData[phaseId] || [];
+            let completedCount = 0;
+            
+            drills.forEach((_, index) => {
+                const card = document.getElementById(`card-${phaseId}-${index}`);
+                if(card && card.classList.contains('completed')) completedCount++;
+            });
+
+            const percent = drills.length ? Math.round((completedCount / drills.length) * 100) : 100;
+            
+            document.getElementById(`status-text-${phaseId}`).innerText = `${percent}%`;
+            document.getElementById(`progress-bar-${phaseId}`).style.width = `${percent}%`;
+
+            if(percent === 100) {
+                document.getElementById(`next-btn-${phaseId}`).disabled = false;
+                
+                // Unlock successive pipeline phases
+                const nextNum = parseInt(phaseId.replace('phase', '')) + 1;
+                const nextPhaseButton = document.getElementById(`btn-phase${nextNum}`);
+                if(nextPhaseButton) nextPhaseButton.disabled = false;
+            }
+        }
+
+        // Exam Orchestration Routines
+        const examDatabase = [
+            { q: "When managing a running instance loop configuration experiencing extreme space leaks across root filesystems, which operations sequence clears allocations safely?", options: ["Execute standard recursive file string removal parameters 'rm -rf /var/log/app/debug.log' directly inside standard execution runtime paths.", "Pipe device empty null blocks into the active descriptor context line using 'cat /dev/null > /var/log/app/debug.log' layouts.", "Run terminal unmount calls across the target host architecture block 'umount -f /var/log' configuration setups.", "Modify filesystem tracking structures dynamically with terminal formatting overrides using 'mkfs.ext4 /dev/xvda1' parameters."], a: 1 },
+            { q: "If an active parent process crashes leaving a trailing row allocation matrix labeled 'defunct' inside systems metrics, how should the operations engineer respond?", options: ["Issue termination commands against individual un-reaped child identifiers 'kill -9 [PID]' directly.", "Send the standard SIGCHLD warning notice sequence against the root application structural identifier 'kill -s SIGCHLD [PPID]'.", "Reboot complete compute resources utilizing the terminal runtime sequence 'shutdown -h now' structures.", "Initialize file permissions resetting workflows using root parameters 'chmod 777 /proc/*'."], a: 1 }
+        ];
+
         function triggerExamLaunchSequence() {
-            document.getElementById("exam-instructions-modal").style.display = "flex";
+            document.getElementById('exam-instructions-modal').style.display = 'flex';
         }
 
         function launchProctoredExamViewport() {
-            document.getElementById("exam-instructions-modal").style.display = "none";
-            document.getElementById("secure-exam-overlay").style.display = "block";
+            document.getElementById('exam-instructions-modal').style.display = 'none';
+            document.getElementById('secure-exam-overlay').style.display = 'block';
             
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
+            // Build Question Elements inside the Form Structure Layout
+            const form = document.getElementById('proctored-exam-form');
+            form.innerHTML = '';
             
-            generateExamStructure();
-            initializeSecurityInterceptors();
-        }
-
-        function generateExamStructure() {
-            const formContainer = document.getElementById("proctored-exam-form");
-            formContainer.innerHTML = "";
-
-            d5ExamQuestions.forEach((item, index) => {
-                const card = document.createElement("div");
-                card.className = "exam-question-card";
-
-                const qText = document.createElement("div");
-                qText.className = "exam-question-text";
-                qText.innerText = `QUESTION ${index + 1}: ${item.q}`;
-                card.appendChild(qText);
-
-                item.options.forEach((option, optIdx) => {
-                    const wrapper = document.createElement("label");
-                    wrapper.className = "exam-option-wrapper";
-
-                    const input = document.createElement("input");
-                    input.type = "radio";
-                    input.name = `question-${index}`;
-                    input.value = optIdx;
-
-                    wrapper.appendChild(input);
-                    wrapper.appendChild(document.createTextNode(option));
-                    card.appendChild(wrapper);
+            examDatabase.forEach((item, qIndex) => {
+                const qCard = document.createElement('div');
+                qCard.className = 'exam-question-card';
+                
+                let optionsMarkup = '';
+                item.options.forEach((opt, oIndex) => {
+                    optionsMarkup += `
+                        <label class="exam-option-wrapper">
+                            <input type="radio" name="question-${qIndex}" value="${oIndex}">
+                            ${opt}
+                        </label>
+                    `;
                 });
 
-                formContainer.appendChild(card);
+                qCard.innerHTML = `
+                    <div class="exam-question-text">Scenario Module Quiz Node [${qIndex + 1}/${examDatabase.length}]: <br>${item.q}</div>
+                    ${optionsMarkup}
+                `;
+                form.appendChild(qCard);
             });
+
+            // Engage window boundary logging guards
+            window.addEventListener('blur', triggerFraudLockoutScreen);
         }
 
-        function initializeSecurityInterceptors() {
-            window.addEventListener("blur", triggerSecurityLockout);
-            document.addEventListener("visibilitychange", () => {
-                if (document.visibilityState === "hidden") triggerSecurityLockout();
-            });
-        }
-
-        function triggerSecurityLockout() {
-            if (document.getElementById("secure-exam-overlay").style.display === "block" && 
-                document.getElementById("success-screen").style.display !== "flex") {
-                document.getElementById("cheat-lockout-screen").style.display = "flex";
-                if (document.exitFullscreen) { document.exitFullscreen().catch(() => {}); }
-            }
+        function triggerFraudLockoutScreen() {
+            document.getElementById('cheat-lockout-screen').style.display = 'flex';
+            window.removeEventListener('blur', triggerFraudLockoutScreen);
         }
 
         function evaluateExamSubmission() {
-            let correctCount = 0;
-            let answeredAll = true;
-
-            d5ExamQuestions.forEach((item, index) => {
-                const selected = document.querySelector(`input[name="question-${index}"]:checked`);
-                if (!selected) {
-                    answeredAll = false;
-                    return;
-                }
-                if (parseInt(selected.value) === item.correct) {
-                    correctCount++;
+            let correctlyAnswered = 0;
+            
+            examDatabase.forEach((item, qIndex) => {
+                const selected = document.querySelector(`input[name="question-${qIndex}"]:checked`);
+                if(selected && parseInt(selected.value) === item.a) {
+                    correctlyAnswered++;
                 }
             });
 
-            if (!answeredAll) {
-                alert("Please answer all evaluation entries across the form before submitting.");
-                return;
-            }
-
-            const finalScore = (correctCount / d5ExamQuestions.length) * 100;
-
-            if (finalScore >= 80) {
-                // Save complete authorization lock token within local storage space linked to user email key
-                if (userData.email) {
-                    localStorage.setItem("exam_status_" + userData.email, "COMPLETED");
-                }
-
-                window.removeEventListener("blur", triggerSecurityLockout);
-                if (document.exitFullscreen) { document.exitFullscreen().catch(() => {}); }
-                
-                document.getElementById("secure-exam-overlay").style.display = "none";
-                document.getElementById("success-screen").style.display = "flex";
+            const score = (correctlyAnswered / examDatabase.length) * 100;
+            
+            if(score >= 80) {
+                window.removeEventListener('blur', triggerFraudLockoutScreen);
+                document.getElementById('secure-exam-overlay').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'flex';
             } else {
-                alert(`Evaluation complete. Score: ${finalScore}%. Passing threshold is 80%. Questions will be re-aligned. Please review structures and retry.`);
-                generateExamStructure();
-                document.getElementById("secure-exam-overlay").scrollTop = 0;
+                alert(`Evaluation performance results [${score}%] fall beneath target metrics compliance rules (80%). Review phase registry scenarios again.`);
             }
         }
+
+        window.onload = function() {
+            // Build standard phase 1 engine arrays
+            loadPhaseDrills('phase1');
+            loadPhaseDrills('phase2');
+            loadPhaseDrills('phase3');
+            loadPhaseDrills('phase4');
+        };
     </script>
 </body>
 </html>
