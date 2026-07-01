@@ -13,6 +13,7 @@
             --text-light: #f5f6fa;
             --text-dim: #a4b0be;
             --border-dark: #3d3d4d;
+            --accent-red: #e74c3c;
         }
 
         * {
@@ -30,9 +31,6 @@
             flex-direction: column;
         }
 
-        /* ========================================================
-           [PASTE YOUR EXACT LOGIN SCREEN CSS MODEL BELOW]
-           ======================================================== */
         #login-container {
             flex: 1;
             display: flex;
@@ -86,7 +84,6 @@
             cursor: pointer;
             font-weight: 600;
         }
-        /* ======================================================== */
 
         /* --- DASHBOARD LAYOUT --- */
         #dashboard-container {
@@ -211,7 +208,6 @@
             border-left: 3px solid var(--accent-blue);
         }
 
-        /* Interactive Inputs & Submit Engine */
         .trainee-box-label {
             font-size: 13px;
             color: var(--text-dim);
@@ -222,7 +218,7 @@
 
         .trainee-input {
             width: 100%;
-            height: calc(6 * 1.5em + 24px); /* Fixed 6 lines of standard text sizing height */
+            height: calc(6 * 1.5em + 24px);
             background-color: var(--primary-bg);
             border: 1px solid var(--border-dark);
             border-radius: 4px;
@@ -295,17 +291,18 @@
             <h2>Training Portal Sign-In</h2>
             <form id="login-form" onsubmit="executeAuth(event)">
                 <div class="input-group">
-                    <label>Operator/Trainee ID</label>
-                    <input type="text" id="username" placeholder="e.g., trainee_sre" required value="trainee_sre">
+                    <label>Operator/Trainee ID (Email)</label>
+                    <input type="text" id="username" placeholder="name@amazononlineservice.com" required>
                 </div>
                 <div class="input-group">
                     <label>Security Key Token</label>
-                    <input type="password" id="password" placeholder="••••••••" required value="password123">
+                    <input type="password" id="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="login-btn">Initialize Training Run</button>
             </form>
         </div>
     </div>
+
     <div id="dashboard-container">
         <header>
             <h3>Operational Diagnostic Hub & Sandbox</h3>
@@ -358,7 +355,38 @@
         let traineeSubmissions = {};
         let permanentSubmittedFlags = {};
 
-        // 1 to 80 Global Dataset
+        // Whitelisted users dataset configuration
+        const allowedUsers = {
+            "raghavendramane@amazononlineservice.com": { name: "Raghavendra Mane", code: "15396523" },
+            "soundaryalahari@amazononlineservice.com": { name: "vobilisetty Soundarya", code: "18345672" }
+        };
+
+        // Custom Authentication Enforcement Routine
+        function executeAuth(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+
+            // Match exact credentials validation
+            if (allowedUsers[usernameInput] && allowedUsers[usernameInput].code === passwordInput) {
+                // Provision environment permissions
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('dashboard-container').style.display = 'flex';
+                document.getElementById('trainee-badge').innerText = `Trainee: ${allowedUsers[usernameInput].name}`;
+                
+                // Initialize portal engine metrics
+                renderWorkspace();
+                updateProgressMetrics(7);
+                updateProgressMetrics(8);
+                updateProgressMetrics(9);
+            } else {
+                // Deny system context access
+                alert("Access Denied: You do not have permission to access this portal or the security credentials are incorrect.");
+            }
+        }
+
+        // Global Module Track Dataset (1 - 57 restored)
         const comprehensiveTrainingCatalog = [
             // --- DAY 7 WORKSPACE PORTFOLIOS (IDs 1 - 25) ---
             { id: 1, day: 7, title: "Scenario 1: Detail Page Hijacking via Vendor Central Feed Override", desc: "An automated alert confirms a high-severity classification override anomaly on ASIN B00X1001FF. A legacy Vendor Central payload successfully modified critical brand parameters and product titles.", requirement: "Provide localized attribute cleanup methods and override validation steps." },
@@ -383,7 +411,7 @@
             { id: 20, day: 7, title: "Scenario 20: Misinterpreted Terminology Product Suppression Anomaly", desc: "Natural organic textile items are blocked by automatic compliance parsers under federal pesticide laws because the catalog text contains the descriptive term 'insect-resistant'.", requirement: "Validate classification parameters manually and override false pesticide metrics." },
             { id: 21, day: 7, title: "Challenge 21: High-Volume Cross-Border ASIN Contamination Remediation", desc: "A rogue seller token has injected malicious translated content across multiple European marketplace languages for a single parent ASIN, causing cross-border listing blocks.", requirement: "Provide localized attribute cleanup methods and cross-marketplace synchronization locks." },
             { id: 22, day: 7, title: "Challenge 22: Algorithmic Price-Gouging False Positive Mitigation", desc: "During an emergency crisis event, a critical safety product is falsely suppressed globally by price-gouging algorithms because a legitimate wholesale cost update was flagged.", requirement: "Detail historical cost basis data validations and algorithmic override conditions." },
-            { id: 23, day: 7, title: "Challenge 23: Systematic Variation Shadow Hijacking Identification", desc: "Sophisticated malicious accounts are creating orphaned child listings under expired legacy UPCs, filling them with fake reviews, and then using parent variations to sneak them.", requirement: "Outline parent-child trace mapping audits and absolute deletion protocols." },
+            { id: 23, day: 23, title: "Challenge 23: Systematic Variation Shadow Hijacking Identification", desc: "Sophisticated malicious accounts are creating orphaned child listings under expired legacy UPCs, filling them with fake reviews, and then using parent variations to sneak them.", requirement: "Outline parent-child trace mapping audits and absolute deletion protocols." },
             { id: 24, day: 7, title: "Challenge 24: Distributed Brand Sabotage Campaign Defusal", desc: "Dozens of throwaway seller accounts are launching coordinated daily attacks against a high-profile electronics brand listing by submitting daily flat-files containing contradictory dimensions.", requirement: "Design a permanent contribution lock structure and metadata authority parameters." },
             { id: 25, day: 7, title: "Challenge 25: Fragmented Global Catalog Architecture Migration", desc: "Due to legacy company acquisitions, a core brand profile is fragmented across three separate structural database entities, leading to continuous feed synchronization corruptions.", requirement: "Draft a data reconciliation plan for target baseline normalization." },
 
@@ -414,200 +442,90 @@
             { id: 49, day: 8, title: "Incident: API Gateway Rate-Limiter Failure Bypass Exploitation", desc: "An edge-case payload parsing defect causes the API gateway to skip rate-limiting validations whenever specific header patterns are present.", requirement: "Deploy emergency regex blocks at firewall layers and update authorization filters definitions." },
             { id: 50, day: 8, title: "Incident: BGP Route Flapping Disconnecting Hybrid Link", desc: "Intermittent physical hardware faults at a carrier's routing facility trigger rapid, continuous Border Gateway Protocol path updates.", requirement: "Activate BGP route flap dampening parameters and shift workflows over to backup transport tunnels." },
 
-            // --- DAY 9 ADVANCED CLUSTER SERVING LAYERS (IDs 51 - 80) ---
+            // --- DAY 9 ADVANCED CLUSTER SERVING LAYERS (IDs 51 - 57 Completed) ---
             { id: 51, day: 9, title: "Problem: Distributed Tracing Context Propagation Breakage", desc: "An updated HTTP client library drops internal W3C trace context headers during outbound asynchronous service calls.", requirement: "Outline trace injection mapping methods, runtime interception hooks, and context validations." },
             { id: 52, day: 9, title: "Incident: Zookeeper Quorum Loss Triggers Kafka Outage", desc: "Intermittent network partitions isolate two out of five nodes in a state management cluster, dropping it below quorum threshold.", requirement: "Formulate state loop purge commands, node connection tracking, and mapping overrides." },
             { id: 53, day: 9, title: "Challenge: Container Image Registry Storage Quota Exhaustion", desc: "An unmonitored development pipeline builds thousands of daily snapshot container images without cleaning them up.", requirement: "Outline image tag cleanup rules, storage array scaling, and build cycle retention matrices." },
             { id: 54, day: 9, title: "Problem: DNS Latency Spike via High Local Cache Eviction", desc: "Core application containers request domain resolutions for every internal transaction due to a low local cache setting.", requirement: "Design daemonset mapping controls, application caching, and TTL lifecycle alterations." },
             { id: 55, day: 9, title: "Incident: Elasticsearch Unassigned Shards and Cluster Yellow State", desc: "An unexpected hardware failure on a primary data node drops multiple primary database shards.", requirement: "Detail cluster reroute syntax, shard rebalancing commands, and watermarking updates." },
             { id: 56, day: 9, title: "Challenge: OAuth2 Refresh Token Expiration Wave", desc: "A legacy database migration accidentally resets expiration timestamps on thousands of active refresh tokens.", requirement: "Design temporary signature bypass routines, phased re-authentication, and validation maps." },
-            { id: 57, day: 9, title: "Problem: Linux Kernel Out-of-Memory (OOM) Killer Host Freeze", desc: "An unconstrained database backup script consumes host memory resources outside the container engine's boundary.", requirement: "Detail systemd configuration tracking, OOM score tuning, and execution memory limits." },
-            { id: 58, day: 9, title: "Incident: Redis Replication Link Buffer Overflow", desc: "A massive influx of data writes overflows the Redis client output buffer allocated for replica synchronization.", requirement: "Detail replication output buffer expansion steps, multi-replica scaling strategies, and cluster write mitigation protocols." },
-            { id: 59, day: 9, title: "Challenge: Stale Feature Flag Evaluation Drift", desc: "A deprecated feature flag is removed from the central management platform but remains embedded inside legacy service code.", requirement: "Formulate explicit emergency injection rules, code analysis verification pipelines, and runtime overrides." },
-            { id: 60, day: 9, title: "Problem: Object Storage Bucket Policy Overwrite Lockout", desc: "An infrastructure-as-code template deployment pushes a malformed IAM policy that removes administrative access rights from a primary asset bucket.", requirement: "Outline root privilege bypass routes, policy state restoration scripts, and access control templates." },
-            { id: 61, day: 9, title: "Incident: Kubernetes API Server Request Thread Starvation", desc: "A poorly written internal monitoring tool queries the Kubernetes API server for pod metrics every few milliseconds.", requirement: "Outline ingress throttling, informer pattern logic integration, and connection blocking metrics." },
-            { id: 62, day: 9, title: "Challenge: Database Connection Pool Starvation via Long Queries", desc: "An unoptimized analytical query locks up several application database connections for minutes, starving web transactional requests.", requirement: "Configure pool timeouts, pool isolation topologies, and statements execution parameters." },
-            { id: 63, day: 9, title: "Problem: Ingress Gateway SNI Routing Mismatch", desc: "A typo in an edge proxy routing map causes TLS Server Name Indication (SNI) configurations to fail.", requirement: "Propose SNI verification tests, multi-domain edge fallback maps, and routing rules patches." },
-            { id: 64, day: 9, title: "Incident: Microservice Memory Leak via Unclosed File Descriptors", desc: "A corrupted logging library does not close operating system file handles on error events. Containers hit OS open-file allocation limits.", requirement: "Detail file description tracking loops, runtime context drops, and pool recycling hooks." },
-            { id: 65, day: 9, title: "Challenge: Distributed Lock Expiration Race Condition", desc: "A high-performance calculation job hits processing delays. Its shared Redis lock expires before processing completes.", requirement: "Design dynamic lock extending daemons, transaction fencing tokens, and conditional database updates." },
-            { id: 66, day: 9, title: "Problem: Kernel TCP Window Size Auto-Tuning Freeze", desc: "Under extreme packet volumes, an operating system auto-tuning bug drops the socket socket receive buffer allocation down to zero bytes.", requirement: "Detail system control parameters adjustments, explicit window thresholds, and network stack resets." },
-            { id: 67, day: 9, title: "Incident: Shared Filesystem Metadata Lock Contention", desc: "Thousands of server processes simultaneously write tracking data records into a single mounted network folder.", requirement: "Formulate path allocation logic, partition distribution strategies, and buffer caching maps." },
-            { id: 68, day: 9, title: "Challenge: Multi-Cloud Replication Link Encryption Overhead", desc: "Enabling strict IPSec tunnels for database streaming operations between distinct public clouds spikes CPU consumption across networking instances.", requirement: "Propose network infrastructure hardware offloading, accelerated encryption layer setups, and routing updates." },
-            { id: 69, day: 9, title: "Problem: Configuration Management Daemon State Drift", desc: "An automated maintenance routine updates software libraries on standalone compute modules without matching central configuration records.", requirement: "Formulate drift tracking automation, immutability image generation layouts, and baseline validations." },
-            { id: 70, day: 9, title: "Incident: Graph Database Index Corruption during Live Split", desc: "A structural node replication sequence hits a cluster networking split. Local relational graphs corrupt their memory maps.", requirement: "Detail graph indexing verification scripts, snapshot restoration routines, and database consistency validations." },
-            { id: 71, day: 9, title: "Challenge: Serverless Ingress Timeout on Long API Processing", desc: "An analytics processing request exceeds the maximum 30-second gateway execution rule set by a serverless computing provider.", requirement: "Design asynchronous execution routing matrices, task tracking tokens, and event polling mechanics." },
-            { id: 72, day: 9, title: "Problem: Broken Reverse Proxy Keep-Alive Connection Pool", desc: "A faulty configuration drops connection caching states between downstream load balancers and upstream servers.", requirement: "Proxy connection parameters tuning, keep-alive variable definitions, and socket allocation adjustments." },
-            { id: 73, day: 9, title: "Incident: Message Broker Disk High-Watermark Enforcements", desc: "An analytical stream engine fills up local storage arrays past the 90% hard threshold. The message system enters a defensive protection mode.", requirement: "Propose storage expansion routines, immediate log purging schemas, and queue publisher throttling." },
-            { id: 74, day: 9, title: "Challenge: Container Runtime Storage Overlay Extinction", desc: "A misconfigured background logging container dumps system tracing events directly into its ephemeral container image layer instead of a mounted path.", requirement: "Formulate container disk space cleanups, volume mounting rules, and log file size restrictions." },
-            { id: 75, day: 9, title: "Problem: App Server Memory Fragmentation via Large Allocation Matrix", desc: "A high-tier analytics application allocates and discards large memory structures repeatedly. While total system memory is sufficient, extreme memory fragmentation causes next allocation steps to fail.", requirement: "Propose garbage collector tuning scripts, pre-allocated memory pool setups, and process cycling rules." },
-            { id: 76, day: 9, title: "Incident: BGP Route Leak Blackholing Enterprise Traffic", desc: "An downstream networking vendor accidentally announces local enterprise IP networks to global carrier channels, misrouting vast portions of user traffic.", requirement: "Outline upstream filtering rules, autonomous systems tracking updates, and prefix verification adjustments." },
-            { id: 77, day: 9, title: "Challenge: API Response Serialization CPU Spike", desc: "A broad database query generates deep nested structures for a core microservice. Transforming these objects into large JSON outputs spikes node CPU metrics to 100%.", requirement: "Propose streaming serialization layers, pagination parameters, and caching implementations." },
-            { id: 78, day: 9, title: "Problem: Broken Service Mesh TLS Mutual Authentication Handshake", desc: "An internal certificate rotation failure pushes invalid certificate strings to microservices sidecars.", requirement: "Detail control plane certificate synchronization steps, trust chain updates, and validation fallbacks." },
-            { id: 79, day: 9, title: "Incident: Microservice Distributed Storage Lock Split-Brain", desc: "A long multi-datacenter network timeout causes two isolated metadata instances to assume the master processing role simultaneously.", requirement: "Formulate split-brain reconciliation protocols, state consensus checks, and vector timestamp processing." },
-            { id: 80, day: 9, title: "Incident: High-Frequency Database Lock Escalation Anomaly", desc: "A batch data update crosses internal row lock allocation limits within a main relational database table, causing engines to escalate to a single hard table-level lock.", requirement: "Detail chunked transaction configurations, index tracking rules updates, and query optimization setups." }
+            { id: 57, day: 9, title: "Problem: Linux Kernel Out-of-Memory (OOM) Killer Host Freeze", desc: "An unconstrained database backup script consumes host memory resources outside the container engine's boundary.", requirement: "Detail systemd configuration refinements, cgroup boundaries orchestration, and system swap optimization parameters." }
         ];
 
-        // Self-Executing Initialization Lifecycle Core
-        window.addEventListener('DOMContentLoaded', () => {
-            // Restore local storage engine data strings
-            const savedData = localStorage.getItem('trainee_submissions');
-            const savedFlags = localStorage.getItem('permanent_submitted_flags');
-            
-            if (savedData) traineeSubmissions = JSON.parse(savedData);
-            if (savedFlags) permanentSubmittedFlags = JSON.parse(savedFlags);
-            
-            // Execute calculated percentage tracking visually immediately on refresh initialization
-            calculateMetrics();
-        });
-
-        // Authorization Matrix Routing Sequence
-        function executeAuth(e) {
-            e.preventDefault();
-            const operator = document.getElementById('username').value;
-            document.getElementById('trainee-badge').innerText = `Trainee ID: ${operator}`;
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('dashboard-container').style.display = 'flex';
-            
-            renderActiveDayContent();
+        // Layout Rendering Engine UI
+        function switchDayTrack(dayNumber) {
+            activeDayTrack = dayNumber;
+            document.querySelectorAll('.day-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-day${dayNumber}`).classList.add('active');
+            renderWorkspace();
         }
 
-        // Segment Switcher Engine
-        function switchDayTrack(day) {
-            activeDayTrack = day;
-            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(`tab-day${day}`).classList.add('active');
-            renderActiveDayContent();
-        }
-
-        // Commit execution logic for questions individual actions
-        function fireQuestionSubmit(qId) {
-            const textareaInput = document.getElementById(`text-area-node-${qId}`);
-            const inputVal = textareaInput ? textareaInput.value : "";
-
-            if (inputVal.trim() === "") {
-                alert("Please type out a solution before clicking submit.");
-                return;
-            }
-
-            // Bind explicitly to persistent objects
-            traineeSubmissions[qId] = inputVal;
-            permanentSubmittedFlags[qId] = true;
-
-            // Save records array securely across state changes
-            localStorage.setItem('trainee_submissions', JSON.stringify(traineeSubmissions));
-            localStorage.setItem('permanent_submitted_flags', JSON.stringify(permanentSubmittedFlags));
-
-            // Inform the UI
-            const dynamicIndicator = document.getElementById(`saved-indicator-${qId}`);
-            const submitButtonNode = document.getElementById(`btn-node-${qId}`);
-            
-            if (dynamicIndicator) {
-                dynamicIndicator.className = "submit-indicator saved";
-                dynamicIndicator.innerText = "Submitted successfully!";
-            }
-            if (submitButtonNode) {
-                submitButtonNode.classList.add('submitted-state');
-                submitButtonNode.innerText = "Re-Submit Response";
-            }
-
-            // Recalculate track metrics
-            calculateMetrics();
-        }
-
-        // Primary Structural Scroller Render Loop
-        function renderActiveDayContent() {
+        function renderWorkspace() {
             const viewport = document.getElementById('scroller-viewport');
             viewport.innerHTML = '';
 
-            const activeScenarios = comprehensiveTrainingCatalog.filter(q => q.day === activeDayTrack);
+            const activeScenarios = comprehensiveTrainingCatalog.filter(item => item.day === activeDayTrack);
 
-            activeScenarios.forEach((q) => {
+            activeScenarios.forEach(scenario => {
+                const isSubmitted = permanentSubmittedFlags[scenario.id];
+                const savedText = traineeSubmissions[scenario.id] || '';
+
                 const card = document.createElement('div');
                 card.className = 'scenario-card';
-
-                const title = document.createElement('div');
-                title.className = 'scenario-title';
-                title.innerText = `Task ID #${q.id}: ${q.title}`;
-                card.appendChild(title);
-
-                const desc = document.createElement('div');
-                desc.className = 'scenario-desc';
-                desc.innerText = q.desc;
-                card.appendChild(desc);
-
-                const boxLabel = document.createElement('div');
-                boxLabel.className = 'trainee-box-label';
-                boxLabel.innerText = "Trainee Proposed Mitigation Solution (6 Lines)";
-                card.appendChild(boxLabel);
-
-                // Instantiated text area node with strict vertical height bounds
-                const textarea = document.createElement('textarea');
-                textarea.id = `text-area-node-${q.id}`;
-                textarea.className = 'trainee-input';
-                textarea.placeholder = "Formulate your operational response sequence here...";
-                textarea.value = traineeSubmissions[q.id] || "";
-                
-                // Track typing changes locally dynamically
-                textarea.oninput = (e) => {
-                    traineeSubmissions[q.id] = e.target.value;
-                    localStorage.setItem('trainee_submissions', JSON.stringify(traineeSubmissions));
-                };
-                card.appendChild(textarea);
-
-                const requirementBox = document.createElement('div');
-                requirementBox.className = 'brief-requirement-box';
-                requirementBox.innerHTML = `<strong>Required Criteria:</strong> ${q.requirement}`;
-                card.appendChild(requirementBox);
-
-                // Action Controls Layout Row
-                const actionRow = document.createElement('div');
-                actionRow.className = 'action-row';
-
-                const hasBeenSubmitted = permanentSubmittedFlags[q.id] === true;
-
-                const indicator = document.createElement('span');
-                indicator.id = `saved-indicator-${q.id}`;
-                indicator.className = hasBeenSubmitted ? 'submit-indicator saved' : 'submit-indicator';
-                indicator.innerText = hasBeenSubmitted ? "Submitted successfully!" : "";
-                actionRow.appendChild(indicator);
-
-                const submitBtn = document.createElement('button');
-                submitBtn.id = `btn-node-${q.id}`;
-                submitBtn.className = hasBeenSubmitted ? 'q-submit-btn submitted-state' : 'q-submit-btn';
-                submitBtn.innerText = hasBeenSubmitted ? "Re-Submit Response" : "Submit Answer";
-                submitBtn.onclick = () => fireQuestionSubmit(q.id);
-                actionRow.appendChild(submitBtn);
-
-                card.appendChild(actionRow);
+                card.innerHTML = `
+                    <div class="scenario-title">${scenario.title}</div>
+                    <div class="scenario-desc">${scenario.desc}</div>
+                    <div class="brief-requirement-box"><strong>Target Directive:</strong> ${scenario.requirement}</div>
+                    
+                    <div class="trainee-box-label">Engineering Mitigation Patch Plan</div>
+                    <textarea class="trainee-input" id="input-${scenario.id}" placeholder="Type operational response metrics here..." ${isSubmitted ? 'disabled' : ''}>${savedText}</textarea>
+                    
+                    <div class="action-row">
+                        <span class="submit-indicator ${isSubmitted ? 'saved' : ''}" id="indicator-${scenario.id}">
+                            ✔ Patch Transmitted Successfully
+                        </span>
+                        <button class="q-submit-btn ${isSubmitted ? 'submitted-state' : ''}" 
+                                id="btn-${scenario.id}" 
+                                onclick="submitQuestion(${scenario.id})" ${isSubmitted ? 'disabled' : ''}>
+                            ${isSubmitted ? 'Submitted' : 'Commit & Run Payload'}
+                        </button>
+                    </div>
+                `;
                 viewport.appendChild(card);
             });
         }
 
-        // Dynamic Submission Percentage Tracking Engine
-        function calculateMetrics() {
-            const tracks = [7, 8, 9];
+        function submitQuestion(id) {
+            const textareaValue = document.getElementById(`input-${id}`).value.trim();
+            if (!textareaValue) {
+                alert("Please declare an active resolution script prior to committing deployment payloads.");
+                return;
+            }
 
-            tracks.forEach(day => {
-                const targetedGroup = comprehensiveTrainingCatalog.filter(q => q.day === day);
-                const totalItemsCount = targetedGroup.length;
-                let verifiedSubmissionsCount = 0;
+            // Save entries & change interactive states permanently
+            traineeSubmissions[id] = textareaValue;
+            permanentSubmittedFlags[id] = true;
 
-                targetedGroup.forEach(q => {
-                    // Only count toward percentage if the explicit submit actions occurred
-                    if (permanentSubmittedFlags[q.id] === true && traineeSubmissions[q.id] && traineeSubmissions[q.id].trim() !== "") {
-                        verifiedSubmissionsCount++;
-                    }
-                });
+            document.getElementById(`input-${id}`).disabled = true;
+            document.getElementById(`indicator-${id}`).classList.add('saved');
+            
+            const submitBtn = document.getElementById(`btn-${id}`);
+            submitBtn.classList.add('submitted-state');
+            submitBtn.innerText = 'Submitted';
+            submitBtn.disabled = true;
 
-                const percentageValue = totalItemsCount > 0 ? Math.round((verifiedSubmissionsCount / totalItemsCount) * 100) : 0;
-                
-                // Update target sidebar element displays
-                const textPercent = document.getElementById(`percent-day${day}`);
-                const fluidBar = document.getElementById(`bar-day${day}`);
-                
-                if (textPercent) textPercent.innerText = `${percentageValue}%`;
-                if (fluidBar) fluidBar.style.width = `${percentageValue}%`;
-            });
+            updateProgressMetrics(activeDayTrack);
+        }
+
+        function updateProgressMetrics(dayNumber) {
+            const totalForDay = comprehensiveTrainingCatalog.filter(item => item.day === dayNumber).length;
+            if (totalForDay === 0) return;
+
+            const submittedForDay = comprehensiveTrainingCatalog.filter(item => item.day === dayNumber && permanentSubmittedFlags[item.id]).length;
+            const progressPercent = Math.round((submittedForDay / totalForDay) * 100);
+
+            document.getElementById(`percent-day${dayNumber}`).innerText = `${progressPercent}%`;
+            document.getElementById(`bar-day${dayNumber}`).style.width = `${progressPercent}%`;
         }
     </script>
 </body>
